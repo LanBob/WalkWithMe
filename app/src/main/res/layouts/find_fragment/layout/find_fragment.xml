@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/find_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--#E0E0E0-->
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tablayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#faf9f9"
+                    app:tabIndicatorColor="#08c2b7"
+                    app:tabIndicatorHeight="@dimen/x5"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="#08c2b7"
+                    app:tabTextColor="@android:color/black" />
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/tab_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white" />
+
+
+
+            </LinearLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ImageButton
+            android:id="@+id/floatCamera"
+            android:src="@mipmap/camera"
+            android:layout_gravity="bottom|center"
+            android:contentDescription="@null"
+            android:layout_marginBottom="@dimen/x16"
+            android:background="@color/white"
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80" />
+    </FrameLayout>
+
+</LinearLayout>

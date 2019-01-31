@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/x16"
+    android:paddingBottom="@dimen/x16"
+    tools:context="com.app.activity.EditActivity">
+
+    <ImageView
+        android:id="@+id/edit_camera"
+        android:layout_width="@dimen/x150"
+        android:layout_height="@dimen/x150"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginBottom="@dimen/x20"
+        android:adjustViewBounds="true"
+        android:src="@drawable/eidt_add_image" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x70"
+        android:layout_toRightOf="@id/edit_camera"
+        android:gravity="center"
+        android:text="请选择您所需的图片"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/nothing_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:layout_below="@id/edit_camera"
+        android:background="#CEDADD" />
+
+    <LinearLayout
+        android:id="@+id/llinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nothing_view"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/et_new_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:background="@null"
+            android:hint="添加标题，建议字数35字以内"
+            android:padding="@dimen/x16"
+            android:textColor="#00eedd"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x20"
+            android:background="#DEE9EB" />
+
+
+        <com.sendtion.xrichtext.RichTextEditor
+            android:id="@+id/et_new_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y580"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            app:rt_editor_image_bottom="10"
+            app:rt_editor_image_height="300"
+            app:rt_editor_text_color="@color/colorAccent"
+            app:rt_editor_text_init_hint="请分享您的旅行和好的去处呀……"
+            app:rt_editor_text_size="16" />
+        <!--x650 * y1133-->
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/nothing_view0"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:layout_below="@id/llinear"
+        android:background="#CEDADD" />
+
+
+    <LinearLayout
+        android:id="@+id/LL_position"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nothing_view0"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:src="@drawable/sign" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x40"
+            android:layout_margin="@dimen/x10"
+            android:text="目的地 :    "
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/positiong_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x40"
+            android:layout_margin="@dimen/x10"
+            android:text="  --  -- 请选择目的地  --  --"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/nothing_view1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:layout_below="@id/LL_position"
+        android:background="#CEDADD" />
+
+    <LinearLayout
+        android:id="@+id/LL_choose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nothing_view1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:src="@drawable/sign" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x30"
+            android:layout_margin="@dimen/x10"
+            android:text="标签、分类 :   "
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/type_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x30"
+            android:layout_margin="@dimen/x10"
+            android:text="  --  -- 请选择分类  --  --"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/nothing_view3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:layout_below="@id/LL_choose"
+        android:background="#CEDADD" />
+
+    <TextView
+        android:id="@+id/save_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x50"
+        android:layout_below="@id/LL_choose"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/y20"
+        android:background="#00eedd"
+        android:gravity="center"
+        android:text="发布" />
+
+    <TextView
+        android:layout_below="@id/save_view"
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp" />
+
+
+
+
+</RelativeLayout>

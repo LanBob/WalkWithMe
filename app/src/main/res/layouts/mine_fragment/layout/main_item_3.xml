@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--关注-->
+    <TextView
+        android:id="@+id/follow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="关注" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/follow_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--收藏-->
+    <TextView
+        android:id="@+id/collection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="无发现" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/collection_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!--点赞-->
+    <TextView
+        android:id="@+id/star_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="无发现" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/star_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

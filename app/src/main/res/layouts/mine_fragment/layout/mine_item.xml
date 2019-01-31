@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/x5"
+    card_view:cardCornerRadius="@dimen/x15">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/x90">
+
+        <com.app.view.CircleImageView
+            android:layout_marginLeft="@dimen/x15"
+            android:id="@+id/mine_imageView"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
+            android:layout_marginTop="@dimen/x15" />
+
+        <ImageView
+            android:id="@+id/divider_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:layout_toRightOf="@id/mine_imageView"
+            android:src="@mipmap/leftdivider" />
+
+        <TextView
+            android:id="@+id/mine_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/divider_image"
+            android:layout_marginLeft="@dimen/x40"
+            android:layout_toRightOf="@id/divider_image"
+            android:padding="@dimen/x5"
+            android:text="TextView"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_marginTop="@dimen/x30"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/into" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+<!--
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/x90"
+        android:orientation="horizontal">
+
+        <com.app.Util.CircleImageView
+            android:id="@+id/mine_imageView"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
+            android:layout_gravity="center_vertical" />
+
+        <ImageView
+            android:src="@mipmap/leftdivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/mine_textView"
+            android:layout_width="@dimen/x590"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@id/mine_imageView"
+            android:padding="@dimen/x5"
+            android:text="TextView"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+
+            android:src="@mipmap/into" />
+    </LinearLayout>
+-->

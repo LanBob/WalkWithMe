@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_margin="@dimen/x5"
+        android:src="@drawable/point1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x260"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.app.view.CircleImageView
+            android:id="@+id/home_every_image"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/home_every_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#629ad2" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/x20"
+        android:layout_height="@dimen/x20"
+        android:layout_gravity="top|right"
+        android:layout_margin="@dimen/x5"
+        android:src="@mipmap/list" />
+
+    <ImageView
+        android:layout_width="@dimen/x20"
+        android:layout_height="@dimen/x20"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/x5"
+        android:src="@mipmap/edit" />
+
+    <TextView
+        android:id="@+id/home_every_daytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/x5"
+        android:background="@drawable/deadtime_background"
+        android:padding="@dimen/x5"
+        android:textSize="14sp" />
+
+
+</android.support.v7.widget.CardView>

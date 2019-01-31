@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.app.activity.PersonMainPage">
+
+    <item
+        android:id="@+id/follow"
+        android:title="关注ta"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/unfollow"
+        android:title="取消关注"
+        app:showAsAction="never" />
+</menu>

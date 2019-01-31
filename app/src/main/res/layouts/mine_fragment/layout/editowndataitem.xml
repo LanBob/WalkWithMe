@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/x5"
+    card_view:cardCornerRadius="@dimen/x10">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/x90">
+
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="@dimen/x30"
+            android:id="@+id/editOwnDataitemText"
+            android:text="item"
+            android:layout_marginLeft="@dimen/x20"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/editOwnDataitemdividerH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:layout_toRightOf="@id/editOwnDataitemText"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/editowndataEditText"
+            android:hint="------------"
+            android:layout_toRightOf="@id/editOwnDataitemdividerH"
+            android:background="@null"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_marginTop="@dimen/x30"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/into" />
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

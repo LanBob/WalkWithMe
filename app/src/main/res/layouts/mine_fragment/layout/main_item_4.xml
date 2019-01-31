@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/x16"
+    android:paddingTop="@dimen/x16"
+    android:paddingRight="@dimen/x16"
+    android:paddingBottom="@dimen/x16"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="@dimen/x40"
+        android:layout_marginLeft="@dimen/x20"
+        android:text="账号"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/change_password_username"
+        android:paddingLeft="@dimen/x40"
+        android:background="@drawable/inputtext"
+        android:hint="输入账号"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="@dimen/x40"
+        android:layout_marginLeft="@dimen/x20"
+        android:text="原密码"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/change_password_old_password"
+        android:paddingLeft="@dimen/x40"
+        android:background="@drawable/inputtext"
+        android:hint="输入原密码"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="@dimen/x40"
+        android:layout_marginLeft="@dimen/x20"
+        android:text="设置新密码"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/change_password_new_password"
+        android:paddingLeft="@dimen/x40"
+        android:background="@drawable/inputtext"
+        android:hint="输入新密码"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/change_password_button"
+        android:gravity="center"
+        android:text="确认修改"
+        android:layout_marginTop="@dimen/x40"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="验证码方式?"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

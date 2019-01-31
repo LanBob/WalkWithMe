@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:textSize="18sp"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="问题标题  (必填 *)       20字以内" />
+
+    <EditText
+        android:id="@+id/feedback_title"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:background="@drawable/textview_border"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y66"
+        android:textSize="17sp"
+        android:paddingLeft="@dimen/x20"
+        android:hint="输入问题标题……"
+        android:maxLength="20" />
+
+    <TextView
+        android:textSize="18sp"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="问题描述  (必填 *)      100字以内" />
+
+    <EditText
+        android:id="@+id/feedback_body"
+        android:textSize="16sp"
+        android:gravity="top"
+        android:padding="@dimen/x40"
+        android:hint="输入你的问题描述……"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:background="@drawable/textview_border"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y300"
+        android:maxLength="100" />
+
+    <TextView
+        android:textSize="18sp"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上传图片 （选填）" />
+
+    <Button
+        android:id="@+id/feedback_buttom"
+        android:gravity="center"
+        android:text="提交反馈"
+        android:layout_marginTop="@dimen/x40"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

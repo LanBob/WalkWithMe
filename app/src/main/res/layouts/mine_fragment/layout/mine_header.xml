@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/aftercheckin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/setting"
+                android:layout_width="@dimen/y40"
+                android:layout_height="@dimen/y40"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/x19"
+                android:layout_marginRight="@dimen/x30"
+                android:src="@drawable/select_collection" />
+            <!--750-->
+            <com.app.view.CircleImageView
+                android:id="@+id/head_image"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x150"
+                android:layout_below="@id/setting"
+                android:layout_marginLeft="@dimen/x300"
+                android:src="@drawable/gril" />
+
+            <TextView
+                android:id="@+id/mine_head_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/head_image"
+                android:layout_alignLeft="@id/head_image"
+                android:text="JNU"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/head_image"
+                android:layout_toRightOf="@id/mine_head_name"
+                android:src="@mipmap/leftdivider" />
+
+            <TextView
+                android:id="@+id/mine_head_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/head_image"
+                android:layout_alignRight="@id/head_image"
+                android:text="girl"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/mine_head_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x30"
+                android:text="I want to see this beautiful JNU."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/beforecheckin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <com.app.view.CircleImageView
+            android:id="@+id/uncheckin_heaed_image"
+            android:layout_width="@dimen/x150"
+            android:layout_height="@dimen/x150"
+            android:layout_below="@id/setting"
+            android:layout_marginLeft="@dimen/x300"
+            android:src="@drawable/gril" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y30"
+            android:gravity="center"
+            android:text="请登录"
+            android:textColor="#0D0E0E"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+</LinearLayout>

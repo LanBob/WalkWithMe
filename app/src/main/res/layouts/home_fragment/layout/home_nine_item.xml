@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/x40"
+    android:paddingTop="@dimen/x10"
+    android:paddingRight="@dimen/x40"
+    android:paddingBottom="@dimen/x10">
+
+    <com.app.view.CircleImageView
+        android:id="@+id/home_nine_item_image"
+        android:layout_width="@dimen/x100"
+        android:layout_height="@dimen/x100"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/home_nine_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+</LinearLayout>

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <!--
+     private String[] name = {"手机号", "昵称", "性别", "年龄", "个性说明", "爱好"};
+    private String[] setHint = {"手机号","使用昵称","男或女","年华","想说的话……","喜欢什么"};
+    -->
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="手机号： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/phone_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------手机号------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="昵称： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/else_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------使用昵称------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="性别： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/sex"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------男或女------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="年龄： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/age"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------请输入你的年龄------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="个性说明： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/say"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------你想说的……------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="爱好： " />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <EditText
+            android:id="@+id/love"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@null"
+            android:hint="------喜欢什么------" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x90"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginTop="@dimen/x30"
+            android:text="地址"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x28"
+            android:src="@mipmap/leftdivider" />
+
+        <TextView
+            android:layout_marginTop="@dimen/x25"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="--------请选择-------------"
+            android:id="@+id/select_province"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:background="#A5B3B3" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x66"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y30"
+        android:layout_marginRight="@dimen/x30"
+        android:background="#6AE6DA"
+        android:text="保存个人信息" />
+
+
+</LinearLayout>
+
+    <!--
+     <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x90">
+
+                <TextView
+                    android:layout_marginTop="@dimen/x30"
+                    android:id="@+id/editOwnDataitemText"
+                    android:text="item"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/editOwnDataitemdividerH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginTop="@dimen/x28"
+                    android:layout_toRightOf="@id/editOwnDataitemText"
+                    android:src="@mipmap/leftdivider" />
+
+                <TextView
+                    android:layout_marginTop="@dimen/x25"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="广东  广州"
+                    android:layout_toRightOf="@id/editOwnDataitemdividerH"
+                    android:layout_marginLeft="@dimen/x40"
+                    android:id="@+id/select_province"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/x30"
+                    android:layout_height="@dimen/x30"
+                    android:layout_marginTop="@dimen/x30"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/x30"
+                    android:src="@mipmap/into" />
+            </RelativeLayout>
+
+    -->

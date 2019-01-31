@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y105">
+
+    <!--
+    <com.app.Util.CircleImageView
+        android:id="@+id/mine_item_myfind_item_headerview"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/home_nine_humanity"
+        android:layout_marginTop="@dimen/y5"
+        android:layout_width="@dimen/y90"
+        android:layout_height="@dimen/y90" />
+    <TextView
+        android:textColor="@color/black"
+        android:text="user name"
+        android:textSize="16sp"
+        android:id="@+id/mine_item_myfind_item_username"
+        android:layout_toRightOf="@id/mine_item_myfind_item_headerview"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginTop="@dimen/y10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_toRightOf="@id/mine_item_myfind_item_headerview"
+        android:layout_below="@id/mine_item_myfind_item_username"
+        android:layout_marginTop="@dimen/x5"
+        android:layout_marginLeft="@dimen/x50"
+        android:textSize="15sp"
+        android:text="title of the pasage"
+        android:id="@+id/mine_item_myfind_item_introduce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/mine_item_myfind_item_button"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginTop="@dimen/x30"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="已关注"
+        android:layout_width="@dimen/x100"
+        android:layout_height="@dimen/x60" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="#95A7A5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y5"/>
+        -->
+
+</RelativeLayout>
