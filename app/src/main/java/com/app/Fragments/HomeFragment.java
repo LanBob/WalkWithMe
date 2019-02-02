@@ -321,7 +321,7 @@ public class HomeFragment extends Fragment {
 
     private void initView() {
         //========================================顶部搜索框
-        searchView =  mRootView.findViewById(R.id.searchview);
+//        searchView =  mRootView.findViewById(R.id.searchview);
         swipeRefreshLayout =  mRootView.findViewById(R.id.refresh);
         swipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.DKGRAY);//设置旋转圈的颜色
         //下拉监听
@@ -354,17 +354,17 @@ public class HomeFragment extends Fragment {
         }
         //========================================
         //==========================================================设置searchView
-        searchView.findViewById(R.id.searchview);
-        SearchView.SearchAutoComplete searchTextArea = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchTextArea.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+//        searchView.findViewById(R.id.searchview);
+//        SearchView.SearchAutoComplete searchTextArea = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+//        searchTextArea.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
 
-        View viewById = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
-        if (viewById != null) {
-            viewById.setBackgroundColor(Color.TRANSPARENT);
-        }
-        android.widget.LinearLayout.LayoutParams layoutParams = (android.widget.LinearLayout.LayoutParams) searchTextArea.getLayoutParams();
-        layoutParams.bottomMargin = -6;
-        searchTextArea.setLayoutParams(layoutParams);
+//        View viewById = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+//        if (viewById != null) {
+//            viewById.setBackgroundColor(Color.TRANSPARENT);
+//        }
+//        android.widget.LinearLayout.LayoutParams layoutParams = (android.widget.LinearLayout.LayoutParams) searchTextArea.getLayoutParams();
+//        layoutParams.bottomMargin = -6;
+//        searchTextArea.setLayoutParams(layoutParams);
         //==========================================================设置searchView
 
 
