@@ -1,4 +1,4 @@
-package com.e.myapplication.Roll;
+package com.app.view.Roll;
 
 import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
@@ -6,14 +6,13 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  * Created by Mr.Jude on 2016/1/9.
  */
-public abstract class LoopPagerAdapter extends PagerAdapter{
+public abstract class LoopPagerAdapter extends PagerAdapter {
     private RollPagerView mViewPager;
 
     private ArrayList<View> mViewList = new ArrayList<>();

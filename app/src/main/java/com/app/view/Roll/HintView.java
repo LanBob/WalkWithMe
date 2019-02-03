@@ -1,4 +1,4 @@
-package com.e.myapplication.Roll;
+package com.app.view.Roll;
 
 
 public interface HintView {

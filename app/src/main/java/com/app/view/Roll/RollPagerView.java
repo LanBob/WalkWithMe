@@ -1,4 +1,4 @@
-package com.e.myapplication.Roll;
+package com.app.view.Roll;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -19,7 +19,8 @@ import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-import com.e.myapplication.R;
+
+import com.app.R;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

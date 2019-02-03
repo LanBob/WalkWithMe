@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/container"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.app.gaolonglong.fragmenttabhost.com.app.Fragments.fragmenttabhost.MainActivity"
+    tools:context=".Fragments.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <!--FragmentTabHost 是整个页面，包括底部Tab和大体内容-->

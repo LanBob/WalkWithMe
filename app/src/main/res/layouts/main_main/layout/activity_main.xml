@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.app.gaolonglong.fragmenttabhost.com.app.Fragments.fragmenttabhost.MainActivity">
+    tools:context=".Fragments.MainActivity">
     <!--这是公共的部分，TextView会在每个页面显示-->
 
     <!--这个是底部的导航栏-->

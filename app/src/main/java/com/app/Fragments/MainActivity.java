@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         //设置大体对得布局
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+
         //去掉分割线
         mTabHost.getTabWidget().setDividerDrawable(null);
 
@@ -169,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }

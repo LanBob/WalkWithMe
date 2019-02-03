@@ -88,6 +88,14 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
+    public void searchByKeyWord(String keyWord,Observer observer){
+        service.searchByKeyWord(keyWord)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
     /**
      * findViewShow，通过type
      * @param type
@@ -108,6 +116,7 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
     public void getStar(String userId,Observer observer){
         service.getStar(userId,0)
                 .subscribeOn(Schedulers.io())

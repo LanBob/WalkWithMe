@@ -33,6 +33,9 @@ public interface Service {
     @GET("get/view_show")
     Observable<ResponseResult<View_show_dao>> getViewShowDao(@Query("id") Long id);
 
+    @GET("get/search")
+    Observable<ResponseResult<List<View_show_dao>>> searchByKeyWord(@Query("keyWord") String keyWord);
+
 
     @GET("get/findItem")
     Observable<ResponseResult<List<Find_item_dao>>> getFindItem(@Query("type") int type);

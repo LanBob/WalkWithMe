@@ -7,7 +7,7 @@
     android:layout_marginBottom="@dimen/x30"
     android:layout_marginLeft="@dimen/x10"
     android:layout_marginRight="@dimen/x10"
-    android:background="@color/white"
+    android:background="@android:color/white"
     android:orientation="vertical"
     app:cardCornerRadius="10dp">
 
