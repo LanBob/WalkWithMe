@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="15dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/search_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y300"
+            android:adjustViewBounds="true" />
+
+        <LinearLayout
+            android:id="@+id/search_item_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_item_image"
+            android:layout_marginLeft="@dimen/x50"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/x55"
+                android:layout_height="@dimen/x55"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/position" />
+
+            <TextView
+                android:id="@+id/search_item_position_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x40"
+                android:text="地点"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/search_item_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x100"
+                android:text="¥ 10"
+                android:textColor="#C52646" />
+
+            <ImageView
+                android:layout_marginLeft="@dimen/x130"
+                android:layout_marginTop="@dimen/x5"
+                android:id="@+id/star"
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x40"
+                android:src="@drawable/star" />
+
+            <TextView
+                android:text="10"
+                android:id="@+id/search_item_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_item_position"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/search_item_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:text="fagdasafgsdfhhfagdfagdasafgsdfhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhasaffagdasafgsdfhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhgsdfhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -10,6 +10,8 @@ import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.transition.TransitionSet;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,6 +39,7 @@ import com.app.JMS.util.LogUtil;
 import com.app.R;
 import com.app.Util.MyUrl;
 import com.app.activity.Home_show_item;
+import com.app.activity.SearchActivity;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.modle.HttpMethods;
@@ -376,7 +379,9 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: earch fro " + tvSearch.getText().toString());
                 String keyWord = tvSearch.getText().toString().trim();
-
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("search",keyWord);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -483,6 +488,7 @@ public class HomeFragment extends Fragment {
         RelativeLayout.LayoutParams LayoutParams = (RelativeLayout.LayoutParams) mSearchLayout.getLayoutParams();
         LayoutParams.width = LayoutParams.MATCH_PARENT;
         LayoutParams.setMargins(dip2px(10), dip2px(10), dip2px(10), dip2px(10));
+        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.white));
         mSearchLayout.setLayoutParams(LayoutParams);
         //开始动画
         beginDelayedTransition(mSearchLayout);
@@ -494,6 +500,7 @@ public class HomeFragment extends Fragment {
         RelativeLayout.LayoutParams LayoutParams = (RelativeLayout.LayoutParams) mSearchLayout.getLayoutParams();
         LayoutParams.width = dip2px(80);
         LayoutParams.setMargins(dip2px(10), dip2px(10), dip2px(10), dip2px(10));
+        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.search_color));
         mSearchLayout.setLayoutParams(LayoutParams);
         //开始动画
         beginDelayedTransition(mSearchLayout);

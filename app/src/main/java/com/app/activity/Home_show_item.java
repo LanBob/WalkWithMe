@@ -2,11 +2,16 @@ package com.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -29,15 +34,32 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
     private List<Find_item_dao> list;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+    private ImageView main_page_top_imageview;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Toolbar toolbar;
+    String home_nine_name[] = {
+            "风景", "摄影", "手工", "人文", "养生", "节日", "探险", "其他"
+    };
+    Integer home_nine_path[] = {
+            R.drawable.home_nine_scenery,
+            R.drawable.home_nine_photography,
+            R.drawable.home_nine_manual,
+            R.drawable.home_nine_humanity,
+            R.drawable.home_nine_healthcare,
+            R.drawable.home_nine_festival,
+            R.drawable.home_nine_explore,
+            R.drawable.home_nine_else
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_show_item);
+        setContentView(R.layout.type_find_view);
         Intent intent = getIntent();
         list = new ArrayList<>();
         int type = intent.getIntExtra("type",1);
-        Log.e("tupe",type + "");
+
+        initView(type);
         //==============================================可以在这里每次获取数据
         Observer<ResponseResult<List<Find_item_dao>>> observer = new Observer<ResponseResult<List<Find_item_dao>>>() {
             int len = 0;
@@ -71,10 +93,8 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
         HttpMethods.getInstance()
                 .getFind_item(type,observer);
 
-
-        findViewById(R.id.home_show_item_introduce).setOnClickListener(this);
-        findViewById(R.id.home_show_item_cardview).setOnClickListener(this);
         recyclerView = findViewById(R.id.home_show_item_recyclerview);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Home_show_item.this,LinearLayout.VERTICAL,false)
         {
             @Override
@@ -82,7 +102,6 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
                 return false;
             }
         };
-
 
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new Com_Adapter<Find_item_dao>(Home_show_item.this,R.layout.home_mid_item,list){
@@ -96,6 +115,39 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
         recyclerView.setAdapter(adapter);
     }
 
+    private void initView(int type) {
+        toolbar = findViewById(R.id.main_page_toolBar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        collapsingToolbarLayout = findViewById(R.id.main_page_collapsing);
+        main_page_top_imageview = findViewById(R.id.main_page_top_imageview);
+        main_page_top_imageview.setImageResource(home_nine_path[type-1]);
+        collapsingToolbarLayout.setTitle(home_nine_name[type-1]);
+
+//        switch (type){
+//            case 1:
+//                main_page_top_imageview.setImageResource(home_nine_path[type]);
+//                break;
+//            case 2:
+//                break;
+//            case 3:
+//                break;
+//            case 4:
+//                break;
+//            case 5:
+//                break;
+//            case 6:
+//                break;
+//            case 7:
+//                break;
+//            case 8:
+//                break;
+//        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -107,4 +159,14 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
 }

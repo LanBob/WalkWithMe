@@ -73,7 +73,7 @@
             android:id="@+id/star"
             android:layout_below="@id/title"
             android:layout_toLeftOf="@id/find_item_colloection"
-            android:src="@drawable/uncollection"
+            android:src="@drawable/unstar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

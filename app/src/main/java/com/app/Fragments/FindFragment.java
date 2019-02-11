@@ -92,7 +92,7 @@ public class FindFragment extends Fragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         reflex(tabLayout);//设置tab宽度
 
-        //==============跳转到PersionMainPage
+        //==============跳转到EditActivity
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -56,6 +56,8 @@ public class PersonMainPage extends AppCompatActivity {
     private Boolean isCollection;
     private TextView yesNum;
     private TextView collection_num;
+    private TextView main_page_position_name;
+    private TextView personMainPageMoney;
 
     private View_show_dao viewshow_dao;
     private TextView content_textview;
@@ -166,6 +168,8 @@ public class PersonMainPage extends AppCompatActivity {
                 View_show_dao dao = find_item_daoResponseResult.getData();
                 followed = dao.getUser_id().toString();
                 view_show_id = dao.getId();
+                main_page_position_name.setText(dao.getCity());
+                personMainPageMoney.setText("¥ " + dao.getMoney());
 
                 //设置背景图
                 String bgurl = MyUrl.add_Path(dao.getDefaultpath());
@@ -207,7 +211,7 @@ public class PersonMainPage extends AppCompatActivity {
                         Log.e("s", s);
                         view.addView(content_textview);
                         content_textview.setText("   " + s);
-                    }
+                    }//
                 }
             }
             @Override
@@ -246,6 +250,8 @@ public class PersonMainPage extends AppCompatActivity {
         collapsingToolbarLayout = findViewById(R.id.main_page_collapsing);
         main_top_imageView = findViewById(R.id.main_page_top_imageview);
         title_view = findViewById(R.id.main_page_title);
+        main_page_position_name = findViewById(R.id.main_page_position_name);
+        personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
 
         //通过java添加 图片
         setSupportActionBar(toolbar);
