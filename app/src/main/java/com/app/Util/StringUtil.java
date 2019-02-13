@@ -247,6 +247,18 @@ public class StringUtil {
         return buffer;
     }
 
+    /**
+     * str 输入字符串
+     * @param str
+     * @return 是否是字符串
+     */
+    public static boolean isInteger(String str) {
+        //加或减出现一次或者零次，然后数字出现任意次
+//        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        Pattern pattern = Pattern.compile("^[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
 
     private Message getBaseSendMessage(MsgType msgType,String fromUserID,String toUserId) {
         Message mMessgae = new Message();

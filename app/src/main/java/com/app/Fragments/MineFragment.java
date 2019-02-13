@@ -228,7 +228,7 @@ public class MineFragment extends Fragment {
                             }
                         });
 
-                    } else {
+                    } else {//就是点击头像区域
                         beforecheckin = holder.itemView.findViewById(R.id.beforecheckin);
                         altercheckin = holder.itemView.findViewById(R.id.aftercheckin);
 

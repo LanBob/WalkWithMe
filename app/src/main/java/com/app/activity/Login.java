@@ -126,8 +126,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_login_1://注册
                 String username = ((EditText)findViewById(R.id.et_account_1)).getText().toString().trim();
                 String pwd = ((EditText)findViewById(R.id.et_password_1)).getText().toString().trim();
-                code = 0;
-                regist(username,pwd);
+                if(StringUtil.isInteger(username)){
+                    code = 0;
+                    regist(username,pwd);
+                }else{
+                    Toast.makeText(Login.this,"请输入数字号码",Toast.LENGTH_SHORT).show();
+
+                }
                 break;
         }
     }

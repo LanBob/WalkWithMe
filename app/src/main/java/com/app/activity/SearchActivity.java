@@ -119,7 +119,14 @@ public class SearchActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(linearLayoutManager);
         view_show_daoList = new ArrayList<>();
 
-        adapter = new Com_Adapter<View_show_dao>(this, R.layout.search_item, view_show_daoList) {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+            adapter = new Com_Adapter<View_show_dao>(this, R.layout.search_item, view_show_daoList) {
             @Override
             public void convert(Com_ViewHolder holder, final View_show_dao view_show_dao) {
                 if(view_show_dao != null){
