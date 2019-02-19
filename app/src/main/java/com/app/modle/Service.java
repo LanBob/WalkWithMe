@@ -27,7 +27,7 @@ public interface Service {
      * GET请求
      * 获取主页信息
      */
-    @GET("person")
+    @GET("app/person_setting")
     Observable<ResponseResult<Person>> getPerson(@Query("id") Long id);
 
     @GET("get/view_show")
