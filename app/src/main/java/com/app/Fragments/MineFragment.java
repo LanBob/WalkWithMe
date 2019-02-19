@@ -29,6 +29,7 @@ import com.app.activity.Mineitem;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.commonAdapter.MultiItemTypeSupport;
 import com.app.commonAdapter.MutiCommomAdapter;
+import com.app.entity.Person_setting;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.MineRecycleItemDao;
@@ -258,25 +259,24 @@ public class MineFragment extends Fragment {
 
                                 //已经登录，且不为
                                 //==================================================测试
-                                Observer<ResponseResult<Person>> observer = new Observer<ResponseResult<Person>>() {
+                                Observer<ResponseResult<Person_setting>> observer = new Observer<ResponseResult<Person_setting>>() {
                                     @Override
                                     public void onSubscribe(Disposable d) {
 
                                     }
 
                                     @Override
-                                    public void onNext(ResponseResult<Person> personResponseResult) {
+                                    public void onNext(ResponseResult<Person_setting> personResponseResult) {
 
-                                        Person person = personResponseResult.getData();
-                                        Log.e("next", "eee" + person);
-                                        if (person != null) {
+                                        Person_setting person_setting = personResponseResult.getData();
+                                        if (person_setting != null) {
                                             //空指针异常
                                             TextView mine_head_textView_name = holder.itemView.findViewById(R.id.mine_head_name);
                                             TextView mine_head_textView_sex = holder.itemView.findViewById(R.id.mine_head_sex);
                                             TextView mine_head_textView_introduce = holder.itemView.findViewById(R.id.mine_head_introduce);
-                                            mine_head_textView_name.setText(person.getName());
-                                            mine_head_textView_sex.setText(person.getSex());
-                                            mine_head_textView_introduce.setText(person.getIntroduce());
+                                            mine_head_textView_name.setText(person_setting.getAlias());
+                                            mine_head_textView_sex.setText(person_setting.getSex());
+                                            mine_head_textView_introduce.setText(person_setting.getIntroduce());
 //                                        new SharedPreferencesHelper(MainApplication.getContext(), "userId")
                                             helper.putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
                                         }

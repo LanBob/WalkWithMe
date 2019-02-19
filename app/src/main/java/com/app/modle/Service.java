@@ -2,6 +2,7 @@ package com.app.modle;
 
 import com.app.entity.Find_item_dao;
 import com.app.entity.Person_dao;
+import com.app.entity.Person_setting;
 import com.app.entity.Star_collection;
 import com.app.entity.View_show_dao;
 import com.app.entity.Person;
@@ -28,7 +29,7 @@ public interface Service {
      * 获取主页信息
      */
     @GET("app/person_setting")
-    Observable<ResponseResult<Person>> getPerson(@Query("id") Long id);
+    Observable<ResponseResult<Person_setting>> getPerson(@Query("id") Long id);
 
     @GET("get/view_show")
     Observable<ResponseResult<View_show_dao>> getViewShowDao(@Query("id") Long id);
