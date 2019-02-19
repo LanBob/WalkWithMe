@@ -89,15 +89,15 @@ public interface Service {
     Observable<ResponseResult<String>> uploadFindview(@Part("data") RequestBody description, @Part MultipartBody.Part... multipartBody);
 
 
-    /**
-     * 登录操作
-     * @param username
-     * @param password
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("login")
-    Observable<ResponseResult<String>> login_check(@Field("username") String username,@Field("password")String password);
+//    /**
+//     * 登录操作
+//     * @param username
+//     * @param password
+//     * @return
+//     */
+//    @FormUrlEncoded
+//    @POST("login")
+//    Observable<ResponseResult<String>> login_check(@Field("username") String username,@Field("password")String password);
 
 
     /**
@@ -107,7 +107,7 @@ public interface Service {
      */
     @FormUrlEncoded
     @POST("login")
-    Observable<ResponseResult<String>> login_check(@Field("user") String userJson);
+    Observable<ResponseResult<String>> login_check(@Field("data") String userJson,@Field("code") int code);
 
     /**
      *

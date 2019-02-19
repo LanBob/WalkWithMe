@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.JMS.util.LogUtil;
 import com.app.MainApplication;
 import com.app.R;
 import com.app.Util.SharedPreferencesHelper;
@@ -51,7 +52,14 @@ public class MineFragment extends Fragment {
      */
     private RecyclerView recyclerView;
     private MineRecycleItemDao mineRecycleItemDaoData;
-    private SharedPreferences sharedPreferences;
+    private static SharedPreferencesHelper helper;
+
+    //    private SharedPreferences sharedPreferences;
+    static {
+        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+    }
+
+
     //设置View对象
     private View mRootView;
     //刷新的对象的
@@ -144,15 +152,14 @@ public class MineFragment extends Fragment {
                                 Toast.makeText(getContext(), "-- " + mineRecycleItemDao.getMessage(), Toast.LENGTH_SHORT).show();
                                 //控制跳转  , "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
                                 String b = "";
-                                b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
-                                        .getString("check_in");
+                                b = helper.getString("isAlreadyLogin");
                                 switch (mineRecycleItemDao.getIndex()) {
                                     case 1://申请成为导游
                                         if ("Y".equals(b)) {
                                             Intent intent1 = new Intent(getActivity(), Authenticate.class);
                                             intent1.putExtra("index", "1");
                                             getActivity().startActivity(intent1);
-                                        }else {
+                                        } else {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
                                             Intent intent_login = new Intent(getActivity(), Login.class);
                                             intent_login.putExtra("index", "7");
@@ -164,7 +171,7 @@ public class MineFragment extends Fragment {
                                             Intent intent2 = new Intent(getActivity(), Mineitem.class);
                                             intent2.putExtra("index", "2");
                                             getActivity().startActivity(intent2);
-                                        }else {
+                                        } else {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
                                             Intent intent_login = new Intent(getActivity(), Login.class);
                                             intent_login.putExtra("index", "7");
@@ -175,7 +182,7 @@ public class MineFragment extends Fragment {
                                         if ("Y".equals(b)) {
                                             Intent intent3 = new Intent(getActivity(), Follow_collection_star.class);
                                             getActivity().startActivity(intent3);
-                                        }else {
+                                        } else {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
                                             Intent intent_login = new Intent(getActivity(), Login.class);
                                             intent_login.putExtra("index", "7");
@@ -187,7 +194,7 @@ public class MineFragment extends Fragment {
                                             Intent intent4 = new Intent(getActivity(), Mineitem.class);
                                             intent4.putExtra("index", "4");
                                             getActivity().startActivity(intent4);
-                                        }else {
+                                        } else {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
                                             Intent intent_login = new Intent(getActivity(), Login.class);
                                             intent_login.putExtra("index", "7");
@@ -232,17 +239,23 @@ public class MineFragment extends Fragment {
                         beforecheckin = holder.itemView.findViewById(R.id.beforecheckin);
                         altercheckin = holder.itemView.findViewById(R.id.aftercheckin);
 
-                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
-                                .getString("check_in");
+//                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
+                        String b = helper.getString("isAlreadyLogin");
                         //如果已经登录，那么通过id和token去请求数据，请求成功，则获取数据并保存
                         if ("Y".equals(b)) {
-                            beforecheckin.setVisibility(View.GONE);
-                            altercheckin.setVisibility(View.VISIBLE);
-                            String username = new SharedPreferencesHelper(MainApplication.getContext(), "user")
-                                    .getString("username");
-                            Long userID = Long.valueOf(username);
+//                            String username = new SharedPreferencesHelper(MainApplication.getContext(), "user")
+                            final String username = helper.getString("username");
+                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData",false);
+                            Long userID = null;
+                            if (username != null)
+                                userID = Long.valueOf(username);
+                            Log.d("isAlreadySetOwnData",isAlreadySetOwnData + "");
 
-                            if(userID != 0) {
+                            //登录，有userName且已经有个人信息
+                            if ((userID != 0 || username != null) && isAlreadySetOwnData) {
+                                beforecheckin.setVisibility(View.GONE);
+                                altercheckin.setVisibility(View.VISIBLE);
+
                                 //已经登录，且不为
                                 //==================================================测试
                                 Observer<ResponseResult<Person>> observer = new Observer<ResponseResult<Person>>() {
@@ -253,17 +266,21 @@ public class MineFragment extends Fragment {
 
                                     @Override
                                     public void onNext(ResponseResult<Person> personResponseResult) {
-                                        Log.e("next", "eee");
+
                                         Person person = personResponseResult.getData();
-                                        //空指针异常
-                                        TextView mine_head_textView_name = holder.itemView.findViewById(R.id.mine_head_name);
-                                        TextView mine_head_textView_sex = holder.itemView.findViewById(R.id.mine_head_sex);
-                                        TextView mine_head_textView_introduce = holder.itemView.findViewById(R.id.mine_head_introduce);
-                                        mine_head_textView_name.setText(person.getName());
-                                        mine_head_textView_sex.setText(person.getSex());
-                                        mine_head_textView_introduce.setText(person.getIntroduce());
-                                        new SharedPreferencesHelper(MainApplication.getContext(), "userId")
-                                                .putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
+                                        Log.e("next", "eee" + person);
+                                        if (person != null) {
+                                            //空指针异常
+                                            TextView mine_head_textView_name = holder.itemView.findViewById(R.id.mine_head_name);
+                                            TextView mine_head_textView_sex = holder.itemView.findViewById(R.id.mine_head_sex);
+                                            TextView mine_head_textView_introduce = holder.itemView.findViewById(R.id.mine_head_introduce);
+                                            mine_head_textView_name.setText(person.getName());
+                                            mine_head_textView_sex.setText(person.getSex());
+                                            mine_head_textView_introduce.setText(person.getIntroduce());
+//                                        new SharedPreferencesHelper(MainApplication.getContext(), "userId")
+                                            helper.putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
+                                        }
+
                                     }
 
                                     @Override
@@ -278,13 +295,14 @@ public class MineFragment extends Fragment {
                                 };
                                 HttpMethods.getInstance()
                                         .getPerson(userID, observer);
-                            }else{
-                                beforecheckin.setVisibility(View.VISIBLE);
-                                altercheckin.setVisibility(View.GONE);
-                                beforecheckin.setOnClickListener(new View.OnClickListener() {
+                            } else {
+                                beforecheckin.setVisibility(View.GONE);
+                                altercheckin.setVisibility(View.VISIBLE);
+                                altercheckin.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Intent intent = new Intent(getActivity(), Login.class);
+                                        Intent intent = new Intent(getActivity(), EditOwnData.class);
+                                        intent.putExtra("username",username);
                                         getActivity().startActivity(intent);
                                     }
                                 });

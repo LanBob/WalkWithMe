@@ -227,15 +227,6 @@ public class HttpMethods {
     }
 
 
-    public void login_check(String username, String pwd, Observer observer){
-        service.login_check(username,pwd)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
-
-
     /**
      * 注册操作
      * @param map
@@ -244,12 +235,42 @@ public class HttpMethods {
     public void Login_check(Map map,Observer observer){
         //注册，直接传一个map进来
         String json  = new Gson().toJson(map);
-        service.login_check(json)
+        service.login_check(json,0)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+    /**
+     * 登录
+     * @param map
+     * @param observer
+     */
+    public void login_check(Map map, Observer observer){
+        String json  = new Gson().toJson(map);
+        service.login_check(json,1)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 登录
+     * @param map
+     * @param observer
+     */
+    public void loginByMessageCode(Map map, Observer observer){
+        String json  = new Gson().toJson(map);
+        service.login_check(json,2)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
 
     /**
      * 上传setting

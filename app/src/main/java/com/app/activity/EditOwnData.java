@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.JMS.util.LogUtil;
 import com.app.R;
 import com.app.Util.CityUtil;
 import com.app.Util.SharedPreferencesHelper;
@@ -42,7 +44,7 @@ public class EditOwnData extends AppCompatActivity {
 
 
     //================所在地
-    private TextView item_left;
+//    private TextView item_left;
     private TextView position_city;
     //================所在地
 
@@ -57,9 +59,10 @@ public class EditOwnData extends AppCompatActivity {
     private EditText age;
     private EditText introduce;
     private EditText love;
-
-
-
+    private static SharedPreferencesHelper helper = null;
+    static {
+        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,8 @@ public class EditOwnData extends AppCompatActivity {
 
         initview();
 
-        String in = new SharedPreferencesHelper(MainApplication.getContext(),"in")
-                .getString("check_in");
+//        String in = new SharedPreferencesHelper(MainApplication.getContext(),"loginState")
+        String in =  helper.getString("isAlreadyLogin");
         if("Y".equals(in)){
             actionBar = getSupportActionBar();
             actionBar.setTitle("设置个人信息");
@@ -87,9 +90,12 @@ public class EditOwnData extends AppCompatActivity {
                 @Override
                 public void onNext(ResponseResult<String> stringResponseResult) {
                     int code = stringResponseResult.getCode();
+                    Log.e("result",code + "code ");
                     if(code == 1){//success
                         Intent myintent = new Intent(EditOwnData.this, MainActivity.class);
                         myintent.putExtra("position", 3);
+                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
+                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData",true));
                         finish();
                         startActivity(myintent);
                     }else{
@@ -137,8 +143,8 @@ public class EditOwnData extends AppCompatActivity {
                         /**
                          * 获取Id
                          */
-                        String username = new SharedPreferencesHelper(MainApplication.getContext(),"user")
-                                .getString("username");
+//                        String username = new SharedPreferencesHelper(MainApplication.getContext(),"user")
+                        String username =helper.getString("username");
                         Long id = Long.valueOf(username);
                         if(id == null){
                             Toast.makeText(EditOwnData.this,"请重新登录",Toast.LENGTH_LONG).show();
@@ -148,24 +154,21 @@ public class EditOwnData extends AppCompatActivity {
                         /**
                          * 设置set_or_not
                          */
-                        new SharedPreferencesHelper(MainApplication.getContext(), "set_or_not")
-                                .putValues(new SharedPreferencesHelper.ContentValue("set", true));
+//                        new SharedPreferencesHelper(MainApplication.getContext(), "set_or_not")
+                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData", true));
 
                         HttpMethods.getInstance()
                                 .Person_settting(person_setting,observer);
+                        LogUtil.d("personSetting OK");
 
                     }
                 }
             });
-            /*
-            boolean set_or_not = new SharedPreferencesHelper(MainApplication.getContext(),"set_or_not")
-                            .getBoolean("set",false);
-             */
 
 
             ///============================================================选择器
-            item_left =  findViewById(R.id.editOwnDataitemText);
-            item_left.setText("所在地");
+//            item_left =  findViewById(R.id.editOwnDataitemText);
+//            item_left.setText("所在地");
             position_city =  findViewById(R.id.select_province);
             position_city.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -215,7 +218,6 @@ public class EditOwnData extends AppCompatActivity {
                     .build();
 
             pvOptions.setPicker(provinceBeanList, cityList, districtList);//添加数据源
-
             ///============================================================
 
 

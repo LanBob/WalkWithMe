@@ -69,6 +69,10 @@ public class PersonMainPage extends AppCompatActivity {
 //    String user = "";
     private String follower;
     private String followed;
+    private static SharedPreferencesHelper helper;
+    static {
+        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
+    }
 
     //===================
     Observer<ResponseResult<View_show_dao>> view_show_observer;
@@ -85,14 +89,15 @@ public class PersonMainPage extends AppCompatActivity {
         setContentView(R.layout.person_main_page);
         initData();
         initView();
-        follower = new SharedPreferencesHelper(MainApplication.getContext(),"user")
-                .getString("username");//follow者
+//        follower = new SharedPreferencesHelper(MainApplication.getContext(),"user")
+        follower =  helper.getString("username");//follow者
 
         ///====================动态设置图片的长和宽
         final LinearLayout view = findViewById(R.id.main_page_show_content);
         final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+
         //设置Glide占位图
         final RequestOptions options = new RequestOptions()
                 .centerCrop()

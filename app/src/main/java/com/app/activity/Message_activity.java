@@ -73,7 +73,7 @@ public class Message_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_activity);
 
-        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "userId");
+        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
         userID= helper.getLong("userId");
         Log.e("id",userID + " ");
 

@@ -71,6 +71,10 @@ public class Mineitem extends AppCompatActivity {
     private Button feedbackButton;
     private EditText feedback_editText_title;
     private EditText feedback_editText_body;
+    private static SharedPreferencesHelper helper = null;
+    static {
+        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+    }
 
     //修改密码
     private Button change_password_button;
@@ -205,10 +209,10 @@ public class Mineitem extends AppCompatActivity {
                 */
 
                 //马上又跳回来
-                new SharedPreferencesHelper(MainApplication.getContext(), "in")
-                        .putValues(new SharedPreferencesHelper.ContentValue("check_in", "N"));
-                new SharedPreferencesHelper(MainApplication.getContext(), "user")
-                        .putValues(new SharedPreferencesHelper.ContentValue("username", "0"));
+//                new SharedPreferencesHelper(MainApplication.getContext(), "in")
+                helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "N"));
+//                new SharedPreferencesHelper(MainApplication.getContext(), "user")
+                helper.putValues(new SharedPreferencesHelper.ContentValue("username", ""));
 
                 Intent myintent = new Intent(Mineitem.this, MainActivity.class);
                 myintent.putExtra("position", 3);
