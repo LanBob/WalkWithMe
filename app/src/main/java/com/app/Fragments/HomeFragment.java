@@ -39,6 +39,7 @@ import com.app.JMS.util.LogUtil;
 import com.app.R;
 import com.app.Util.MyUrl;
 import com.app.activity.Home_show_item;
+import com.app.activity.PersonMainPage;
 import com.app.activity.SearchActivity;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
@@ -162,15 +163,20 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void convert(Com_ViewHolder holder, final Find_item_dao find_item_dao) {
 
-                    holder.setText(R.id.home_mid_name, find_item_dao.getTitle());
-                    holder.setText(R.id.type, find_item_dao.getType() + "人文");
-                    holder.setText(R.id.money, "¥ : " + find_item_dao.getMoney() + " 元起");
+                    holder.setText(R.id.home_mid_title,find_item_dao.getTitle());
+                    holder.setText(R.id.home_mid_money,"¥ " + find_item_dao.getMoney());
+                    holder.setText(R.id.home_mid_city,find_item_dao.getCity());
+                    holder.setText(R.id.home_mid_star,find_item_dao.getStar()+"");
                     holder.setImageResource(R.id.home_mid_image, MyUrl.add_Path(find_item_dao.getDefaultpath()));
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), " " + find_item_dao.getTitle(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), PersonMainPage.class);
+                            Log.e("viewID", find_item_dao.getId() + " ");
+                            intent.putExtra("viewID", find_item_dao.getId());
+                            startActivity(intent);
                         }
                     });
                 }

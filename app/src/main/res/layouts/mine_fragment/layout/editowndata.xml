@@ -10,6 +10,7 @@
     private String[] setHint = {"手机号","使用昵称","男或女","年华","想说的话……","喜欢什么"};
     -->
     <LinearLayout
+        android:id="@+id/head"
         android:layout_marginLeft="@dimen/x30"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x90"
@@ -20,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="手机号： " />
+            android:text="头像： " />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -29,13 +30,12 @@
             android:layout_marginTop="@dimen/x28"
             android:src="@mipmap/leftdivider" />
 
-        <EditText
-            android:id="@+id/phone_num"
-            android:layout_width="wrap_content"
+        <com.app.view.CircleImageView
+            android:id="@+id/edit_head_image"
+            android:layout_width="@dimen/x130"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/x30"
-            android:background="@null"
-            android:hint="------手机号------" />
+            android:layout_marginLeft="@dimen/x150"
+            android:src="@drawable/chat_girl" />
 
     </LinearLayout>
 

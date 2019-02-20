@@ -1,6 +1,7 @@
 package com.app.modle;
 
 import com.app.entity.Find_item_dao;
+import com.app.entity.HeadImage;
 import com.app.entity.Person_dao;
 import com.app.entity.Person_setting;
 import com.app.entity.Star_collection;
@@ -61,6 +62,9 @@ public interface Service {
     @GET("get/messageCode")
     Observable<ResponseResult<String>> getMessageCode(@Query("phone")String userId);
 
+    @GET("app/uploadHeadImage")
+    Observable<ResponseResult<HeadImage>> getHeadImage(@Query("phone")String userId);
+
     /*
 
     @GET("get/who_star_collection")
@@ -93,6 +97,9 @@ public interface Service {
     @POST("app/up_view_show")
     Observable<ResponseResult<String>> uploadFindview(@Part("data") RequestBody description, @Part MultipartBody.Part... multipartBody);
 
+    @Multipart
+    @POST("app/uploadHeadImage")
+    Observable<ResponseResult<String>> uploadHeadImage(@Part("id") RequestBody description,@Part MultipartBody.Part... multipartBody);
 
 //    /**
 //     * 登录操作

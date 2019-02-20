@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class SearchActivity extends AppCompatActivity{
+public class SearchActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity{
             }
         };
         HttpMethods.getInstance()
-                .searchByKeyWord(searchText,observer);
+                .searchByKeyWord(searchText, observer);
     }
 
     private void initView() {
@@ -126,19 +126,20 @@ public class SearchActivity extends AppCompatActivity{
             }
         });
 
-            adapter = new Com_Adapter<View_show_dao>(this, R.layout.search_item, view_show_daoList) {
+        adapter = new Com_Adapter<View_show_dao>(this, R.layout.search_item, view_show_daoList) {
             @Override
             public void convert(Com_ViewHolder holder, final View_show_dao view_show_dao) {
-                if(view_show_dao != null){
-                    holder.setText(R.id.search_item_position_text,view_show_dao.getCity());
-                    holder.setText(R.id.search_item_star,view_show_dao.getStar() +"");
-                    holder.setText(R.id.search_item_money,"¥ " + view_show_dao.getMoney());
+                if (view_show_dao != null) {
+                    holder.setText(R.id.search_item_position_text, view_show_dao.getCity());
+                    holder.setText(R.id.search_item_star, view_show_dao.getStar() + "");
+                    holder.setText(R.id.search_item_money, "¥ " + view_show_dao.getMoney());
                     holder.setImageResource(R.id.search_item_image, MyUrl.add_Path(view_show_dao.getDefaultpath()));
-                    holder.setText(R.id.search_item_text,view_show_dao.getTitle());
+                    holder.setText(R.id.search_item_text, view_show_dao.getTitle());
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(SearchActivity.this, PersonMainPage.class);
+                            Log.e("viewID", view_show_dao.getId() + " ");
                             intent.putExtra("viewID", view_show_dao.getId());
                             startActivity(intent);
                         }
@@ -153,7 +154,7 @@ public class SearchActivity extends AppCompatActivity{
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.action_search:
                         //搜索框显示
                         break;

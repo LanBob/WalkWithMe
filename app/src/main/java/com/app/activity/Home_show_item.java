@@ -107,9 +107,21 @@ public class Home_show_item extends AppCompatActivity implements View.OnClickLis
         adapter = new Com_Adapter<Find_item_dao>(Home_show_item.this,R.layout.home_mid_item,list){
 
             @Override
-            public void convert(Com_ViewHolder holder, Find_item_dao find_item_dao) {
+            public void convert(Com_ViewHolder holder, final Find_item_dao find_item_dao) {
                 holder.setImageResource(R.id.home_mid_image,MyUrl.add_Path(find_item_dao.getDefaultpath()));
-                holder.setText(R.id.home_mid_name,find_item_dao.getTitle());
+                holder.setText(R.id.home_mid_title,find_item_dao.getTitle());
+                holder.setText(R.id.home_mid_money,"¥ " + find_item_dao.getMoney());
+                holder.setText(R.id.home_mid_city,find_item_dao.getCity());
+                holder.setText(R.id.home_mid_star,find_item_dao.getStar()+"");
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Home_show_item.this,PersonMainPage.class);
+                        Log.e("viewID", find_item_dao.getId() + " ");
+                        intent.putExtra("viewID", find_item_dao.getId());
+                        startActivity(intent);
+                    }
+                });
             }
         };
         recyclerView.setAdapter(adapter);

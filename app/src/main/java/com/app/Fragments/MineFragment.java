@@ -17,9 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.JMS.activity.ChatActivity;
 import com.app.JMS.util.LogUtil;
+import com.app.JMS.util.PictureFileUtil;
 import com.app.MainApplication;
 import com.app.R;
+import com.app.Util.MyUrl;
 import com.app.Util.SharedPreferencesHelper;
 import com.app.activity.Authenticate;
 import com.app.activity.EditOwnData;
@@ -29,12 +32,19 @@ import com.app.activity.Mineitem;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.commonAdapter.MultiItemTypeSupport;
 import com.app.commonAdapter.MutiCommomAdapter;
+import com.app.entity.HeadImage;
 import com.app.entity.Person_setting;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.MineRecycleItemDao;
 import com.app.entity.Person;
 import com.app.view.CircleImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 
 
 import java.util.ArrayList;
@@ -42,6 +52,8 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -56,6 +68,8 @@ public class MineFragment extends Fragment {
     private MineRecycleItemDao mineRecycleItemDaoData;
     private static SharedPreferencesHelper helper;
     ImageView settingImage;
+    private CircleImageView head_image;
+    public static final int REQUEST_CODE_IMAGE = 0000;
 
     //    private SharedPreferences sharedPreferences;
     static {
@@ -144,7 +158,7 @@ public class MineFragment extends Fragment {
             recyclerView.setAdapter(new MutiCommomAdapter<MineRecycleItemDao>(getContext(), listDao, m) {
                 @Override
                 public void convert(final Com_ViewHolder holder, final MineRecycleItemDao mineRecycleItemDao) {
-                    int i = holder.getItemViewType();
+                    final int i = holder.getItemViewType();
                     if (i != 0) {
                         //处理常规item
                         holder.setText(R.id.mine_textView, mineRecycleItemDao.getMessage());
@@ -242,14 +256,14 @@ public class MineFragment extends Fragment {
                         beforecheckin = holder.itemView.findViewById(R.id.beforecheckin);
                         altercheckin = holder.itemView.findViewById(R.id.aftercheckin);
                         settingImage = holder.itemView.findViewById(R.id.setting);
+                        head_image = holder.itemView.findViewById(R.id.head_image);
                         settingImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(),EditOwnData.class);
+                                Intent intent = new Intent(getActivity(), EditOwnData.class);
                                 getActivity().startActivity(intent);
                             }
                         });
-
 
 //                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
                         String b = helper.getString("isAlreadyLogin");
@@ -257,11 +271,11 @@ public class MineFragment extends Fragment {
                         if ("Y".equals(b)) {
 //                            String username = new SharedPreferencesHelper(MainApplication.getContext(), "user")
                             final String username = helper.getString("username");
-                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData",false);
+                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
                             Long userID = null;
                             if (username != null)
                                 userID = Long.valueOf(username);
-                            Log.d("isAlreadySetOwnData",isAlreadySetOwnData + "");
+                            Log.d("isAlreadySetOwnData", isAlreadySetOwnData + "");
 
                             //登录，有userName且已经有个人信息
                             if ((userID != 0 || username != null) && isAlreadySetOwnData) {
@@ -269,7 +283,7 @@ public class MineFragment extends Fragment {
                                 altercheckin.setVisibility(View.VISIBLE);
 
                                 //已经登录，且不为
-                                //==================================================测试
+                                //==================================================获取个人信息
                                 Observer<ResponseResult<Person_setting>> observer = new Observer<ResponseResult<Person_setting>>() {
                                     @Override
                                     public void onSubscribe(Disposable d) {
@@ -304,8 +318,47 @@ public class MineFragment extends Fragment {
                                         Log.e("com", "eee");
                                     }
                                 };
+                                //==================================================获取个人信息
+                                Observer<ResponseResult<HeadImage>> responseResultObserver = new Observer<ResponseResult<HeadImage>>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
+                                        HeadImage headImage  = headImageResponseResult.getData();
+                                        CircleImageView circleImageView = holder.itemView.findViewById(R.id.head_image);
+                                        RequestOptions options = new RequestOptions()
+                                                .centerCrop()
+                                                .placeholder(R.drawable.gray_bg)
+                                                .error(R.drawable.chat_girl)
+                                                .priority(Priority.HIGH)
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+                                        Glide.with(getActivity())
+                                                .load(MyUrl.add_Path(headImage.getHead_image()))
+                                                // .listener(mRequestListener)
+                                                .apply(options)
+                                                .into(circleImageView);
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+                                };
+
                                 HttpMethods.getInstance()
                                         .getPerson(userID, observer);
+                                HttpMethods.getInstance()
+                                        .getHeadImage(userID.toString(),responseResultObserver);
+
                             } else {
                                 beforecheckin.setVisibility(View.GONE);
                                 altercheckin.setVisibility(View.VISIBLE);
@@ -313,7 +366,7 @@ public class MineFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         Intent intent = new Intent(getActivity(), EditOwnData.class);
-                                        intent.putExtra("username",username);
+                                        intent.putExtra("username", username);
                                         getActivity().startActivity(intent);
                                     }
                                 });
@@ -342,5 +395,11 @@ public class MineFragment extends Fragment {
         return mRootView;
     }
 
+
+
+
+    private void sendImageMessage(String path) {
+        System.out.println(path);
+    }
 }
 

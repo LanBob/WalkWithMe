@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:layout_toRightOf="@id/money"
+                android:layout_toRightOf="@id/find_item_money"
                 android:layout_below="@id/find_item_default_image"
                 android:text="Introduce" />
 

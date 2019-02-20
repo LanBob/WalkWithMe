@@ -10,26 +10,40 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.JMS.util.GlideUtils;
 import com.app.JMS.util.LogUtil;
+import com.app.JMS.util.PictureFileUtil;
 import com.app.R;
 import com.app.Util.CityUtil;
 import com.app.Util.SharedPreferencesHelper;
 import com.app.Fragments.MainActivity;
 import com.app.MainApplication;
 
+import com.app.entity.HeadImage;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.Person_setting;
+import com.app.view.CircleImageView;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -37,6 +51,10 @@ public class EditOwnData extends AppCompatActivity {
     private ActionBar actionBar;
     private OptionsPickerView pvOptions;
     private Button button;
+    public static final int REQUEST_CODE_IMAGE = 0000;
+    private LinearLayout head;
+    private CircleImageView edit_head_image;
+    private String headImagePath;
 
     ArrayList<String> provinceBeanList = new ArrayList<>();
     ArrayList<List<String>> cityList = new ArrayList<>();
@@ -55,7 +73,7 @@ public class EditOwnData extends AppCompatActivity {
 
     private String city;
 
-    private EditText phone_num;
+//    private EditText phone_num;
     private EditText alias;
     private EditText sex;
     private EditText age;
@@ -119,12 +137,40 @@ public class EditOwnData extends AppCompatActivity {
                 }
             };
 
+//          上传
+            final Observer<ResponseResult<String>> responseResultObserver = new Observer<ResponseResult<String>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(ResponseResult<String> headImageResponseResult) {
+                    if(headImageResponseResult.getCode() == 1){//成功
+                        Toast.makeText(EditOwnData.this,"头像上传成功",Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(EditOwnData.this,"头像上传失败",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //先设置默认信息，防止空值，再进行上传数据
                     Person_setting person_setting = new Person_setting();
-                    String num = String.valueOf(phone_num.getText());
+//                    String num = String.valueOf(phone_num.getText());
+                    String phone = helper.getString("username");
                     String else_name = String.valueOf(alias.getText());
                     String s = String.valueOf(sex.getText());
                     int ag = 0;
@@ -135,16 +181,17 @@ public class EditOwnData extends AppCompatActivity {
                     }
                     String said = String.valueOf(introduce.getText());
                     String loves = String.valueOf(love.getText());
-                    if(agag ==null||num == null || alias == null || s ==null||said ==null||loves==null || city == null){
+                    if(agag ==null||phone == null || alias == null || s ==null||said ==null||loves==null || city == null || headImagePath== null){
                         Toast.makeText(EditOwnData.this,"请检查输入是否有空值",Toast.LENGTH_LONG).show();
                     }else{
                         person_setting.setCity(city);
-                        person_setting.setPhone_num(num);
+                        person_setting.setPhone_num(phone);
                         person_setting.setAlias(else_name);
                         person_setting.setAge(ag);
                         person_setting.setLove(loves);
                         person_setting.setSex(s);
                         person_setting.setIntroduce(said);
+
                         /**
                          * 获取Id
                          */
@@ -154,18 +201,24 @@ public class EditOwnData extends AppCompatActivity {
                         if(id == null){
                             Toast.makeText(EditOwnData.this,"请重新登录",Toast.LENGTH_LONG).show();
                         }
-                        person_setting.setId(id);
 
                         /**
                          * 设置set_or_not
                          */
 //                        new SharedPreferencesHelper(MainApplication.getContext(), "set_or_not")
                         helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData", true));
+                        person_setting.setId(id);
+                        File f = new File(headImagePath);
+                        List<File> fileList = new ArrayList<>();
+                        fileList.add(f);
 
                         HttpMethods.getInstance()
                                 .Person_settting(person_setting,observer);
-                        LogUtil.d("personSetting OK");
 
+                        HttpMethods.getInstance()
+                                .HeadImageUpload(username,fileList,responseResultObserver);
+
+                        LogUtil.d("personSetting OK");
                     }
                 }
             });
@@ -233,12 +286,20 @@ public class EditOwnData extends AppCompatActivity {
     }
 
     private void initview() {
-        phone_num = findViewById(R.id.phone_num);
+//        phone_num = findViewById(R.id.phone_num);
+        head = findViewById(R.id.head);
+        edit_head_image = findViewById(R.id.edit_head_image);
         alias = findViewById(R.id.else_name);
         sex = findViewById(R.id.sex);
         age = findViewById(R.id.age);
         introduce = findViewById(R.id.say);
         love = findViewById(R.id.love);
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PictureFileUtil.openGalleryPic(EditOwnData.this, REQUEST_CODE_IMAGE);
+            }
+        });
     }
 
     @Override
@@ -252,5 +313,40 @@ public class EditOwnData extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("e","resultCode " + requestCode);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_IMAGE:
+                    Log.e("e","获取图片路径成功");
+                    List<LocalMedia> selectListPic = PictureSelector.obtainMultipleResult(data);
+                    String headImage = selectListPic.get(0).getPath();
+//                    GlideUtils.loadChatImage(EditOwnData.this,headImagePath,edit_head_image);
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.gray_bg)
+                            .error(R.drawable.chat_girl)
+                            .priority(Priority.HIGH)
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+                    Glide.with(EditOwnData.this)
+                            .load(headImage)
+                            // .listener(mRequestListener)
+                            .apply(options)
+                            .into(edit_head_image);
+
+                    LogUtil.d("获取图片路径成功:" + headImagePath);
+                    headImagePath = headImage;
+                    break;
+            }
+        }
+    }
+
+//    private void sendHeaImage(String phone,String headImagePath) {
+//        System.out.println(phone + "  headImagePath" + headImagePath);
+//    }
 
 }

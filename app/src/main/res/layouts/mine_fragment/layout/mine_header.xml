@@ -24,6 +24,7 @@
                 android:layout_marginTop="@dimen/x19"
                 android:layout_marginRight="@dimen/x30"
                 android:src="@drawable/set" />
+
             <!--750-->
             <com.app.view.CircleImageView
                 android:id="@+id/head_image"

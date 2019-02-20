@@ -310,9 +310,35 @@ public class HttpMethods {
      * @param observer
      */
     public void Person_settting(Person_setting setting, Observer observer){
+//        MultipartBody.Part[] partList = filesMultipartBody(fileList);
         String json = new Gson().toJson(setting);
          service.setPersonSettiong(json)
                  .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 上传头像
+     * @param id
+     * @param fileList
+     * @param observer
+     */
+    public void HeadImageUpload(String id,List<File> fileList, Observer observer){
+        MultipartBody.Part[] partList = filesMultipartBody(fileList);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), id);
+        service.uploadHeadImage(requestBody,partList)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getHeadImage(String phone, Observer observer){
+        service.getHeadImage(phone)
+                .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
