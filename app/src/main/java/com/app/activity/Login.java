@@ -285,7 +285,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                         @Override
                         public void onNext(Long num) {
-
                             layout1_clock.setText("剩余" + num + "秒");
                         }
 
@@ -484,6 +483,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onNext(ResponseResult<String> stringResponseResult) {
                 if (stringResponseResult.getCode() == 1) {//如果code是0，就可以获取
                     codeMessage = stringResponseResult.getData().toString();//得到短信验证码，暂时保存
+                    Log.e("codeMessage",codeMessage);
                 } else {
                     Toast.makeText(Login.this, "无法获取验证码", Toast.LENGTH_SHORT).show();
                 }
