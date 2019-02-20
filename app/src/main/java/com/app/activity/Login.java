@@ -46,9 +46,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private Button layoutLogin;
     private CheckBox checkBox_password;
     private CheckBox checkBox_login;
+    final int count = 60;//倒计时10秒
+    private String codeMessage = "";
 
 
-//    忘记密码
+    //    忘记密码
     private TextView layout_forget_password;
 
     private int code = 0;
@@ -62,6 +64,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private Button layout1_regist;
     private TextView add_count;
     private EditText layout1_code;
+    private Button layout1_clock;
+
+//    忘记密码，修改密码
+    private Button layout4_clock;
+    private Button layout4_regist;
 
 
     private FrameLayout frameLayout;
@@ -72,6 +79,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     //=========验证码登录
     private TextView messageCode;
     private Button codeButton;
+    private Button messageCodeSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +142,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         layout_forget_password = findViewById(R.id.layout_forget_password);
         topText = findViewById(R.id.topText);
         frameLayout4 = findViewById(R.id.login_layout_4);
-
+        layout1_clock = findViewById(R.id.layout1_clock);
+        layout4_clock = findViewById(R.id.layout4_clock);
+        layout4_regist = findViewById(R.id.layout4_regist);
+        messageCodeSignIn = findViewById(R.id.messageCodeSignIn);
 
         layoutLogin.setOnClickListener(this);
         layout1_regist.setOnClickListener(this);
@@ -143,6 +154,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         messageCode.setOnClickListener(this);
         codeButton.setOnClickListener(this);
         layout_forget_password.setOnClickListener(this);
+        layout1_clock.setOnClickListener(this);
+        layout4_clock.setOnClickListener(this);
+        layout4_regist.setOnClickListener(this);
+        messageCodeSignIn.setOnClickListener(this);
     }
 
     @Override
@@ -187,25 +202,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 String messageCode = layout1_code.getText().toString();
                 if (StringUtil.isMobile(username) && StringUtil.isInteger(messageCode)) {
                     code = 0;
-                    regist(username, pwd,messageCode);
+                    regist(username, pwd, messageCode);
                 } else {
                     Toast.makeText(Login.this, "请输入数字号码", Toast.LENGTH_SHORT).show();
-
                 }
                 break;
-            case R.id.clock://倒计时并获取验证码
+            case R.id.clock://登录界面倒计时并获取验证码
                 String messageCodeUserName = ((EditText) findViewById(R.id.messageCodeUserName)).getText().toString().trim();
                 String code = ((EditText) findViewById(R.id.code)).getText().toString().trim();
-                if (messageCodeUserName == "" || messageCodeUserName == null || !StringUtil.isMobile(messageCodeUserName)) {
+                if ("".equals(messageCodeUserName) || !StringUtil.isMobile(messageCodeUserName)) {
                     Toast.makeText(Login.this, "请输入正确手机号码", Toast.LENGTH_LONG).show();
                     break;
                 }
-                if (!StringUtil.isInteger(code) || code == "" || code == null) {
-                    Toast.makeText(Login.this, "请输入正确验证码", Toast.LENGTH_LONG).show();
-                    break;
-                }
-
-                final int count = 60;//倒计时10秒
+//                if (!StringUtil.isInteger(code) || code == "" || code == null) {
+//                    Toast.makeText(Login.this, "1请输入正确验证码", Toast.LENGTH_LONG).show();
+//                    break;
+//                }
                 Observable.interval(0, 1, TimeUnit.SECONDS)
                         .take(count + 1)
                         .map(new Function<Long, Long>() {
@@ -245,18 +257,222 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         codeButton.setText("发送验证码");
                     }
                 });
-
-//                loginByMessageCode(messageCodeUserName, code);
+                getMessageCode(messageCodeUserName);
                 break;
+            case R.id.layout1_clock://注册时候获取验证码
+                String u = ((EditText) findViewById(R.id.layout1_account)).getText().toString().trim();
+                if (StringUtil.isMobile(u)) {
+                    Observable.interval(0, 1, TimeUnit.SECONDS)
+                            .take(count + 1)
+                            .map(new Function<Long, Long>() {
+                                @Override
+                                public Long apply(Long aLong) throws Exception {
+                                    return count - aLong;
+                                }
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())//ui线程中进行控件更新
+                            .doOnSubscribe(new Consumer<Disposable>() {
+                                @Override
+                                public void accept(Disposable disposable) throws Exception {
+                                    layout1_clock.setEnabled(false);
+                                    layout1_clock.setTextColor(Color.BLACK);
+                                }
+                            }).subscribe(new Observer<Long>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
 
+                        }
+
+                        @Override
+                        public void onNext(Long num) {
+
+                            layout1_clock.setText("剩余" + num + "秒");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            //回复原来初始状态
+                            layout1_clock.setEnabled(true);
+                            layout1_clock.setText("发送验证码");
+                        }
+                    });
+                    getMessageCode(u);
+                } else {
+                    Toast.makeText(Login.this, "请正确输入数字号码", Toast.LENGTH_SHORT).show();
+                }
+            case R.id.layout4_clock://修改密码的获取验证码
+                String u4 = ((EditText) findViewById(R.id.layout4_account)).getText().toString().trim();
+                if (StringUtil.isMobile(u4)) {
+                    Observable.interval(0, 1, TimeUnit.SECONDS)
+                            .take(count + 1)
+                            .map(new Function<Long, Long>() {
+                                @Override
+                                public Long apply(Long aLong) throws Exception {
+                                    return count - aLong;
+                                }
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())//ui线程中进行控件更新
+                            .doOnSubscribe(new Consumer<Disposable>() {
+                                @Override
+                                public void accept(Disposable disposable) throws Exception {
+                                    layout4_clock.setEnabled(false);
+                                    layout4_clock.setTextColor(Color.BLACK);
+                                }
+                            }).subscribe(new Observer<Long>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(Long num) {
+
+                            layout4_clock.setText("剩余" + num + "秒");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            //回复原来初始状态
+                            layout4_clock.setEnabled(true);
+                            layout4_clock.setText("发送验证码");
+                        }
+                    });
+                    getMessageCode(u4);//获取验证码
+                }else{
+                    Toast.makeText(Login.this, "请正确输入数字号码", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.layout4_regist://修改密码按钮
+                String username4 = ((EditText) findViewById(R.id.layout4_account)).getText().toString().trim();
+                String pwd4 = ((EditText) findViewById(R.id.layout4_password)).getText().toString().trim();
+                String messageCode4 = ((EditText) findViewById(R.id.layout4_code)).getText().toString().trim();
+                if (StringUtil.isMobile(username4) && StringUtil.isInteger(messageCode4)) {
+                    changePassword(username4, pwd4, messageCode4);
+                } else {
+                    Toast.makeText(Login.this, "请输入数字号码", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.messageCodeSignIn://验证码登录
+                String u2 = ((EditText) findViewById(R.id.messageCodeUserName)).getText().toString().trim();
+                String code2 = ((EditText) findViewById(R.id.code)).getText().toString().trim();
+                if (StringUtil.isMobile(u2) && StringUtil.isInteger(code2)) {
+                    loginByMessageCode(u2,code2);
+                } else {
+                    Toast.makeText(Login.this, "请输入数字号码", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
-    private void loginByMessageCode(String messageCodeUserName, String code) {
+
+    private void loginByMessageCode(final String username, String code){
+        if(codeMessage.equals(code)){//如果验证码正确
+            Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(ResponseResult<String> stringResponseResult) {
+                    if(stringResponseResult.getCode() == 1){
+                        Toast.makeText(Login.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
+
+//                    new SharedPreferencesHelper(MainApplication.getContext(), "loginState")
+                        helper.putValues(new SharedPreferencesHelper.ContentValue("username",username));
+                    }else{
+                        Toast.makeText(Login.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+
+                    Intent myintent = new Intent(Login.this, MainActivity.class);
+                    myintent.putExtra("position", 3);
+                    finish();
+                    startActivity(myintent);
+                    //登录成功后将用户名修改为这个Username
+
+                }
+            };
+            Map<String,String> map = new HashMap<>();
+            map.put("username",username);
+            HttpMethods.getInstance()
+                    .loginByMessageCode(map,observer);
+        }else{
+            Toast.makeText(Login.this, "输入的验证码不正确", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    /**
+     * 修改密码
+     * @param username4
+     * @param pwd4
+     * @param messageCode4
+     */
+    private void changePassword(String username4, String pwd4, String messageCode4) {
+        if (codeMessage.equals(messageCode4)) {//如果验证码正确了
+            Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(ResponseResult<String> stringResponseResult) {
+                    if(stringResponseResult.getCode() == 1){
+                        Toast.makeText(Login.this, "成功，请重新登录", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(Login.this, "修改失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+                    Intent myintent = new Intent(Login.this, MainActivity.class);
+                    myintent.putExtra("position", 3);
+                    finish();
+                    startActivity(myintent);
+                }
+            };
+            Map<String,String> map = new HashMap<>();
+            map.put("username",username4);
+            map.put("password",StringUtil.toMD5(pwd4));
+            HttpMethods.getInstance()
+                    .changePassword(map,observer);
+
+        }else{
+            Toast.makeText(Login.this, "输入的验证码不正确", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //获取验证码并保存在codeMessage
+    private void getMessageCode(String messageCodeUserName) {
         //传递进来两个东西：手机号和验证码
-        Map<String, String> map = new HashMap<>();
-        map.put("messageCodeUserName", messageCodeUserName);
-        map.put("code", code);
         Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
 
             @Override
@@ -266,7 +482,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             @Override
             public void onNext(ResponseResult<String> stringResponseResult) {
-
+                if (stringResponseResult.getCode() == 1) {//如果code是0，就可以获取
+                    codeMessage = stringResponseResult.getData().toString();//得到短信验证码，暂时保存
+                } else {
+                    Toast.makeText(Login.this, "无法获取验证码", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -280,7 +500,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }
         };
         HttpMethods.getInstance()
-                .loginByMessageCode(map, observer);
+                .getMessageCode(messageCodeUserName, observer);
     }
 
     /**
@@ -289,47 +509,56 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * @param username
      * @param pwd
      */
-    private void regist(String username, String pwd,String messageCode) {
-        //messageCode验证码
-        layout1_regist.setClickable(false);
-        Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+    private void regist(String username, String pwd, String messageCode) {
+        if (codeMessage.equals(messageCode)) {//如果验证码正确了
+            //messageCode验证码
+            layout1_regist.setClickable(false);
+            Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onNext(ResponseResult<String> stringResponseResult) {
-
-                code = stringResponseResult.getCode();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("ee", e.getMessage());
-                layout1_regist.setClickable(true);
-            }
-
-            @Override
-            public void onComplete() {
-                if (code == 1) {
-                    frameLayout1.setVisibility(View.GONE);
-                    frameLayout.setVisibility(View.VISIBLE);
-                    Toast.makeText(Login.this, "注册成功，请登录", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(Login.this, "注册失败", Toast.LENGTH_LONG).show();
                 }
-                code = 0;
-                layout1_regist.setClickable(true);
-            }
-        };
-        Map<String, String> m = new HashMap<>();
-        m.put("username", username);
-        String md5 = StringUtil.toMD5(pwd);
-        m.put("password", md5);
-        m.put("messageCode",messageCode);
-        HttpMethods.getInstance()
-                .Login_check(m, observer);
+
+                @Override
+                public void onNext(ResponseResult<String> stringResponseResult) {
+                    code = stringResponseResult.getCode();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("ee", e.getMessage());
+                    layout1_regist.setClickable(true);
+                }
+
+                @Override
+                public void onComplete() {
+                    if (code == 1) {
+                        frameLayout1.setVisibility(View.GONE);
+                        frameLayout.setVisibility(View.VISIBLE);
+                        Toast.makeText(Login.this, "注册成功，请登录", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(Login.this, "注册失败", Toast.LENGTH_LONG).show();
+                    }
+                    code = 0;
+                    layout1_regist.setClickable(true);
+
+                    Intent myintent = new Intent(Login.this, MainActivity.class);
+                    myintent.putExtra("position", 3);
+                    finish();
+                    startActivity(myintent);
+                }
+            };
+            Map<String, String> m = new HashMap<>();
+            m.put("username", username);
+            String md5 = StringUtil.toMD5(pwd);
+            m.put("password", md5);
+            HttpMethods.getInstance()
+                    .Login_check(m, observer);
+        } else {
+            Toast.makeText(Login.this, "输入的验证码不正确", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -365,6 +594,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onError(Throwable e) {
                 layoutLogin.setClickable(true);
+                Log.e("message", getAccount() + " 和" + getPassword());
+                e.printStackTrace();
                 Toast.makeText(Login.this, "啦啦啦，遇到不可知错误啦……", Toast.LENGTH_SHORT).show();
                 code = 0;
             }
@@ -375,7 +606,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 //中间是登录操作
                 if (code == 1) {
                     //登录操作，在Mysql里面得到了此用户的信息，并通过登录操作
-
                     //保存登录成功状态
 //                    new SharedPreferencesHelper(MainApplication.getContext(), "loginState")//相当于check_in
                     helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));

@@ -14,7 +14,7 @@
         android:textColor="#4DF7E0"
         android:textSize="19sp" />
 
-    <!--新加入的-->
+    <!--最正常的登录-->
     <FrameLayout
         android:id="@+id/login_layout"
         android:layout_width="@dimen/x600"
@@ -36,7 +36,7 @@
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:hint="Username" />
+                android:hint="请输入手机号" />
             <!--android:layout_marginTop="@dimen/y40"-->
 
             <EditText
@@ -44,7 +44,7 @@
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout_account"
-                android:hint="Password"
+                android:hint="输入密码"
                 android:inputType="textPassword" />
             <!--android:layout_marginTop="@dimen/y130"-->
 
@@ -94,20 +94,20 @@
                 android:layout_below="@id/layout_forget_password"
                 android:layout_marginTop="@dimen/y130"
                 android:gravity="center_horizontal"
-                android:text="Sign In" />
+                android:text="登录" />
 
             <TextView
                 android:id="@+id/messageCode"
-                android:layout_below="@id/layout_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/layout_login"
                 android:text="验证码方式" />
 
         </RelativeLayout>
 
     </FrameLayout>
 
-
+    <!--注册-->
     <FrameLayout
         android:id="@+id/login_layout_1"
         android:layout_width="@dimen/x600"
@@ -118,23 +118,23 @@
         android:visibility="gone">
 
         <RelativeLayout
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
             <!--750dp * 1130-->
             <EditText
                 android:id="@+id/layout1_account"
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:hint="Username" />
+                android:hint="请输入手机号" />
 
             <EditText
                 android:id="@+id/layout1_password"
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout1_account"
-                android:hint="Password"
+                android:hint="请输入密码"
                 android:inputType="textPassword" />
 
 
@@ -145,14 +145,14 @@
                 android:layout_below="@id/layout1_password"
                 android:layout_marginTop="@dimen/y14"
                 android:hint="输入验证码"
-                android:inputType="textPassword" />
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/layout1_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x15"
                 android:layout_below="@id/layout1_password"
+                android:layout_marginLeft="@dimen/x15"
                 android:layout_toRightOf="@id/layout1_code"
                 android:text="获取验证码" />
 
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/y40"
-                android:hint="Username" />
+                android:hint="请输入手机号" />
 
 
             <EditText
@@ -200,7 +200,7 @@
                 android:layout_below="@id/messageCodeUserName"
                 android:layout_marginTop="@dimen/y14"
                 android:hint="输入验证码"
-                android:inputType="textPassword" />
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/clock"
@@ -218,14 +218,14 @@
                 android:layout_below="@id/code"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginTop="@dimen/y200"
-                android:text="Sign In" />
+                android:text="登录" />
 
 
         </RelativeLayout>
 
     </FrameLayout>
 
-
+    <!--忘记密码-->
     <FrameLayout
         android:id="@+id/login_layout_4"
         android:layout_width="@dimen/x600"
@@ -236,23 +236,23 @@
         android:visibility="gone">
 
         <RelativeLayout
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
             <!--750dp * 1130-->
             <EditText
                 android:id="@+id/layout4_account"
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:hint="Username" />
+                android:hint="请输入手机号" />
 
             <EditText
                 android:id="@+id/layout4_password"
                 android:layout_width="@dimen/x450"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout4_account"
-                android:hint="Password"
+                android:hint="请输入修改后的密码"
                 android:inputType="textPassword" />
 
 
@@ -263,14 +263,14 @@
                 android:layout_below="@id/layout4_password"
                 android:layout_marginTop="@dimen/y14"
                 android:hint="输入验证码"
-                android:inputType="textPassword" />
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/layout4_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x15"
                 android:layout_below="@id/layout4_password"
+                android:layout_marginLeft="@dimen/x15"
                 android:layout_toRightOf="@id/layout4_code"
                 android:text="获取验证码" />
 
@@ -280,7 +280,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout4_password"
                 android:layout_marginTop="@dimen/y200"
-                android:text="注册" />
+                android:text="确认修改" />
 
         </RelativeLayout>
 

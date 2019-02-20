@@ -256,14 +256,46 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
-    /**
-     * 登录
-     * @param map
-     * @param observer
-     */
-    public void loginByMessageCode(Map map, Observer observer){
+    public void changePassword(Map map,Observer observer){
+        String json  = new Gson().toJson(map);
+        service.login_check(json,3)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void loginByMessageCode(Map map,Observer observer){
         String json  = new Gson().toJson(map);
         service.login_check(json,2)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+//    /**
+//     * 登录
+//     * @param map
+//     * @param observer
+//     */
+//    public void loginByMessageCode(Map map, Observer observer){
+//        String json  = new Gson().toJson(map);
+//        service.login_check(json,2)
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(observer);
+//    }
+
+
+    /**
+     * 获取验证码
+     * @param phone
+     * @param observer
+     */
+    public void getMessageCode(String phone,Observer observer){
+        service.getMessageCode(phone)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

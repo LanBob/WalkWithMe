@@ -57,6 +57,10 @@ public interface Service {
     @GET("get/who_star_collection")
     Observable<ResponseResult<Integer>> star_collection_follow(@Query("first") String first,@Query("second") String second,@Query("code") int code);
 
+
+    @GET("get/messageCode")
+    Observable<ResponseResult<String>> getMessageCode(@Query("phone")String userId);
+
     /*
 
     @GET("get/who_star_collection")
@@ -109,6 +113,8 @@ public interface Service {
     @FormUrlEncoded
     @POST("login")
     Observable<ResponseResult<String>> login_check(@Field("data") String userJson,@Field("code") int code);
+
+
 
     /**
      *

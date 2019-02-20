@@ -34,6 +34,7 @@ import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.MineRecycleItemDao;
 import com.app.entity.Person;
+import com.app.view.CircleImageView;
 
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class MineFragment extends Fragment {
     private RecyclerView recyclerView;
     private MineRecycleItemDao mineRecycleItemDaoData;
     private static SharedPreferencesHelper helper;
+    ImageView settingImage;
 
     //    private SharedPreferences sharedPreferences;
     static {
@@ -239,6 +241,15 @@ public class MineFragment extends Fragment {
                     } else {//就是点击头像区域
                         beforecheckin = holder.itemView.findViewById(R.id.beforecheckin);
                         altercheckin = holder.itemView.findViewById(R.id.aftercheckin);
+                        settingImage = holder.itemView.findViewById(R.id.setting);
+                        settingImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(),EditOwnData.class);
+                                getActivity().startActivity(intent);
+                            }
+                        });
+
 
 //                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
                         String b = helper.getString("isAlreadyLogin");

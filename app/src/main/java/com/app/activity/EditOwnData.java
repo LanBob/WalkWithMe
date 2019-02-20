@@ -48,6 +48,8 @@ public class EditOwnData extends AppCompatActivity {
     private TextView position_city;
     //================所在地
 
+    private int mycode = 0;
+
     private String[] name = {"手机号", "昵称", "性别", "年龄", "个性说明", "爱好"};
     private String[] setHint = {"手机号","使用昵称","男或女","年华","想说的话……","喜欢什么"};
 
@@ -92,14 +94,12 @@ public class EditOwnData extends AppCompatActivity {
                     int code = stringResponseResult.getCode();
                     Log.e("result",code + "code ");
                     if(code == 1){//success
-                        Intent myintent = new Intent(EditOwnData.this, MainActivity.class);
-                        myintent.putExtra("position", 3);
                         helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
                         helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData",true));
-                        finish();
-                        startActivity(myintent);
+                        mycode = 1;
                     }else{
                         Toast.makeText(EditOwnData.this,"遇到不可知错误……",Toast.LENGTH_SHORT).show();
+                        mycode = 0;
                     }
                 }
 
@@ -110,7 +110,12 @@ public class EditOwnData extends AppCompatActivity {
 
                 @Override
                 public void onComplete() {
-
+                    if(mycode == 1){
+                        Intent myintent = new Intent(EditOwnData.this, MainActivity.class);
+                        myintent.putExtra("position", 3);
+                        finish();
+                        startActivity(myintent);
+                    }
                 }
             };
 
