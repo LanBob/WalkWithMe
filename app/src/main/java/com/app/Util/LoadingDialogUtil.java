@@ -1,8 +1,12 @@
 package com.app.Util;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +33,20 @@ public class LoadingDialogUtil extends Dialog {
         LinearLayout linearLayout = (LinearLayout)this.findViewById(R.id.LLinearLayout);
 
         linearLayout.getBackground().setAlpha(210);
+    }
+
+
+    /**
+     * 设置页面最外层布局 FitsSystemWindows 属性
+     * @param activity
+     * @param value
+     */
+    public static void setFitsSystemWindows(Activity activity, boolean value) {
+        ViewGroup contentFrameLayout = (ViewGroup) activity.findViewById(android.R.id.content);
+        View parentView = contentFrameLayout.getChildAt(0);
+        if (parentView != null && Build.VERSION.SDK_INT >= 14) {
+            parentView.setFitsSystemWindows(value);
+        }
     }
 }
 

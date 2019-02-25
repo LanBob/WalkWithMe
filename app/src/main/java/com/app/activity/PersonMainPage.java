@@ -1,11 +1,15 @@
 package com.app.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +26,10 @@ import com.app.Util.MyUrl;
 import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
 import com.app.MainApplication;
+import com.app.entity.HeadImage;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
+import com.app.view.CircleImageView;
 import com.app.view.GoodView;
 import com.app.entity.Star_collection;
 import com.app.entity.View_show_dao;
@@ -58,6 +64,14 @@ public class PersonMainPage extends AppCompatActivity {
     private TextView collection_num;
     private TextView main_page_position_name;
     private TextView personMainPageMoney;
+    private CircleImageView headImage;
+    ///
+    private DrawerLayout mDrawerLayout = null;
+    private LinearLayout leftChat;
+    private LinearLayout leftMainPage;
+    private CircleImageView leftImageView;
+
+
 
     private View_show_dao viewshow_dao;
     private TextView content_textview;
@@ -81,6 +95,7 @@ public class PersonMainPage extends AppCompatActivity {
     Observer<ResponseResult<String>> follow_observer;
     Observer<ResponseResult<Star_collection>> star_collection_observer;
     Observer<ResponseResult<Integer>> star_collection_follow;
+    Observer<ResponseResult<HeadImage>> headImageObserver;
     //===================
 
     @Override
@@ -237,8 +252,9 @@ public class PersonMainPage extends AppCompatActivity {
                 HttpMethods.getInstance()
                         .getStarColllection(view_show_id.toString(),star_collection_observer);
 
+                HttpMethods.getInstance()
+                        .getHeadImage(view_show_id.toString(),headImageObserver);
             }
-
         };
         //view_show_id
         HttpMethods.getInstance()
@@ -257,6 +273,7 @@ public class PersonMainPage extends AppCompatActivity {
         title_view = findViewById(R.id.main_page_title);
         main_page_position_name = findViewById(R.id.main_page_position_name);
         personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
+        headImage = findViewById(R.id.headImage);
 
         //通过java添加 图片
         setSupportActionBar(toolbar);
@@ -266,6 +283,69 @@ public class PersonMainPage extends AppCompatActivity {
         }
         star_button =  findViewById(R.id.person_page_yes_no);
         collection_button = findViewById(R.id.person_page_collection);
+
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            /**
+             * 当抽屉滑动状态改变的时候被调用
+             * 状态值是STATE_IDLE（闲置--0）, STATE_DRAGGING（拖拽的--1）, STATE_SETTLING（固定--2）中之一。
+             * 抽屉打开的时候，点击抽屉，drawer的状态就会变成STATE_DRAGGING，然后变成STATE_IDLE
+             */
+            @Override
+            public void onDrawerStateChanged(int arg0) {
+                Log.i("drawer", "drawer的状态：" + arg0);
+            }
+
+            /**
+             * 当抽屉被滑动的时候调用此方法
+             * arg1 表示 滑动的幅度（0-1）
+             */
+            @Override
+            public void onDrawerSlide(View arg0, float arg1) {
+                Log.i("drawer", arg1 + "");
+            }
+
+            /**
+             * 当一个抽屉被完全打开的时候被调用
+             */
+            @Override
+            public void onDrawerOpened(View arg0) {
+                Log.i("drawer", "抽屉被完全打开了！");
+            }
+
+            /**
+             * 当一个抽屉完全关闭的时候调用此方法
+             */
+            @Override
+            public void onDrawerClosed(View arg0) {
+                Log.i("drawer", "抽屉被完全关闭了！");
+            }
+        });
+        headImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.RIGHT);
+            }
+        });
+
+        leftMainPage = findViewById(R.id.leftMainPage);
+        leftChat = findViewById(R.id.leftChat);
+        leftMainPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PersonMainPage.this,"请求主页",Toast.LENGTH_SHORT).show();
+            }
+        });
+        leftChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PersonMainPage.this,"请求联系 Ta",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initData() {
@@ -366,6 +446,7 @@ public class PersonMainPage extends AppCompatActivity {
                  */
                 HttpMethods.getInstance()
                         .star_collection_follow(view_show_id.toString(),follower,0,star_collection_follow);
+
                 /**
                  * 获取是否点赞
                  */
@@ -419,6 +500,51 @@ public class PersonMainPage extends AppCompatActivity {
 
             }
         };
+        leftImageView = findViewById(R.id.leftImageView);
+        headImageObserver = new Observer<ResponseResult<HeadImage>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
+                HeadImage headImageData = headImageResponseResult.getData();
+                String headImageUrl = "";
+                if(headImageData != null){
+                    headImageUrl = headImageData.getHead_image();
+                }
+                if(headImageUrl != "" || headImageUrl != null){
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.gray_bg)
+                            .error(R.drawable.chat_girl)
+                            .priority(Priority.HIGH)
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+                    Glide.with(PersonMainPage.this)
+                            .load(MyUrl.add_Path(headImageUrl))
+                            .apply(options)
+                            .into(headImage);
+
+                    Glide.with(PersonMainPage.this)
+                            .load(MyUrl.add_Path(headImageUrl))
+                            .apply(options)
+                            .into(leftImageView);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
     }
 
     @Override

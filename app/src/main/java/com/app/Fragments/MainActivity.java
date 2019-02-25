@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 
 import com.app.R;
+import com.app.Util.LoadingDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+        LoadingDialogUtil.setFitsSystemWindows(MainActivity.this,true);
+
         //找到Tab选项卡
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 

@@ -483,6 +483,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onNext(ResponseResult<String> stringResponseResult) {
                 if (stringResponseResult.getCode() == 1) {//如果code是0，就可以获取
                     codeMessage = stringResponseResult.getData().toString();//得到短信验证码，暂时保存
+                    Toast.makeText(Login.this, "验证码已发送至您的手机，请注意查收", Toast.LENGTH_SHORT).show();
                     Log.e("codeMessage",codeMessage);
                 } else {
                     Toast.makeText(Login.this, "无法获取验证码", Toast.LENGTH_SHORT).show();
