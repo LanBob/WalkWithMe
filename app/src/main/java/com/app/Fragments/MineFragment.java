@@ -23,7 +23,8 @@ import com.app.JMS.util.PictureFileUtil;
 import com.app.MainApplication;
 import com.app.R;
 import com.app.Util.MyUrl;
-import com.app.Util.SharedPreferencesHelper;
+//import com.app.Util.SharedPreferencesHelper;
+import com.app.Util.StringUtil;
 import com.app.activity.Authenticate;
 import com.app.activity.EditOwnData;
 import com.app.activity.Follow_collection_star;
@@ -66,15 +67,15 @@ public class MineFragment extends Fragment {
      */
     private RecyclerView recyclerView;
     private MineRecycleItemDao mineRecycleItemDaoData;
-    private static SharedPreferencesHelper helper;
+//    private static SharedPreferencesHelper helper;
     ImageView settingImage;
     private CircleImageView head_image;
     public static final int REQUEST_CODE_IMAGE = 0000;
 
     //    private SharedPreferences sharedPreferences;
-    static {
-        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-    }
+//    static {
+//        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+//    }
 
 
     //设置View对象
@@ -169,7 +170,8 @@ public class MineFragment extends Fragment {
                                 Toast.makeText(getContext(), "-- " + mineRecycleItemDao.getMessage(), Toast.LENGTH_SHORT).show();
                                 //控制跳转  , "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
                                 String b = "";
-                                b = helper.getString("isAlreadyLogin");
+//                                b = helper.getString("isAlreadyLogin");
+                                StringUtil.getValue("isAlreadyLogin");
                                 switch (mineRecycleItemDao.getIndex()) {
                                     case 1://申请成为导游
                                         if ("Y".equals(b)) {
@@ -266,19 +268,22 @@ public class MineFragment extends Fragment {
                         });
 
 //                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
-                        String b = helper.getString("isAlreadyLogin");
+//                        String b = helper.getString("isAlreadyLogin");
+                        String b = StringUtil.getValue("isAlreadyLogin");
+
                         //如果已经登录，那么通过id和token去请求数据，请求成功，则获取数据并保存
                         if ("Y".equals(b)) {
-//                            String username = new SharedPreferencesHelper(MainApplication.getContext(), "user")
-                            final String username = helper.getString("username");
-                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
+//                            final String username = helper.getString("username");
+                            final String username = StringUtil.getValue("username");
+//                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
+                            String isAlreadySetOwnData = StringUtil.getValue("isAlreadySetOwnData");
                             Long userID = null;
                             if (username != null)
                                 userID = Long.valueOf(username);
                             Log.d("isAlreadySetOwnData", isAlreadySetOwnData + "");
 
                             //登录，有userName且已经有个人信息
-                            if ((userID != 0 || username != null) && isAlreadySetOwnData) {
+                            if ((userID != 0 || username != null) && "Y".equals(isAlreadySetOwnData)) {
                                 beforecheckin.setVisibility(View.GONE);
                                 altercheckin.setVisibility(View.VISIBLE);
 
@@ -303,7 +308,8 @@ public class MineFragment extends Fragment {
                                             mine_head_textView_sex.setText(person_setting.getSex());
                                             mine_head_textView_introduce.setText(person_setting.getIntroduce());
 //                                        new SharedPreferencesHelper(MainApplication.getContext(), "userId")
-                                            helper.putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
+//                                            helper.putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
+//                                            StringUtil.putValue("username",personResponseResult.getData().getId());
                                         }
 
                                     }

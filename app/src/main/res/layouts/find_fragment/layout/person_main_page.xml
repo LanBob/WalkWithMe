@@ -118,15 +118,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical">
-                        <!--内容提供-->
-
-                        <!--
-                         <TextView
-                             android:id="@+id/main_page_show_content_content"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:text="context" />
-                        -->
 
                     </LinearLayout>
 

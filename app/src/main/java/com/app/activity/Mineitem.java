@@ -16,11 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.R;
-import com.app.Util.SharedPreferencesHelper;
+import com.app.Util.StringUtil;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.Fragments.MainActivity;
-import com.app.MainApplication;
+//import com.app.MainApplication;
 import com.app.view.StepDialog;
 import com.app.view.ZoomOutPageTransformer;
 import com.app.entity.Find_item_dao;
@@ -71,10 +71,10 @@ public class Mineitem extends AppCompatActivity {
     private Button feedbackButton;
     private EditText feedback_editText_title;
     private EditText feedback_editText_body;
-    private static SharedPreferencesHelper helper = null;
-    static {
-        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-    }
+//    private static SharedPreferencesHelper helper = null;
+//    static {
+//        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+//    }
 
     //修改密码
     private Button change_password_button;
@@ -92,7 +92,7 @@ public class Mineitem extends AppCompatActivity {
         Log.e("index", "" + index);
         switch (index) {
             case 1:
-                setContentView(R.layout.login);
+
                 StepDialog.getInstance()
                         .setPageTransformer(new ZoomOutPageTransformer())
                         .setCanceledOnTouchOutside(true)
@@ -210,9 +210,11 @@ public class Mineitem extends AppCompatActivity {
 
                 //马上又跳回来
 //                new SharedPreferencesHelper(MainApplication.getContext(), "in")
-                helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "N"));
+//                helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "N"));
+                StringUtil.putValue("isAlreadyLogin", "N");
 //                new SharedPreferencesHelper(MainApplication.getContext(), "user")
-                helper.putValues(new SharedPreferencesHelper.ContentValue("username", ""));
+//                helper.putValues(new SharedPreferencesHelper.ContentValue("username", ""));
+                StringUtil.putValue("username", "");
 
                 Intent myintent = new Intent(Mineitem.this, MainActivity.class);
                 myintent.putExtra("position", 3);

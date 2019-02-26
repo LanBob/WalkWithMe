@@ -6,7 +6,16 @@ import android.content.SharedPreferences;
 public class SharedPreferencesHelper {
     //定义一个SharePreference对象
     SharedPreferences sharedPreferences;
+
     //定义一个上下文对象
+    public static void put(String key,String value){
+
+    }
+
+    public static void get(String key){
+
+    }
+
 
     //创建SharePreference对象时要上下文和存储的模式
     //通过构造方法传入一个上下文

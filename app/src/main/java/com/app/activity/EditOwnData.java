@@ -15,16 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.JMS.util.GlideUtils;
 import com.app.JMS.util.LogUtil;
 import com.app.JMS.util.PictureFileUtil;
 import com.app.R;
 import com.app.Util.CityUtil;
-import com.app.Util.SharedPreferencesHelper;
 import com.app.Fragments.MainActivity;
-import com.app.MainApplication;
 
-import com.app.entity.HeadImage;
+import com.app.Util.StringUtil;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.Person_setting;
@@ -79,10 +76,10 @@ public class EditOwnData extends AppCompatActivity {
     private EditText age;
     private EditText introduce;
     private EditText love;
-    private static SharedPreferencesHelper helper = null;
-    static {
-        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
-    }
+//    private static SharedPreferencesHelper helpser = null;
+//    static {
+//        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +90,7 @@ public class EditOwnData extends AppCompatActivity {
         initview();
 
 //        String in = new SharedPreferencesHelper(MainApplication.getContext(),"loginState")
-        String in =  helper.getString("isAlreadyLogin");
+        String in =  StringUtil.getValue("isAlreadyLogin");
         if("Y".equals(in)){
             actionBar = getSupportActionBar();
             actionBar.setTitle("设置个人信息");
@@ -112,8 +109,10 @@ public class EditOwnData extends AppCompatActivity {
                     int code = stringResponseResult.getCode();
                     Log.e("result",code + "code ");
                     if(code == 1){//success
-                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
-                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData",true));
+//                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
+//                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData",true));
+                        StringUtil.putValue("isAlreadyLogin", "Y");
+                        StringUtil.putValue("isAlreadySetOwnData","Y");
                         mycode = 1;
                     }else{
                         Toast.makeText(EditOwnData.this,"遇到不可知错误……",Toast.LENGTH_SHORT).show();
@@ -170,7 +169,8 @@ public class EditOwnData extends AppCompatActivity {
                     //先设置默认信息，防止空值，再进行上传数据
                     Person_setting person_setting = new Person_setting();
 //                    String num = String.valueOf(phone_num.getText());
-                    String phone = helper.getString("username");
+//                    String phone = helper.getString("username");
+                    String phone = StringUtil.getValue("username");
                     String else_name = String.valueOf(alias.getText());
                     String s = String.valueOf(sex.getText());
                     int ag = 0;
@@ -196,7 +196,8 @@ public class EditOwnData extends AppCompatActivity {
                          * 获取Id
                          */
 //                        String username = new SharedPreferencesHelper(MainApplication.getContext(),"user")
-                        String username =helper.getString("username");
+//                        String username =helper.getString("username");
+                        String username = StringUtil.getValue("username");
                         Long id = Long.valueOf(username);
                         if(id == null){
                             Toast.makeText(EditOwnData.this,"请重新登录",Toast.LENGTH_LONG).show();
@@ -206,7 +207,8 @@ public class EditOwnData extends AppCompatActivity {
                          * 设置set_or_not
                          */
 //                        new SharedPreferencesHelper(MainApplication.getContext(), "set_or_not")
-                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData", true));
+//                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData", true));
+                        StringUtil.putValue("isAlreadySetOwnData", "Y");
                         person_setting.setId(id);
                         File f = new File(headImagePath);
                         List<File> fileList = new ArrayList<>();

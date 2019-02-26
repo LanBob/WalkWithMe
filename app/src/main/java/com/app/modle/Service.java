@@ -1,5 +1,6 @@
 package com.app.modle;
 
+import com.app.entity.CommentDao;
 import com.app.entity.Find_item_dao;
 import com.app.entity.HeadImage;
 import com.app.entity.Person_dao;
@@ -35,6 +36,9 @@ public interface Service {
     @GET("get/view_show")
     Observable<ResponseResult<View_show_dao>> getViewShowDao(@Query("id") Long id);
 
+    @GET("get/findItem")
+    Observable<ResponseResult<List<Find_item_dao>>> getViewShowDaoByUserId(@Query("userId") String userId);
+
     @GET("get/search")
     Observable<ResponseResult<List<View_show_dao>>> searchByKeyWord(@Query("keyWord") String keyWord);
 
@@ -64,6 +68,9 @@ public interface Service {
 
     @GET("app/uploadHeadImage")
     Observable<ResponseResult<HeadImage>> getHeadImage(@Query("phone")String userId);
+
+    @GET("app/comment")
+    Observable<ResponseResult<List<CommentDao>>> getCommentByViewShowId(@Query("viewShowId")String viewShowId);
 
     /*
 
@@ -148,7 +155,7 @@ public interface Service {
     @FormUrlEncoded
     @POST("app/follow_collection")
     Observable<ResponseResult<String>> add_Collection(@Field("view_show_id") String view_show_id,
-                                              @Field("who_cellection") String who_cellection,@Field("code") int code);
+                                              @Field("who_collection") String who_cellection,@Field("code") int code);
 
     /**
      *
@@ -163,4 +170,10 @@ public interface Service {
     Observable<ResponseResult<String>> add_Follow(@Field("follower") String follower,
                                                       @Field("followed") String followed,@Field("code") int code);
 
+
+
+    @FormUrlEncoded
+    @POST("app/comment")
+    Observable<ResponseResult<String>> comment(@Field("userId") String userId,
+                                                  @Field("viewShowId") String viewShowId,@Field("comment") String comment);
 }

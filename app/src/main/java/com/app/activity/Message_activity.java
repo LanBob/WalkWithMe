@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.app.JMS.bean.Message;
 import com.app.R;
 import com.app.Util.MyUrl;
-import com.app.Util.SharedPreferencesHelper;
+//import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
@@ -60,7 +60,7 @@ public class Message_activity extends AppCompatActivity {
     private ArrayList<String> mSelectPath;
     private static final int REQUEST_IMAGE = 2;
     private ViewGroup.LayoutParams l;
-    private Long userID;
+    private String userID;
 
     private WebSocket mwebSocket;
     private WebSocketSubscriber webSocketSubscriber;
@@ -73,9 +73,10 @@ public class Message_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_activity);
 
-        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-        userID= helper.getLong("userId");
-        Log.e("id",userID + " ");
+//        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+//        userID= helper.getLong("userId");
+        userID = StringUtil.getValue("userId");
+//        Log.e("id",userID + " ");
 
         webSocketSubscriber = new WebSocketSubscriber() {
             @Override

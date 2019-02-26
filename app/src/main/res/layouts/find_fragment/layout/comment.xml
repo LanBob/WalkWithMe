@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.app.view.CircleImageView
+        android:id="@+id/commentHeadImage"
+        android:layout_marginLeft="@dimen/x20"
+        android:src="@drawable/chat_girl"
+        android:layout_width="@dimen/y60"
+        android:layout_height="@dimen/y60" />
+
+    <TextView
+        android:id="@+id/commentName"
+        android:text="Lusr"
+        android:layout_toRightOf="@id/commentHeadImage"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/mytime"
+        android:layout_marginLeft="@dimen/x80"
+        android:text="1998.7.10"
+        android:layout_toRightOf="@id/commentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/commentComment"
+        android:text="这里有什么风景啊？"
+        android:layout_toRightOf="@id/commentHeadImage"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_below="@id/commentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

@@ -15,9 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.JMS.util.LogUtil;
 import com.app.R;
-import com.app.Util.SharedPreferencesHelper;
+//import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
 import com.app.Fragments.MainActivity;
 import com.app.MainApplication;
@@ -54,11 +53,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private TextView layout_forget_password;
 
     private int code = 0;
-    private static SharedPreferencesHelper helper = null;
-
-    static {
-        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-    }
+//    private static SharedPreferencesHelper helper = null;
+//
+//    static {
+//        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
+//    }
 
     //----------------------------------------注册相关
     private Button layout1_regist;
@@ -102,10 +101,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             checkBox_login.setChecked(false);//取消自动登录的复选框
         }
 
-        String name = helper.getString("name");
-        String pass = helper.getString("password");
+//        String name = helper.getString("name");
+//        String pass = helper.getString("password");
+        String name = StringUtil.getValue("name");
+        String pass = StringUtil.getValue("password");
         //判断曾经是否记住密码
-        if (remenberPassword()) {
+        if ("Y".equals(remenberPassword())) {
             checkBox_password.setChecked(true);//勾选记住密码
             layout_account.setText("" + name);
             layout_password.setText("" + pass);//把密码和账号输入到输入框中
@@ -119,10 +120,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
         //判断是否自动登录
-        if (helper.getBoolean("autoLogin", false)) {
+//        if (helper.getBoolean("autoLogin", false)) {
+//            checkBox_login.setChecked(true);
+//            login();//去登录就可以
+//        }
+        //判断是否自动登录
+        if("Y".equals(StringUtil.getValue("autoLogin"))){
             checkBox_login.setChecked(true);
             login();//去登录就可以
         }
+
     }
 
     private void initView() {
@@ -304,6 +311,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 } else {
                     Toast.makeText(Login.this, "请正确输入数字号码", Toast.LENGTH_SHORT).show();
                 }
+                break;
             case R.id.layout4_clock://修改密码的获取验证码
                 String u4 = ((EditText) findViewById(R.id.layout4_account)).getText().toString().trim();
                 if (StringUtil.isMobile(u4)) {
@@ -386,10 +394,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 public void onNext(ResponseResult<String> stringResponseResult) {
                     if(stringResponseResult.getCode() == 1){
                         Toast.makeText(Login.this, "登录成功", Toast.LENGTH_SHORT).show();
-                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
-
+//                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
+                        StringUtil.putValue("isAlreadyLogin", "Y");
+                        StringUtil.putValue("username",username);
 //                    new SharedPreferencesHelper(MainApplication.getContext(), "loginState")
-                        helper.putValues(new SharedPreferencesHelper.ContentValue("username",username));
+//                        helper.putValues(new SharedPreferencesHelper.ContentValue("username",username));
                     }else{
                         Toast.makeText(Login.this, "登录失败", Toast.LENGTH_SHORT).show();
                     }
@@ -609,18 +618,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     //登录操作，在Mysql里面得到了此用户的信息，并通过登录操作
                     //保存登录成功状态
 //                    new SharedPreferencesHelper(MainApplication.getContext(), "loginState")//相当于check_in
-                    helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
+                    StringUtil.putValue("isAlreadyLogin", "Y");
+                    StringUtil.putValue("username", getAccount());
+//                    StringUtil.putValue("isAlreadySetOwnData", "Y");
+                    String isAlreadySetOwnData = StringUtil.getValue("isAlreadySetOwnData");
+//                    helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
 
 //                    new SharedPreferencesHelper(MainApplication.getContext(), "loginState")
-                    helper.putValues(new SharedPreferencesHelper.ContentValue("username", getAccount()));
+//                    helper.putValues(new SharedPreferencesHelper.ContentValue("username", getAccount()));
 
                     //是否设置了个人消息
 //                    boolean isAlreadySetOwnData = new SharedPreferencesHelper(MainApplication.getContext(),"loginState")
-                    boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
+//                    boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
 /**
  * 如果还没有设置个人信息，就跳转到个人信息去，
  */
-                    if (isAlreadySetOwnData) {
+//                    if (isAlreadySetOwnData) {
+                    if("Y".equals(isAlreadySetOwnData)){
                         //如果已经设置个人信息,重新加载Minfragment
                         Intent myintent = new Intent(Login.this, MainActivity.class);
                         myintent.putExtra("position", 3);
@@ -667,27 +681,40 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //如果设置自动登录
         if (checkBox_login.isChecked()) {
             //自动登录。且记住密码
-            helper.putValues(
-                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
-                    new SharedPreferencesHelper.ContentValue("autoLogin", true),
-                    new SharedPreferencesHelper.ContentValue("password", getPassword()),
-                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
+            StringUtil.putValue("remenberPassword", "Y");
+            StringUtil.putValue("autoLogin", "Y");
+            StringUtil.putValue("password", getPassword());
+            StringUtil.putValue("name", getAccount());
+//            helper.putValues(
+//                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
+//                    new SharedPreferencesHelper.ContentValue("autoLogin", true),
+//                    new SharedPreferencesHelper.ContentValue("password", getPassword()),
+//                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
 
         } else if (!checkBox_password.isChecked()) {
+            StringUtil.putValue("remenberPassword", "N");
+            StringUtil.putValue("autoLogin", "N");
+            StringUtil.putValue("password", getPassword());
+            StringUtil.putValue("name", getAccount());
             //也没有记住密码，没记住自动登录
-            helper.putValues(
-                    new SharedPreferencesHelper.ContentValue("remenberPassword", false),
-                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
-                    new SharedPreferencesHelper.ContentValue("password", ""),
-                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
+//            helper.putValues(
+//                    new SharedPreferencesHelper.ContentValue("remenberPassword", false),
+//                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
+//                    new SharedPreferencesHelper.ContentValue("password", ""),
+//                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
 
         } else if (checkBox_password.isChecked()) {   //如果保存密码，没有自动登录
             //创建记住密码为选中和自动登录是默认不选,保存密码数据
-            helper.putValues(
-                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
-                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
-                    new SharedPreferencesHelper.ContentValue("password", getPassword()),
-                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
+            StringUtil.putValue("remenberPassword", "Y");
+            StringUtil.putValue("autoLogin", "N");
+            StringUtil.putValue("password", getPassword());
+            StringUtil.putValue("name", getAccount());
+
+//            helper.putValues(
+//                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
+//                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
+//                    new SharedPreferencesHelper.ContentValue("password", getPassword()),
+//                    new SharedPreferencesHelper.ContentValue("name", getAccount()));
         }
     }
 
@@ -695,11 +722,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     /**
      * 判断是否记住密码
      */
-    private boolean remenberPassword() {
+    private String remenberPassword() {
         //获取SharedPreferences对象，使用自定义类的方法来获取对象
 //        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-        boolean remenberPassword = helper.getBoolean("remenberPassword", false);
-        return remenberPassword;
+//        boolean remenberPassword = helper.getBoolean("remenberPassword", false);
+        return StringUtil.getValue("remenberPassword");
     }
 
     /**
@@ -708,15 +735,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private boolean firstLogin() {
         //获取SharedPreferences对象，使用自定义类的方法来获取对象
 //        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-        boolean first = helper.getBoolean("first", true);//如果是第一个就返回true
-        if (!first) {
+//        boolean first = helper.getBoolean("first", true);//如果是第一个就返回true
+        String first = StringUtil.getValue("first");//如果是第一次登录，返回Y
+        if ("Y".equals(first)) {//如果是第一次登录
             Log.e("first", "frst");
             //创建一个ContentVa对象（自定义的）设置不是第一次登录，,并创建记住密码和自动登录是默认不选，创建账号和密码为空
-            helper.putValues(new SharedPreferencesHelper.ContentValue("first", true),
-                    new SharedPreferencesHelper.ContentValue("remenberPassword", false),
-                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
-                    new SharedPreferencesHelper.ContentValue("name", ""),
-                    new SharedPreferencesHelper.ContentValue("password", ""));
+//            helper.putValues(new SharedPreferencesHelper.ContentValue("first", true),
+//                    new SharedPreferencesHelper.ContentValue("remenberPassword", false),
+//                    new SharedPreferencesHelper.ContentValue("autoLogin", false),
+//                    new SharedPreferencesHelper.ContentValue("name", ""),
+//                    new SharedPreferencesHelper.ContentValue("password", ""));
+            StringUtil.putValue("first","N");
+            StringUtil.putValue("remenberPassword", "N");
+            StringUtil.putValue("autoLogin", "N");
+            StringUtil.putValue("name", "");
+            StringUtil.putValue("password", "");
             return true;
         }
         return false;

@@ -163,6 +163,9 @@
         <item name="android:backgroundDimAmount">0.4</item>
     </style>
 
-
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item><!--true 屏幕变暗-->
+        <item name="android:windowBackground">@android:color/transparent</item><!-- 背景透明 -->
+    </style>
 
 </resources>

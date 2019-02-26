@@ -3,11 +3,14 @@ package com.app.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -23,13 +26,18 @@ import android.widget.Toast;
 import com.app.R;
 import com.app.Util.LoadingDialogUtil;
 import com.app.Util.MyUrl;
-import com.app.Util.SharedPreferencesHelper;
+//import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
-import com.app.MainApplication;
+//import com.app.MainApplication;
+import com.app.commonAdapter.Com_Adapter;
+import com.app.commonAdapter.Com_ViewHolder;
+import com.app.entity.CommentDao;
 import com.app.entity.HeadImage;
+import com.app.entity.Person;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.view.CircleImageView;
+import com.app.view.CommentDialog;
 import com.app.view.GoodView;
 import com.app.entity.Star_collection;
 import com.app.entity.View_show_dao;
@@ -40,6 +48,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
+import org.w3c.dom.Comment;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,7 +81,7 @@ public class PersonMainPage extends AppCompatActivity {
     private LinearLayout leftChat;
     private LinearLayout leftMainPage;
     private CircleImageView leftImageView;
-
+    private CommentDialog dialog;
 
 
     private View_show_dao viewshow_dao;
@@ -83,10 +94,10 @@ public class PersonMainPage extends AppCompatActivity {
 //    String user = "";
     private String follower;
     private String followed;
-    private static SharedPreferencesHelper helper;
-    static {
-        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
-    }
+//    private static SharedPreferencesHelper helper;
+//    static {
+//        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
+//    }
 
     //===================
     Observer<ResponseResult<View_show_dao>> view_show_observer;
@@ -96,38 +107,29 @@ public class PersonMainPage extends AppCompatActivity {
     Observer<ResponseResult<Star_collection>> star_collection_observer;
     Observer<ResponseResult<Integer>> star_collection_follow;
     Observer<ResponseResult<HeadImage>> headImageObserver;
+    Observer<ResponseResult<View_show_dao>> mainObserver;
+    Observer<ResponseResult<List<CommentDao>>> getCommentObserver;
+    Observer<ResponseResult<String>> comment;
     //===================
+
+    //RecyclerView评论
+    private RecyclerView.Adapter adapter;
+    private List<CommentDao> commentDaoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.person_main_page);
+        follower = StringUtil.getValue("username");
+        Intent intent = getIntent();
+        //============================================================通过ID获取数据
+        view_show_id = intent.getLongExtra("viewID", 1L);
+        commentDaoList = new ArrayList<>();
+
         initData();
         initView();
-//        follower = new SharedPreferencesHelper(MainApplication.getContext(),"user")
-        follower =  helper.getString("username");//follow者
-
-        ///====================动态设置图片的长和宽
-        final LinearLayout view = findViewById(R.id.main_page_show_content);
-        final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        //设置Glide占位图
-        final RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.gray_bg)
-                .error(R.drawable.bg)
-                .priority(Priority.HIGH)
-                .override(lp.width, lp.height)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
-
-        //============================================================通过ID获取数据
-        Intent intent = getIntent();
-        view_show_id = intent.getLongExtra("viewID", 1L);
 
         //=============================底部设置点赞和关注之类
-
         if (star_button != null)
             star_button.init(this);
 
@@ -158,11 +160,13 @@ public class PersonMainPage extends AppCompatActivity {
         });
 
         collection_button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if(isCollection == false){//如果没有点赞
                     isCollection = true;
                     collection_num.setText((Integer.parseInt(collection_num.getText().toString()) +1) +"");
+
                     HttpMethods.getInstance()
                             .add_Collection(view_show_id.toString(),follower,1,collection_observer);
 
@@ -175,7 +179,131 @@ public class PersonMainPage extends AppCompatActivity {
             }
         });
 
-        Observer<ResponseResult<View_show_dao>> observer = new Observer<ResponseResult<View_show_dao>>() {
+//        Observer<ResponseResult<View_show_dao>>
+        //view_show_id
+        HttpMethods.getInstance()
+                .getView_show_dao(view_show_id, mainObserver);
+        //===========加载主界面=================================================
+    }
+
+    private void initView() {
+        isYes = false;
+        isCollection = false;
+        yesNum = findViewById(R.id.yesnum);
+        collection_num = findViewById(R.id.collection_num);
+        toolbar = findViewById(R.id.main_page_toolBar);
+        collapsingToolbarLayout = findViewById(R.id.main_page_collapsing);
+        main_top_imageView = findViewById(R.id.main_page_top_imageview);
+        title_view = findViewById(R.id.main_page_title);
+        main_page_position_name = findViewById(R.id.main_page_position_name);
+        personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
+        headImage = findViewById(R.id.headImage);
+        star_button =  findViewById(R.id.person_page_yes_no);
+        collection_button = findViewById(R.id.person_page_collection);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        leftMainPage = findViewById(R.id.leftMainPage);
+        leftChat = findViewById(R.id.leftChat);
+
+        //通过java添加 图片
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            /**
+             * 当抽屉滑动状态改变的时候被调用
+             * 状态值是STATE_IDLE（闲置--0）, STATE_DRAGGING（拖拽的--1）, STATE_SETTLING（固定--2）中之一。
+             * 抽屉打开的时候，点击抽屉，drawer的状态就会变成STATE_DRAGGING，然后变成STATE_IDLE
+             */
+            @Override
+            public void onDrawerStateChanged(int arg0) {
+//                Log.i("drawer", "drawer的状态：" + arg0);
+            }
+
+            /**
+             * 当抽屉被滑动的时候调用此方法
+             * arg1 表示 滑动的幅度（0-1）
+             */
+            @Override
+            public void onDrawerSlide(View arg0, float arg1) {
+                Log.i("drawer", arg1 + "");
+            }
+
+            /**
+             * 当一个抽屉被完全打开的时候被调用
+             */
+            @Override
+            public void onDrawerOpened(View arg0) {
+//                Log.i("drawer", "抽屉被完全打开了！");
+            }
+
+            /**
+             * 当一个抽屉完全关闭的时候调用此方法
+             */
+            @Override
+            public void onDrawerClosed(View arg0) {
+//                Log.i("drawer", "抽屉被完全关闭了！");
+            }
+        });
+        headImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.RIGHT);
+            }
+        });
+//        上述打开抽屉
+
+        leftMainPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PersonMainPage.this,"请求主页",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PersonMainPage.this,OwnMainPage.class);
+                intent.putExtra("userId",followed);
+                startActivity(intent);
+            }
+        });
+        leftChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PersonMainPage.this,"请求联系 Ta",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initData() {
+        loadingDialogUtil = new LoadingDialogUtil(PersonMainPage.this);
+        loadingDialogUtil.setCanceledOnTouchOutside(false);
+
+        adapter = new Com_Adapter<CommentDao>(PersonMainPage.this,R.layout.comment,commentDaoList){
+
+            @Override
+            public void convert(Com_ViewHolder holder, CommentDao commentDao) {
+                holder.setText(R.id.commentName, commentDao.getUserName());
+                holder.setText(R.id.commentComment, commentDao.getComment());
+                holder.setText(R.id.mytime,StringUtil.millToTime(commentDao.getMytime()));
+                holder.setImageResource(R.id.commentHeadImage, MyUrl.add_Path(commentDao.getDefaultImage()));
+            }
+        };
+
+        ///====================动态设置图片的长和宽
+        final LinearLayout view = findViewById(R.id.main_page_show_content);
+        final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        //设置Glide占位图
+        final RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.gray_bg)
+                .error(R.drawable.bg)
+                .priority(Priority.HIGH)
+                .override(lp.width, lp.height)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+        mainObserver = new Observer<ResponseResult<View_show_dao>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 loadingDialogUtil.show();
@@ -216,6 +344,7 @@ public class PersonMainPage extends AppCompatActivity {
                             content_imageview.setLayoutParams(lp);
                             content_imageview.setAdjustViewBounds(true);
                             content_imageview.setPadding(5, 10, 5, 10);
+                            //通过增加实现
                             view.addView(content_imageview);
                             String url = MyUrl.add_Path(s);
                             Log.e("url", url);
@@ -233,12 +362,46 @@ public class PersonMainPage extends AppCompatActivity {
                         content_textview.setText("   " + s);
                     }//
                 }
+                //for结束，内容展示完成，增加一个评论按钮
+                ImageView commont = new ImageView(PersonMainPage.this);
+                commont.setImageResource(R.drawable.pinglun);
+                ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,100);
+                commont.setLayoutParams(layoutParams);
+                commont.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ///
+                        dialog = new CommentDialog(PersonMainPage.this,new CommentDialog.OnClickCallBack(){
+
+                            @Override
+                            public String send(String comment) {
+                                Toast.makeText(PersonMainPage.this,"PersonMainPage 评论" + comment, +Toast.LENGTH_LONG).show();
+                                return null;
+                            }
+                        });
+                        dialog.show();
+//                        Toast.makeText(PersonMainPage.this,"评论",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                view.addView(commont);
+                //尝试
+                RecyclerView recyclerView = new RecyclerView(PersonMainPage.this);
+                ViewGroup.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                recyclerView.setLayoutParams(layoutParams1);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonMainPage.this);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(adapter);
+                view.addView(recyclerView);
             }
             @Override
             public void onError(Throwable e) {
                 //错误结果
                 Log.e("error", "" + e.getMessage());
                 loadingDialogUtil.cancel();
+                Toast.makeText(PersonMainPage.this,"错误请重试或反馈",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -253,104 +416,12 @@ public class PersonMainPage extends AppCompatActivity {
                         .getStarColllection(view_show_id.toString(),star_collection_observer);
 
                 HttpMethods.getInstance()
-                        .getHeadImage(view_show_id.toString(),headImageObserver);
+                        .getHeadImage(followed,headImageObserver);
+                HttpMethods.getInstance()
+                        .getCommentByViewShow(view_show_id.toString(),getCommentObserver);
             }
         };
-        //view_show_id
-        HttpMethods.getInstance()
-                .getView_show_dao(view_show_id, observer);
-        //===========加载主界面=================================================
-    }
 
-    private void initView() {
-        isYes = false;
-        isCollection = false;
-        yesNum = findViewById(R.id.yesnum);
-        collection_num = findViewById(R.id.collection_num);
-        toolbar = findViewById(R.id.main_page_toolBar);
-        collapsingToolbarLayout = findViewById(R.id.main_page_collapsing);
-        main_top_imageView = findViewById(R.id.main_page_top_imageview);
-        title_view = findViewById(R.id.main_page_title);
-        main_page_position_name = findViewById(R.id.main_page_position_name);
-        personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
-        headImage = findViewById(R.id.headImage);
-
-        //通过java添加 图片
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        star_button =  findViewById(R.id.person_page_yes_no);
-        collection_button = findViewById(R.id.person_page_collection);
-
-
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            /**
-             * 当抽屉滑动状态改变的时候被调用
-             * 状态值是STATE_IDLE（闲置--0）, STATE_DRAGGING（拖拽的--1）, STATE_SETTLING（固定--2）中之一。
-             * 抽屉打开的时候，点击抽屉，drawer的状态就会变成STATE_DRAGGING，然后变成STATE_IDLE
-             */
-            @Override
-            public void onDrawerStateChanged(int arg0) {
-                Log.i("drawer", "drawer的状态：" + arg0);
-            }
-
-            /**
-             * 当抽屉被滑动的时候调用此方法
-             * arg1 表示 滑动的幅度（0-1）
-             */
-            @Override
-            public void onDrawerSlide(View arg0, float arg1) {
-                Log.i("drawer", arg1 + "");
-            }
-
-            /**
-             * 当一个抽屉被完全打开的时候被调用
-             */
-            @Override
-            public void onDrawerOpened(View arg0) {
-                Log.i("drawer", "抽屉被完全打开了！");
-            }
-
-            /**
-             * 当一个抽屉完全关闭的时候调用此方法
-             */
-            @Override
-            public void onDrawerClosed(View arg0) {
-                Log.i("drawer", "抽屉被完全关闭了！");
-            }
-        });
-        headImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.RIGHT);
-            }
-        });
-
-        leftMainPage = findViewById(R.id.leftMainPage);
-        leftChat = findViewById(R.id.leftChat);
-        leftMainPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(PersonMainPage.this,"请求主页",Toast.LENGTH_SHORT).show();
-            }
-        });
-        leftChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(PersonMainPage.this,"请求联系 Ta",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void initData() {
-        loadingDialogUtil = new LoadingDialogUtil(PersonMainPage.this);
-        loadingDialogUtil.setCanceledOnTouchOutside(false);
         star_observer = new Observer<ResponseResult<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -415,7 +486,7 @@ public class PersonMainPage extends AppCompatActivity {
             @Override
             public void onComplete() {
                 loadingDialogUtil.cancel();
-                Toast.makeText(PersonMainPage.this,"关注成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this,"操作成功",Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -441,6 +512,7 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onComplete() {
+
                 /**
                  * 获取点赞
                  */
@@ -509,6 +581,8 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
+
+                Log.e("data",headImageResponseResult.getData().getHead_image());
                 HeadImage headImageData = headImageResponseResult.getData();
                 String headImageUrl = "";
                 if(headImageData != null){
@@ -545,6 +619,63 @@ public class PersonMainPage extends AppCompatActivity {
             }
         };
 
+        getCommentObserver = new Observer<ResponseResult<List<CommentDao>>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<List<CommentDao>> listResponseResult) {
+
+                List<CommentDao> list = listResponseResult.getData();
+                if(listResponseResult.getCode() != 0 && list != null){
+                    commentDaoList.clear();
+                    commentDaoList.addAll(list);
+                    //得到数据
+                    Log.e("size",commentDaoList.size() + " " +commentDaoList.get(0));
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                //刷新
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        comment = new Observer<ResponseResult<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                loadingDialogUtil.show();
+            }
+
+            @Override
+            public void onNext(ResponseResult<String> stringResponseResult) {
+                int code = stringResponseResult.getCode();
+                if(code == 0){
+                    Toast.makeText(PersonMainPage.this,"评论出错啦",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(PersonMainPage.this,"评论成功",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(PersonMainPage.this,"评论出错啦",Toast.LENGTH_SHORT).show();
+                loadingDialogUtil.cancel();
+            }
+
+            @Override
+            public void onComplete() {
+                loadingDialogUtil.cancel();
+            }
+        };
     }
 
     @Override
@@ -570,30 +701,3 @@ public class PersonMainPage extends AppCompatActivity {
         return true;
     }
 }
-/*
-  toolbar = (Toolbar) findViewById(R.id.main_page_toolBar);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_page_collapsing);
-        main_top_imageView = (ImageView) findViewById(R.id.main_page_top_imageview);
-        title_view = (TextView) findViewById(R.id.main_page_title);
-
-        title_view.setText(title);
-        list_dao = new ArrayList<>();
-        //data :/person_page/2.png
-        //  /person_page/up/1.png
-        LinearLayout view = (LinearLayout) findViewById(R.id.main_page_show_content);
-        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        //每个人的图片
-        for (int i = 1; i <= 4; ++i) {
-            dao = new Person_main_page_dao();
-            dao.setUrl("/app/find/up/" + i + ".png");
-            content_imageview = new ImageView(this);
-            content_imageview.setLayoutParams(lp);
-            content_imageview.setAdjustViewBounds(true);
-            content_imageview.setPadding(5,10,5,10);
-            view.addView(content_imageview);
-          //  Glide.with(this).load(MyUrl.getUrl()+dao.getUrl()).into(content_imageview);
-            Log.e("e","" + dao.getUrl());
-        }
-*/

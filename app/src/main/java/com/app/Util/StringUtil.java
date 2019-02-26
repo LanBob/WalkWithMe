@@ -10,6 +10,7 @@ import android.util.Log;
 import com.app.JMS.bean.Message;
 import com.app.JMS.bean.MsgSendStatus;
 import com.app.JMS.bean.MsgType;
+import com.app.MainApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +23,9 @@ import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -34,6 +37,38 @@ import okio.ByteString;
  * Created by sendtion on 2016/6/24.
  */
 public class StringUtil {
+
+    private static SharedPreferencesHelper helper;
+    static {
+        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
+    }
+
+    public static String getValue(String key){
+        return helper.getString(key);
+    }
+
+    /**
+     * {
+     *     "name":登录框的账号
+     *     "password":登录框的密码
+     *     "isAlreadyLogin":是否已经登录，取值：Y或N
+     *     "username":登录的账号，等于手机号
+     *     "isAlreadySetOwnData":是否设置了个人信息,取值:Y或N
+     *     "remenberPassword":是否记住密码，取值Y或N
+     *     "first":是否首次登录
+     * }
+     * @param key
+     * @param value
+     */
+    public static void putValue(String key,String value){
+        helper.putValues(new SharedPreferencesHelper.ContentValue(key,value));
+    }
+
+    public static String millToTime(String mill){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sd = sdf.format(new Date(Long.parseLong(mill)));
+        return sd;
+    }
 
 
     /**

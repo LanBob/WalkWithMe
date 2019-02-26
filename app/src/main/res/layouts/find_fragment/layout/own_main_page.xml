@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tool:context=".activity.OwnMainPage">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/ll_head"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y450"
+                android:background="#00eedd"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.app.view.CircleImageView
+                    android:id="@+id/own_main_page_headImage"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="@dimen/x300"
+                    android:layout_marginTop="@dimen/y40"
+                    android:src="@drawable/chat_girl" />
+
+                <TextView
+                    android:id="@+id/own_main_page_introduce"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请介绍自己" />
+
+                <TextView
+                    android:id="@+id/own_main_page_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y30"
+                    android:text="城市" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="总关注数:"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/own_main_page_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x50"
+                        android:text="总点赞数:"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/own_main_page_star"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/gaideText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_head"
+                android:gravity="center_horizontal"
+                android:text="Ta 的向导"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/gaide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/gaideText" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

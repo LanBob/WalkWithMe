@@ -88,6 +88,20 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
+    /**
+     * 通过id获取旅游信息页面
+     * @param userId
+     * @param observer
+     */
+    public void getViewShowDaoByUserId(String userId,Observer observer){
+        service.getViewShowDaoByUserId(userId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
     public void searchByKeyWord(String keyWord,Observer observer){
         service.searchByKeyWord(keyWord)
                 .subscribeOn(Schedulers.io())
@@ -133,6 +147,27 @@ public class HttpMethods {
     }
     public void getStarColllection(String view_show_id,Observer observer){
         service.getStarCollection(view_show_id,4)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 通过ViewShowId进行查询
+     * @param view_show_id
+     * @param observer
+     */
+    public void getCommentByViewShow(String view_show_id,Observer observer){
+        service.getCommentByViewShowId(view_show_id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void comment(String userId,String viewShowId,String comment,Observer observer){
+        service.comment(userId,viewShowId,comment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
