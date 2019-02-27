@@ -9,6 +9,8 @@
     android:orientation="vertical">
     <TextView
         android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="19sp"
         android:text="无订单"
         android:layout_gravity="center"
         android:id="@+id/mine_item_mytraval_nothing"
@@ -16,10 +18,5 @@
         android:layout_height="match_parent" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
-        android:id="@+id/mine_item_mytraval_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>

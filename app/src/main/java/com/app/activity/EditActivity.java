@@ -168,9 +168,9 @@ public class EditActivity extends AppCompatActivity {
                     viewshow_dao.setIntroduce(content.toString());
                     viewshow_dao.setMoney(new BigDecimal(Double.toString(1.1)));
                     viewshow_dao.setUser_id(13724158682L);
-                    viewshow_dao.setStar(0);
-                    viewshow_dao.setCollection(0);
-                    viewshow_dao.setInterest(0);
+//                    viewshow_dao.setStar(0);
+//                    viewshow_dao.setCollection(0);
+//                    viewshow_dao.setInterest(0);
                     viewshow_dao.setDefaultpath(defalut_path);
 
                     String times = System.currentTimeMillis() + "";

@@ -43,8 +43,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -79,7 +77,7 @@ public class PersonMainPage extends AppCompatActivity {
     private CommentDialog dialog;
 
 
-    private View_show_dao viewshow_dao;
+//    private View_show_dao viewshow_dao;
     private TextView content_textview;
     private ShineButton star_button;
     private ShineButton collection_button;

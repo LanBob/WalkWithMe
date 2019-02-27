@@ -11,9 +11,9 @@ public class View_show_dao {
     private BigDecimal money;
     private String defaultpath;
     private Long id;
-    private int star;
-    private int collection;
-    private int interest;
+//    private int star;
+//    private int collection;
+//    private int interest;
 
     public String getDefaultpath() {
         return defaultpath;
@@ -31,29 +31,29 @@ public class View_show_dao {
         this.id = id;
     }
 
-    public int getStar() {
-        return star;
-    }
-
-    public void setStar(int star) {
-        this.star = star;
-    }
-
-    public int getCollection() {
-        return collection;
-    }
-
-    public void setCollection(int collection) {
-        this.collection = collection;
-    }
-
-    public int getInterest() {
-        return interest;
-    }
-
-    public void setInterest(int interest) {
-        this.interest = interest;
-    }
+//    public int getStar() {
+//        return star;
+//    }
+//
+//    public void setStar(int star) {
+//        this.star = star;
+//    }
+//
+//    public int getCollection() {
+//        return collection;
+//    }
+//
+//    public void setCollection(int collection) {
+//        this.collection = collection;
+//    }
+//
+//    public int getInterest() {
+//        return interest;
+//    }
+//
+//    public void setInterest(int interest) {
+//        this.interest = interest;
+//    }
 
 
 

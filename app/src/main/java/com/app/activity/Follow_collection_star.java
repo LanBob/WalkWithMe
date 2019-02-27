@@ -132,7 +132,9 @@ public class Follow_collection_star extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(Follow_collection_star.this,OwnMainPage.class);
-                            intent.putExtra("userId",person_dao.getId());
+                            String id = person_dao.getId().toString();
+                            Log.e("userId in Follow",id);
+                            intent.putExtra("userId",id);
                             startActivity(intent);
                         }
                     });

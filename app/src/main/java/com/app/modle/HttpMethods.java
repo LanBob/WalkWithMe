@@ -174,6 +174,14 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
+    public void feedBack(String userId,String title,String content,Observer observer){
+        service.feedBack(userId,title,content)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 
 
     /**

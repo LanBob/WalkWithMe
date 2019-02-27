@@ -21,6 +21,8 @@ import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.Fragments.MainActivity;
 //import com.app.MainApplication;
+import com.app.modle.HttpMethods;
+import com.app.modle.ResponseResult;
 import com.app.view.StepDialog;
 import com.app.view.ZoomOutPageTransformer;
 import com.app.entity.Find_item_dao;
@@ -30,6 +32,9 @@ import com.app.entity.Mytraval_dao;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -55,9 +60,9 @@ public class Mineitem extends AppCompatActivity {
     private ImageView imageView;
 
     //我的旅行
-    private RecyclerView mytraval_recyclerView;
+//    private RecyclerView mytraval_recyclerView;
     private TextView mytraval_textView;
-    private List<Mytraval_dao> mytraval_list;
+//    private List<Mytraval_dao> mytraval_list;
 
 
     //发现关注=========================================
@@ -77,6 +82,8 @@ public class Mineitem extends AppCompatActivity {
     private EditText change_password_username;
     private EditText change_password_old;
     private EditText change_password_new;
+    private Observer<ResponseResult<String>> observer;
+    private String userId;
 
 
     @Override
@@ -86,7 +93,8 @@ public class Mineitem extends AppCompatActivity {
         int index = -1;
         index = Integer.parseInt(intent.getStringExtra("index"));
         Log.e("index", "" + index);
-
+        userId = "";
+        userId = StringUtil.getValue("username");
         switch (index) {
             case 1:
 
@@ -108,39 +116,39 @@ public class Mineitem extends AppCompatActivity {
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
                 //============================获取订单消息,无或者recyclerView
-                mytraval_recyclerView = (RecyclerView) findViewById(R.id.mine_item_mytraval_recyclerview);
+//                mytraval_recyclerView = (RecyclerView) findViewById(R.id.mine_item_mytraval_recyclerview);
                 mytraval_textView = (TextView) findViewById(R.id.mine_item_mytraval_nothing);
 
-                mytraval_list = new ArrayList<>();
-                Mytraval_dao dao = new Mytraval_dao();
-                dao.setTitle("欢迎您");
-                dao.setPosition("广州");
-                dao.setMoney(new BigDecimal(50.0));
-                mytraval_list.add(dao);
-
-                if (mytraval_list.size() > 0) {
-                    mytraval_textView.setVisibility(View.GONE);
-                    mytraval_recyclerView.setVisibility(View.VISIBLE);
-                    mytraval_recyclerView.setLayoutManager(new LinearLayoutManager(Mineitem.this));
-
-                    mytraval_recyclerView.setAdapter(new Com_Adapter<Mytraval_dao>(Mineitem.this, R.layout.main_item_2_item, mytraval_list) {
-                        @Override
-                        public void convert(Com_ViewHolder holder, Mytraval_dao mytraval_dao) {
-                            holder.setText(R.id.main_item_2_item_title, mytraval_dao.getTitle());
-                            holder.setText(R.id.main_item_2_item_position, mytraval_dao.getPosition());
-                            holder.setText(R.id.main_item_2_item_money, mytraval_dao.getMoney().toString());
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(Mineitem.this, "show 订单", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    mytraval_textView.setVisibility(View.VISIBLE);
-                    mytraval_recyclerView.setVisibility(View.GONE);
-                }
+//                mytraval_list = new ArrayList<>();
+//                Mytraval_dao dao = new Mytraval_dao();
+//                dao.setTitle("欢迎您");
+//                dao.setPosition("广州");
+//                dao.setMoney(new BigDecimal(50.0));
+//                mytraval_list.add(dao);
+//
+//                if (mytraval_list.size() > 0) {
+//                    mytraval_textView.setVisibility(View.GONE);
+//                    mytraval_recyclerView.setVisibility(View.VISIBLE);
+//                    mytraval_recyclerView.setLayoutManager(new LinearLayoutManager(Mineitem.this));
+//
+//                    mytraval_recyclerView.setAdapter(new Com_Adapter<Mytraval_dao>(Mineitem.this, R.layout.main_item_2_item, mytraval_list) {
+//                        @Override
+//                        public void convert(Com_ViewHolder holder, Mytraval_dao mytraval_dao) {
+//                            holder.setText(R.id.main_item_2_item_title, mytraval_dao.getTitle());
+//                            holder.setText(R.id.main_item_2_item_position, mytraval_dao.getPosition());
+//                            holder.setText(R.id.main_item_2_item_money, mytraval_dao.getMoney().toString());
+//                            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Toast.makeText(Mineitem.this, "show 订单", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                } else {
+//                    mytraval_textView.setVisibility(View.VISIBLE);
+//                    mytraval_recyclerView.setVisibility(View.GONE);
+//                }
 
                 //============================
 
@@ -191,9 +199,8 @@ public class Mineitem extends AppCompatActivity {
                         }else if(title.length() > 20 || body.length() > 100){
                             Toast.makeText(Mineitem.this,"问题标题或内容超限制",Toast.LENGTH_SHORT).show();
                         }else{
-
-                            //HttpMethod
-                            Toast.makeText(Mineitem.this,"" + title + ","+ body,Toast.LENGTH_SHORT).show();
+                            HttpMethods.getInstance()
+                                    .feedBack(userId,title,body,observer);
                         }
                     }
                 });
@@ -235,11 +242,36 @@ public class Mineitem extends AppCompatActivity {
                 actionBar.setTitle("关于");
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
-
                 break;
         }
 
+        observer = new Observer<ResponseResult<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onNext(ResponseResult<String> stringResponseResult) {
+                if(stringResponseResult.getCode() == 0){
+                    Toast.makeText(Mineitem.this,"反馈失败,请稍后",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(Mineitem.this,"已完成，感谢您的反馈！",Toast.LENGTH_LONG).show();
+                    feedback_editText_title.setText("");
+                    feedback_editText_body.setText("");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
     }
 
 

@@ -131,7 +131,8 @@ public class SearchActivity extends AppCompatActivity {
             public void convert(Com_ViewHolder holder, final View_show_dao view_show_dao) {
                 if (view_show_dao != null) {
                     holder.setText(R.id.search_item_position_text, view_show_dao.getCity());
-                    holder.setText(R.id.search_item_star, view_show_dao.getStar() + "");
+                    //获取的Star不准确
+//                    holder.setText(R.id.search_item_star, view_show_dao.getStar() + "");
                     holder.setText(R.id.search_item_money, "¥ " + view_show_dao.getMoney());
                     holder.setImageResource(R.id.search_item_image, MyUrl.add_Path(view_show_dao.getDefaultpath()));
                     holder.setText(R.id.search_item_text, view_show_dao.getTitle());

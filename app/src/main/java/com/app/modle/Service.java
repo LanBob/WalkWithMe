@@ -176,4 +176,10 @@ public interface Service {
     @POST("app/comment")
     Observable<ResponseResult<String>> comment(@Field("userId") String userId,
                                                   @Field("viewShowId") String viewShowId,@Field("comment") String comment);
+
+    @FormUrlEncoded
+    @POST("app/feedBack")
+    Observable<ResponseResult<String>> feedBack(@Field("userId") String userId,
+                                               @Field("title") String title,@Field("content") String content);
+
 }
