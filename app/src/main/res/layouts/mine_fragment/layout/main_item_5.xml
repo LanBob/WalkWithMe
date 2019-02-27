@@ -10,7 +10,7 @@
         android:layout_marginTop="@dimen/x40"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="问题标题  (必填 *)       20字以内" />
+        android:text="问题标题  (必填 *)       30字以内" />
 
     <EditText
         android:id="@+id/feedback_title"
@@ -23,7 +23,7 @@
         android:textSize="17sp"
         android:paddingLeft="@dimen/x20"
         android:hint="输入问题标题……"
-        android:maxLength="20" />
+        android:maxLength="30" />
 
     <TextView
         android:textSize="18sp"
@@ -46,14 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y300"
         android:maxLength="100" />
-
-    <TextView
-        android:textSize="18sp"
-        android:layout_marginLeft="@dimen/x60"
-        android:layout_marginTop="@dimen/x40"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="上传图片 （选填）" />
 
     <Button
         android:id="@+id/feedback_buttom"

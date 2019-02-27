@@ -71,10 +71,6 @@ public class Mineitem extends AppCompatActivity {
     private Button feedbackButton;
     private EditText feedback_editText_title;
     private EditText feedback_editText_body;
-//    private static SharedPreferencesHelper helper = null;
-//    static {
-//        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-//    }
 
     //修改密码
     private Button change_password_button;
@@ -90,6 +86,7 @@ public class Mineitem extends AppCompatActivity {
         int index = -1;
         index = Integer.parseInt(intent.getStringExtra("index"));
         Log.e("index", "" + index);
+
         switch (index) {
             case 1:
 
@@ -194,6 +191,8 @@ public class Mineitem extends AppCompatActivity {
                         }else if(title.length() > 20 || body.length() > 100){
                             Toast.makeText(Mineitem.this,"问题标题或内容超限制",Toast.LENGTH_SHORT).show();
                         }else{
+
+                            //HttpMethod
                             Toast.makeText(Mineitem.this,"" + title + ","+ body,Toast.LENGTH_SHORT).show();
                         }
                     }

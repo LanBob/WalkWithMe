@@ -47,13 +47,13 @@ public interface Service {
     Observable<ResponseResult<List<Find_item_dao>>> getFindItem(@Query("type") int type);
 
     @GET("app/follow_collection")
-    Observable<ResponseResult<List<Find_item_dao>>> getFollow(@Query("userId")String userId,@Query("code")int code);
+    Observable<ResponseResult<List<Person_dao>>> getFollow(@Query("userId")String userId,@Query("code")int code);
 
     @GET("app/follow_collection")
     Observable<ResponseResult<List<Find_item_dao>>> getStar(@Query("userId")String userId,@Query("code")int code);
 
     @GET("app/follow_collection")
-    Observable<ResponseResult<List<Person_dao>>> getCollection(@Query("userId")String userId, @Query("code")int code);
+    Observable<ResponseResult<List<Find_item_dao>>> getCollection(@Query("userId")String userId, @Query("code")int code);
 
     @GET("app/follow_collection")
     Observable<ResponseResult<Star_collection>> getStarCollection(@Query("view_show_id")String view_show_id,@Query("code")int code);

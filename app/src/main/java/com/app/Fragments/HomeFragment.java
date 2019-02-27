@@ -27,6 +27,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +50,7 @@ import com.app.entity.Find_item_dao;
 import com.app.entity.Home_everyDao;
 import com.app.entity.Home_mid_dao;
 import com.app.entity.Home_nine_dao;
+import com.app.view.Roll.ColorPointHintView;
 import com.app.view.Roll.LoopPagerAdapter;
 import com.app.view.Roll.RollPagerView;
 
@@ -111,6 +113,7 @@ public class HomeFragment extends Fragment {
     private List<Home_nine_dao> home_nine_list_dao;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ScrollView scrollView;
+//    private Button button;
 
     //=========home_nine_recyclerViee=============================================
 
@@ -319,8 +322,14 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
         //===========================Search
-        mViewPager.setAdapter(new ImageLoopAdapter(mViewPager));
+        final ImageLoopAdapter loopAdapter = new ImageLoopAdapter(mViewPager);
+        mViewPager.setAdapter(loopAdapter);
+        mViewPager.setHintView(new ColorPointHintView(getContext(),Color.YELLOW,Color.WHITE));
+
+
         //设置全屏透明状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             this.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -471,6 +480,7 @@ public class HomeFragment extends Fragment {
         public int getRealCount() {
             return imgs.length;
         }
+
     }
 
 

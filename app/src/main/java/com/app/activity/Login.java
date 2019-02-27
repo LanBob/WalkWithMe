@@ -85,8 +85,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         context = this;
+        Intent intent = getIntent();
         initView();
         initData();
+        String index = intent.getStringExtra("index");
+        Log.e("index",index);
+        if("4".equals(index)){
+            layout_forget_password.performClick();
+        }
     }
 
     //初始化这些账号密码

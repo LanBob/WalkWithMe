@@ -4,42 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--关注-->
-    <TextView
-        android:id="@+id/follow"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="关注" />
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/follow_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--收藏-->
+            <TextView
+                android:layout_marginTop="@dimen/y10"
+                android:id="@+id/collection"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x50"
+                android:layout_marginBottom="@dimen/y30"
+                android:background="#ACF7F1"
+                android:gravity="center"
+                android:text="收藏的旅游胜地"
+                android:textColor="@color/black" />
 
-    <!--收藏-->
-    <TextView
-        android:id="@+id/collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="无发现" />
+            <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/collection_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/collection_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <!--点赞-->
-    <TextView
-        android:id="@+id/star_"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="无发现" />
+            <!--点赞-->
+            <TextView
+                android:layout_marginTop="@dimen/y30"
+                android:id="@+id/star_"
+                android:layout_marginBottom="@dimen/y30"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30"
+                android:background="#ACF7F1"
+                android:gravity="center"
+                android:text="点赞过的旅游胜地"
+                android:textColor="@color/black" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/star_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/star_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+            <!--关注-->
+            <TextView
+                android:id="@+id/follow"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30"
+                android:layout_marginTop="@dimen/y30"
+                android:background="#ACF7F1"
+                android:layout_marginBottom="@dimen/y30"
+                android:gravity="center"
+                android:text="关注的导游:  "
+                android:textColor="@color/black" />
+
+            <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/follow_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

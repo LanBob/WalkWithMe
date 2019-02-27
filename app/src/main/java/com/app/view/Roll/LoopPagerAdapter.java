@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
- * Created by Mr.Jude on 2016/1/9.
+ * Created by Lusr
  */
 public abstract class LoopPagerAdapter extends PagerAdapter {
     private RollPagerView mViewPager;
@@ -57,7 +57,7 @@ public abstract class LoopPagerAdapter extends PagerAdapter {
         }
     }
 
-    private void setCurrent(int index){
+    public void setCurrent(int index){
         try {
             Field field = ViewPager.class.getDeclaredField("mCurItem");
             field.setAccessible(true);
@@ -114,4 +114,5 @@ public abstract class LoopPagerAdapter extends PagerAdapter {
     }
 
     public abstract int getRealCount();
+//    public abstract View setViewByPosition();
 }

@@ -17,13 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.JMS.activity.ChatActivity;
-import com.app.JMS.util.LogUtil;
-import com.app.JMS.util.PictureFileUtil;
-import com.app.MainApplication;
 import com.app.R;
 import com.app.Util.MyUrl;
-//import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
 import com.app.activity.Authenticate;
 import com.app.activity.EditOwnData;
@@ -38,14 +33,11 @@ import com.app.entity.Person_setting;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.MineRecycleItemDao;
-import com.app.entity.Person;
 import com.app.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
 
 
 import java.util.ArrayList;
@@ -54,7 +46,6 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -167,14 +158,17 @@ public class MineFragment extends Fragment {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getContext(), "-- " + mineRecycleItemDao.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getContext(), "-- " + mineRecycleItemDao.getMessage(), Toast.LENGTH_SHORT).show();
                                 //控制跳转  , "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
                                 String b = "";
 //                                b = helper.getString("isAlreadyLogin");
-                                StringUtil.getValue("isAlreadyLogin");
+                                b = StringUtil.getValue("isAlreadyLogin");
+                                Log.e("myindex",""+mineRecycleItemDao.getIndex()+" -->"+ mineRecycleItemDao.getMessage());
+
                                 switch (mineRecycleItemDao.getIndex()) {
                                     case 1://申请成为导游
                                         if ("Y".equals(b)) {
+                                            //需要修改,改为指向导游验证
                                             Intent intent1 = new Intent(getActivity(), Authenticate.class);
                                             intent1.putExtra("index", "1");
                                             getActivity().startActivity(intent1);
@@ -210,7 +204,7 @@ public class MineFragment extends Fragment {
                                         break;
                                     case 4://修改密码
                                         if ("Y".equals(b)) {
-                                            Intent intent4 = new Intent(getActivity(), Mineitem.class);
+                                            Intent intent4 = new Intent(getActivity(), Login.class);
                                             intent4.putExtra("index", "4");
                                             getActivity().startActivity(intent4);
                                         } else {

@@ -1,11 +1,8 @@
 package com.app.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,14 +23,11 @@ import android.widget.Toast;
 import com.app.R;
 import com.app.Util.LoadingDialogUtil;
 import com.app.Util.MyUrl;
-//import com.app.Util.SharedPreferencesHelper;
 import com.app.Util.StringUtil;
-//import com.app.MainApplication;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.entity.CommentDao;
 import com.app.entity.HeadImage;
-import com.app.entity.Person;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.view.CircleImageView;
@@ -48,7 +42,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
-import org.w3c.dom.Comment;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +104,7 @@ public class PersonMainPage extends AppCompatActivity {
     Observer<ResponseResult<HeadImage>> headImageObserver;
     Observer<ResponseResult<View_show_dao>> mainObserver;
     Observer<ResponseResult<List<CommentDao>>> getCommentObserver;
-    Observer<ResponseResult<String>> comment;
+    Observer<ResponseResult<String>> commentObserver;
     //===================
 
     //RecyclerView评论
@@ -285,6 +280,7 @@ public class PersonMainPage extends AppCompatActivity {
                 holder.setText(R.id.commentComment, commentDao.getComment());
                 holder.setText(R.id.mytime,StringUtil.millToTime(commentDao.getMytime()));
                 holder.setImageResource(R.id.commentHeadImage, MyUrl.add_Path(commentDao.getDefaultImage()));
+
             }
         };
 
@@ -376,7 +372,11 @@ public class PersonMainPage extends AppCompatActivity {
 
                             @Override
                             public String send(String comment) {
+                                //需要发送评论
+                                HttpMethods.getInstance()
+                                        .comment(follower,view_show_id.toString(),comment,commentObserver);
                                 Toast.makeText(PersonMainPage.this,"PersonMainPage 评论" + comment, +Toast.LENGTH_LONG).show();
+
                                 return null;
                             }
                         });
@@ -385,11 +385,23 @@ public class PersonMainPage extends AppCompatActivity {
                     }
                 });
                 view.addView(commont);
-                //尝试
-                RecyclerView recyclerView = new RecyclerView(PersonMainPage.this);
+
                 ViewGroup.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                recyclerView.setLayoutParams(layoutParams1);
+
+                TextView textView = new TextView(PersonMainPage.this);
+                textView.setTextColor(getResources().getColor(R.color.blue));
+                textView.setLayoutParams(layoutParams);
+                textView.setTextSize(19);
+                textView.setText("     以下是评论区:");
+                view.addView(textView);
+
+                ViewGroup.LayoutParams ll = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 190);
+
+                //尝试
+                RecyclerView recyclerView = new RecyclerView(PersonMainPage.this);
+                recyclerView.setLayoutParams(ll);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PersonMainPage.this);
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(linearLayoutManager);
@@ -629,7 +641,7 @@ public class PersonMainPage extends AppCompatActivity {
             public void onNext(ResponseResult<List<CommentDao>> listResponseResult) {
 
                 List<CommentDao> list = listResponseResult.getData();
-                if(listResponseResult.getCode() != 0 && list != null){
+                if( list != null&& listResponseResult.getCode() != 0){
                     commentDaoList.clear();
                     commentDaoList.addAll(list);
                     //得到数据
@@ -649,7 +661,7 @@ public class PersonMainPage extends AppCompatActivity {
             }
         };
 
-        comment = new Observer<ResponseResult<String>>() {
+        commentObserver = new Observer<ResponseResult<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 loadingDialogUtil.show();
