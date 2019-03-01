@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y50"
+                android:text="导游验证"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x60"
+                android:layout_marginTop="@dimen/y18"
+                android:text="请如实填写信息，此信息将作为后台审核、日后"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x60"
+                android:layout_marginTop="@dimen/y10"
+                android:text="发布向导信息的重要依据"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y50">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginTop="@dimen/y10"
+                    android:text="姓名:"
+                    android:textSize="19sp" />
+
+                <EditText
+                    android:id="@+id/inputUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y50"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginRight="@dimen/x80"
+                    android:layout_toRightOf="@id/name"
+                    android:background="@drawable/pink_editext_border" />
+
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_below="@id/inputUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginTop="@dimen/y30"
+                    android:text="年龄:"
+                    android:textSize="19sp" />
+
+
+                <EditText
+                    android:id="@+id/inputAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y50"
+                    android:layout_marginTop="@dimen/y30"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginRight="@dimen/x80"
+                    android:layout_below="@id/inputUserName"
+                    android:layout_toRightOf="@id/age"
+                    android:background="@drawable/pink_editext_border" />
+
+
+                <TextView
+                    android:id="@+id/sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/inputAge"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginTop="@dimen/x50"
+                    android:text="性别:"
+                    android:textSize="19sp" />
+
+                <com.app.view.SwitchView
+                    android:id="@+id/sexButtom"
+                    android:layout_width="@dimen/x110"
+                    android:layout_height="@dimen/x65"
+                    android:layout_below="@id/inputAge"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginTop="@dimen/y30"
+                    android:layout_toRightOf="@id/sex" />
+
+                <TextView
+                    android:id="@+id/sexName"
+                    android:text="男"
+                    android:textSize="19sp"
+                    android:layout_marginTop="@dimen/y40"
+                    android:layout_below="@id/inputAge"
+                    android:layout_marginLeft="@dimen/x19"
+                    android:layout_toRightOf="@id/sexButtom"
+                    android:textColor="@color/pickerview_timebtn_nor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/sexButtom"
+                    android:layout_marginTop="@dimen/y10"
+                    android:gravity="center_horizontal"
+                    android:text="请输入您的个人介绍：" />
+
+
+                <TextView
+                    android:id="@+id/text3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text1"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginTop="@dimen/y18"
+                    android:text="（例如您的生活照、爱好、优良奖项、案例，能向游客证"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text3"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginTop="@dimen/y10"
+                    android:text="明您是作风优良、待人友善、热情待客的向导，包含文字和图片）"
+                    android:textSize="14sp" />
+
+                <com.sendtion.xrichtext.RichTextEditor
+                    android:id="@+id/richText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y580"
+                    android:layout_below="@id/text4"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:layout_marginRight="@dimen/x20"
+                    android:background="@drawable/pink_editext_border"
+                    app:rt_editor_image_bottom="10"
+                    app:rt_editor_image_height="300"
+                    app:rt_editor_text_color="@color/colorAccent"
+                    app:rt_editor_text_init_hint="生活照、爱好、优良奖项、案例、性格等……"
+                    app:rt_editor_text_size="16" />
+
+                <ImageView
+                    android:id="@+id/tocamera"
+                    android:layout_width="@dimen/x150"
+                    android:layout_height="@dimen/x150"
+                    android:layout_below="@id/richText"
+                    android:layout_marginLeft="@dimen/x150"
+                    android:layout_marginBottom="@dimen/x20"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/eidt_add_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/richText"
+                    android:layout_marginTop="@dimen/x50"
+                    android:layout_toRightOf="@id/tocamera"
+                    android:gravity="center"
+                    android:text="请选择您所需的图片"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tocamera"
+                    android:layout_marginLeft="@dimen/x70"
+                    android:layout_marginRight="@dimen/x70"
+                    android:background="#4B45E7"
+                    android:gravity="center_horizontal" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

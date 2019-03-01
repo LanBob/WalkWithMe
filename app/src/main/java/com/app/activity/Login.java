@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         initView();
         initData();
         String index = intent.getStringExtra("index");
-        Log.e("index",index);
+        Log.e("index",index +" ");
         if("4".equals(index)){
             layout_forget_password.performClick();
         }

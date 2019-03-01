@@ -75,6 +75,18 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
+    public void isgoodman(RequestBody requestBody, List<File> fileList,Observer observer) {
+
+        MultipartBody.Part[] partList = filesMultipartBody(fileList);
+            service.isgoodman(requestBody,partList)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
+
+
     /**
      * 通过id获取旅游信息页面
      * @param id

@@ -105,6 +105,10 @@ public interface Service {
     Observable<ResponseResult<String>> uploadFindview(@Part("data") RequestBody description, @Part MultipartBody.Part... multipartBody);
 
     @Multipart
+    @POST("app/isgoodman")
+    Observable<ResponseResult<String>> isgoodman(@Part("data") RequestBody description, @Part MultipartBody.Part... multipartBody);
+
+    @Multipart
     @POST("app/uploadHeadImage")
     Observable<ResponseResult<String>> uploadHeadImage(@Part("id") RequestBody description,@Part MultipartBody.Part... multipartBody);
 
@@ -181,5 +185,6 @@ public interface Service {
     @POST("app/feedBack")
     Observable<ResponseResult<String>> feedBack(@Field("userId") String userId,
                                                @Field("title") String title,@Field("content") String content);
+
 
 }

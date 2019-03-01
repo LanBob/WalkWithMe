@@ -9,17 +9,19 @@
     app:cardBackgroundColor="#ffffff"
     app:cardCornerRadius="10dp"
     app:cardElevation="15dp">
-
+<!--编写步骤内容的代码-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="35dp"
         android:orientation="vertical">
 
+        <!--设置背景-->
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="150dp" />
+
 
         <TextView
             android:id="@+id/test_title"
@@ -33,33 +35,6 @@
             android:textColor="#000000"
             android:textSize="18dp" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            style="@style/TabRadioGroup">
-
-            <RadioButton
-                android:id="@+id/first"
-                style="@style/radiobuttom"
-                android:text="first" />
-
-            <RadioButton
-                android:id="@+id/second"
-                style="@style/radiobuttom"
-                android:text="first" />
-
-            <RadioButton
-                android:id="@+id/third"
-                style="@style/radiobuttom"
-                android:text="first" />
-
-            <RadioButton
-                android:id="@+id/four"
-                style="@style/radiobuttom"
-                android:text="first" />
-
-        </RadioGroup>
-
-
     </LinearLayout>
 
     <TextView
@@ -72,14 +47,6 @@
         android:textColor="#ffffff"
         android:textSize="24dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="10dp"
-        android:text="10月30日 11:11"
-        android:textColor="#CCCCCC"
-        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/next"
@@ -87,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="10dp"
-        android:text="下一题 >>"
+        android:text="下一个提示 >>"
         android:textColor="#333333"
         android:textSize="18dp" />
 

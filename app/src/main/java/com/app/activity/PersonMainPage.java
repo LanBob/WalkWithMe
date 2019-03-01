@@ -76,6 +76,8 @@ public class PersonMainPage extends AppCompatActivity {
     private CircleImageView leftImageView;
     private CommentDialog dialog;
 
+    private TextView upMytime;
+
 
 //    private View_show_dao viewshow_dao;
     private TextView content_textview;
@@ -118,6 +120,7 @@ public class PersonMainPage extends AppCompatActivity {
         //============================================================通过ID获取数据
         view_show_id = intent.getLongExtra("viewID", 1L);
         commentDaoList = new ArrayList<>();
+        upMytime = findViewById(R.id.upMytime);
 
         initData();
         initView();
@@ -278,7 +281,6 @@ public class PersonMainPage extends AppCompatActivity {
                 holder.setText(R.id.commentComment, commentDao.getComment());
                 holder.setText(R.id.mytime,StringUtil.millToTime(commentDao.getMytime()));
                 holder.setImageResource(R.id.commentHeadImage, MyUrl.add_Path(commentDao.getDefaultImage()));
-
             }
         };
 
@@ -312,6 +314,8 @@ public class PersonMainPage extends AppCompatActivity {
                 view_show_id = dao.getId();
                 main_page_position_name.setText(dao.getCity());
                 personMainPageMoney.setText("¥ " + dao.getMoney());
+                Log.e("mytime",dao.getMyTime());
+                upMytime.setText(dao.getMyTime());
 
                 //设置背景图
                 String bgurl = MyUrl.add_Path(dao.getDefaultpath());

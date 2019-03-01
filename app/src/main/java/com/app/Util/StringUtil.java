@@ -70,6 +70,29 @@ public class StringUtil {
         return sd;
     }
 
+    public static boolean isBigDecimal(String str){
+        if(str==null || str.trim().length() == 0){
+            return false;
+        }
+        char[] chars = str.toCharArray();
+        int sz = chars.length;
+        int i = (chars[0] == '-') ? 1 : 0;
+        if(i == sz) return false;
+
+        if(chars[i] == '.') return false;//除了负号，第一位不能为'小数点'
+
+        boolean radixPoint = false;
+        for(; i < sz; i++){
+            if(chars[i] == '.'){
+                if(radixPoint) return false;
+                radixPoint = true;
+            }else if(!(chars[i] >= '0' && chars[i] <= '9')){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * @param targetStr 要处理的字符串

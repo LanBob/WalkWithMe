@@ -92,6 +92,7 @@ public class FindFragment extends Fragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         reflex(tabLayout);//设置tab宽度
 
+        //要判断是否登录且是否成为导游
         //==============跳转到EditActivity
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override

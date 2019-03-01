@@ -13,12 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.R;
 import com.app.Util.CityUtil;
 import com.app.Util.LoadingDialogUtil;
+import com.app.Util.StringUtil;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.View_show_dao;
@@ -55,7 +57,10 @@ public class EditActivity extends AppCompatActivity {
     private TextView type_choose_textView;
     private TextView position_textView;
     private TextView save_textView;
-    private TextView show_view;
+    private EditText editMoney;
+
+    private String userId;
+
     private View_show_dao viewshow_dao;
     LoadingDialogUtil loadingDialogUtil;
     private EditText editText;
@@ -85,9 +90,10 @@ public class EditActivity extends AppCompatActivity {
         type_choose_textView = findViewById(R.id.type_choose);
         save_textView = findViewById(R.id.save_view);
         position_textView = findViewById(R.id.positiong_choose);
-        show_view = findViewById(R.id.show);
+//        show_view = findViewById(R.id.show);
         editText = findViewById(R.id.et_new_title);
-
+        editMoney = findViewById(R.id.editMoney);
+        userId = StringUtil.getValue("username");
 
         viewshow_dao = new View_show_dao();
 
@@ -137,86 +143,96 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //=====================获取editText数据
-                String title = String.valueOf(editText.getText());
-                viewshow_dao.setTitle(title);
-                //=====================
-
-                loadingDialogUtil = new LoadingDialogUtil(EditActivity.this);
-                loadingDialogUtil.setCanceledOnTouchOutside(false);
-                loadingDialogUtil.show();
-                List<RichTextEditor.EditData> editList = richTextEditor.buildEditData();
-                StringBuffer content = new StringBuffer();
-                List<File> files = new ArrayList<>();
-
-                for (RichTextEditor.EditData itemData : editList) {
-                    if (itemData.inputStr != null) {
-                        content.append(itemData.inputStr);
-                    } else if (itemData.imagePath != null) {
-                        String path_1 = itemData.imagePath.substring(itemData.imagePath.lastIndexOf("/") + 1);
-                        if(defalut_path == null){
-                            defalut_path = path_1;
-                        }
-                        content.append("<img src=\"").append(path_1).append("\"/>");
-                        File f = new File(itemData.imagePath);
-                        files.add(f);
-                    }
+                String title = String.valueOf(editText.getText()).trim();
+                String money = String.valueOf(editMoney.getText()).trim();
+                BigDecimal bigDecimal = null;
+                Double d  = 0.0;
+                if(StringUtil.isBigDecimal(money)){
+                    bigDecimal = new BigDecimal(money);
+                    d = bigDecimal.doubleValue();
                 }
-                if (files.size() < 1 || defalut_path == null) {
-                    loadingDialogUtil.cancel();
-                    Toast.makeText(EditActivity.this,"至少选择一张图片",Toast.LENGTH_SHORT).show();
-                } else {
-                    viewshow_dao.setIntroduce(content.toString());
-                    viewshow_dao.setMoney(new BigDecimal(Double.toString(1.1)));
-                    viewshow_dao.setUser_id(13724158682L);
+
+                if (title != null && money != null && !"".equals(title) && !"".equals(money) && StringUtil.isBigDecimal(money) && d >= 0) {
+
+                    viewshow_dao.setTitle(title);
+                    //=====================
+                    loadingDialogUtil = new LoadingDialogUtil(EditActivity.this);
+                    loadingDialogUtil.setCanceledOnTouchOutside(false);
+                    loadingDialogUtil.show();
+                    List<RichTextEditor.EditData> editList = richTextEditor.buildEditData();
+                    StringBuffer content = new StringBuffer();
+                    List<File> files = new ArrayList<>();
+
+                    for (RichTextEditor.EditData itemData : editList) {
+                        if (itemData.inputStr != null) {
+                            content.append(itemData.inputStr);
+                        } else if (itemData.imagePath != null) {
+                            String path_1 = itemData.imagePath.substring(itemData.imagePath.lastIndexOf("/") + 1);
+                            if (defalut_path == null) {
+                                defalut_path = path_1;
+                            }
+                            content.append("<img src=\"").append(path_1).append("\"/>");
+                            File f = new File(itemData.imagePath);
+                            files.add(f);
+                        }
+                    }
+                    if (files.size() < 1 || defalut_path == null) {
+                        loadingDialogUtil.cancel();
+                        Toast.makeText(EditActivity.this, "至少选择一张图片", Toast.LENGTH_SHORT).show();
+                    } else {
+                        viewshow_dao.setIntroduce(content.toString());
+                        viewshow_dao.setMoney(bigDecimal);
+                        viewshow_dao.setUser_id(Long.valueOf(userId));
 //                    viewshow_dao.setStar(0);
 //                    viewshow_dao.setCollection(0);
 //                    viewshow_dao.setInterest(0);
-                    viewshow_dao.setDefaultpath(defalut_path);
+                        viewshow_dao.setDefaultpath(defalut_path);
 
-                    String times = System.currentTimeMillis() + "";
-                    String l = times.substring(3);
-                    viewshow_dao.setId(Long.valueOf(l));
+                        String times = System.currentTimeMillis() + "";
+                        String l = times.substring(3);
+                        viewshow_dao.setId(Long.valueOf(l));
 
-                    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-                    String json = gson.toJson(viewshow_dao);
+                        String json = gson.toJson(viewshow_dao);
 
-                    Log.e("json", json);
+                        Log.e("json", json);
 
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), json);
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), json);
 
-                    Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            Log.e("re", "re");
-                        }
+                        Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                Log.e("re", "re");
+                            }
 
-                        @Override
-                        public void onNext(ResponseResult<String> stringResponseResult) {
-                            Log.e("result_eidttext", stringResponseResult.getData());
-                            loadingDialogUtil.cancel();
-                        }
+                            @Override
+                            public void onNext(ResponseResult<String> stringResponseResult) {
+                                Log.e("result_eidttext", stringResponseResult.getData());
+                                loadingDialogUtil.cancel();
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e("e", "error_message" + e.getMessage());
-                            loadingDialogUtil.cancel();
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("e", "error_message" + e.getMessage());
+                                loadingDialogUtil.cancel();
+                            }
 
-                        @Override
-                        public void onComplete() {
-                            Log.e("e", "complete");
+                            @Override
+                            public void onComplete() {
+                                Log.e("e", "complete");
 
-                        }
-                    };
+                            }
+                        };
 
-                    HttpMethods.getInstance()
-                            .uploadEditText(requestBody, files, observer);
-
-                    show_view.setText(viewshow_dao.getType() + "\n" + viewshow_dao.getCity() + "\n\n"
-                            + viewshow_dao.getIntroduce());
+                        HttpMethods.getInstance()
+                                .uploadEditText(requestBody, files, observer);
+//                        show_view.setText(viewshow_dao.getType() + "\n" + viewshow_dao.getCity() + "\n\n"
+//                                + viewshow_dao.getIntroduce());
+                    }
+                }else {
+                    Toast.makeText(EditActivity.this,"请检查标题或者价格",Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
@@ -288,8 +304,6 @@ public class EditActivity extends AppCompatActivity {
                 richTextEditor.addEditTextAtIndex(richTextEditor.getLastIndex(), "");
             }
         }
-
-
     }
 }
 

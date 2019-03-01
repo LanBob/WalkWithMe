@@ -3,52 +3,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#006064"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/newest"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Newest(0)" />
-
-        <TextView
-            android:id="@+id/newer"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Newer(-1)" />
-
-        <TextView
-            android:id="@+id/older_1"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Older(+1)" />
-
-        <TextView
-            android:id="@+id/older_2"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Older(+2)" />
-
-        <TextView
-            android:id="@+id/older_3"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Older(+3)" />
-    </LinearLayout>
 
     <com.app.view.TurnCardListView
         android:id="@+id/card_list"
@@ -62,7 +16,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Submit"
+        android:text="已经完成阅读"
         android:layout_gravity="center_horizontal|bottom"
         android:textSize="16sp"
         android:textColor="@color/white"

@@ -31,12 +31,15 @@
                     android:src="@drawable/chat_girl" />
 
                 <TextView
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
                     android:id="@+id/own_main_page_introduce"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="请介绍自己" />
 
                 <TextView
+                    android:textSize="17sp"
                     android:id="@+id/own_main_page_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

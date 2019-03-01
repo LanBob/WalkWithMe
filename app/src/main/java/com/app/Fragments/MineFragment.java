@@ -88,11 +88,10 @@ public class MineFragment extends Fragment {
             R.drawable.mine_order, R.drawable.mine_chage_password,
             R.drawable.mine_feedback, R.drawable.mine_back_login,
             R.drawable.mine_add_account,
-            R.drawable.mine_about};
+            R.drawable.mine_about,R.drawable.mine_feedback};
     String[] mineItem = {
-            "账号", "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于"
+            "账号", "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于","管理员入口"
     };
-    int index[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     //====================图片对应关系==============================================
 
     @Nullable

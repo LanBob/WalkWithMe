@@ -11,6 +11,17 @@ public class View_show_dao {
     private BigDecimal money;
     private String defaultpath;
     private Long id;
+
+    public String getMyTime() {
+        return myTime;
+    }
+
+    public void setMyTime(String myTime) {
+        this.myTime = myTime;
+    }
+
+    private String myTime;
+
 //    private int star;
 //    private int collection;
 //    private int interest;

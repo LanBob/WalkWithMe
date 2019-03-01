@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <stroke android:width="2dp" android:color="#48CAB9" /><!--边框颜色-->
+            <stroke android:width="2dp" android:color="#EC64CF" /><!--边框颜色-->
             <solid android:color="#f8f8f8" /><!--填充色-->
             <corners android:radius="8dp" />
         </shape>

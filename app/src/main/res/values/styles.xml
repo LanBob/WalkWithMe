@@ -14,7 +14,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+
+
     <style name="AppTheme.Main" parent="MyAppTheme" />
+
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -167,5 +173,6 @@
         <item name="android:backgroundDimEnabled">false</item><!--true 屏幕变暗-->
         <item name="android:windowBackground">@android:color/transparent</item><!-- 背景透明 -->
     </style>
+
 
 </resources>
