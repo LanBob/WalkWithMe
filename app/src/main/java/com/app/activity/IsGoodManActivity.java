@@ -140,6 +140,7 @@ public class IsGoodManActivity extends AppCompatActivity implements View.OnClick
                     isGoodMan.setAge(age);
                     isGoodMan.setIntroduce(content.toString());
                     isGoodMan.setUserName(userName);
+                    isGoodMan.setScore(0);
                     if(userId =="" || userId == null){
                         userName = "1";
                     }

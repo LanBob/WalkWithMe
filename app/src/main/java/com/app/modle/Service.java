@@ -3,6 +3,7 @@ package com.app.modle;
 import com.app.entity.CommentDao;
 import com.app.entity.Find_item_dao;
 import com.app.entity.HeadImage;
+import com.app.entity.IsGoodMan;
 import com.app.entity.Person_dao;
 import com.app.entity.Person_setting;
 import com.app.entity.Star_collection;
@@ -72,6 +73,9 @@ public interface Service {
     @GET("app/comment")
     Observable<ResponseResult<List<CommentDao>>> getCommentByViewShowId(@Query("viewShowId")String viewShowId);
 
+    @GET("app/isgoodman")
+    Observable<ResponseResult<List<IsGoodMan>>> getIsGoodMan(@Query("code")String code);
+
     /*
 
     @GET("get/who_star_collection")
@@ -90,6 +94,11 @@ public interface Service {
     @POST("app/person_setting")
     Observable<ResponseResult<String>> setPersonSettiong(@Field("person_setting") String json);
 
+//    管理员模块
+    @FormUrlEncoded
+    @POST("app/manager")
+    Observable<ResponseResult<String>> managerUploadScore(@Field("userId") String userId,@Field("score") int score);
+//    管理员模块
 
     /**
      * 通过 MultipartBody和@body作为参数来上传，仅仅是用来进行消息的缓存的。

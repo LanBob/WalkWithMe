@@ -12,6 +12,15 @@ public class IsGoodMan {
     private String sex;
     private String age;
     private String introduce;
+    private Integer score;
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 
     public String getUserId() {
         return userId;

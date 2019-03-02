@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:background="@drawable/textview_border"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y190">
+
+        <com.app.view.CircleImageView
+            android:id="@+id/headImage"
+            android:layout_marginLeft="@dimen/x60"
+            android:src="@drawable/chat_girl"
+            android:layout_width="@dimen/y190"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_toRightOf="@id/headImage"
+            android:layout_marginTop="@dimen/x19"
+            android:layout_marginLeft="@dimen/x60"
+            android:text="lusr"
+            android:textSize="25sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/age"
+            android:layout_below="@id/userName"
+            android:text="年龄: 18"
+            android:layout_toRightOf="@id/headImage"
+            android:layout_marginTop="@dimen/x19"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <TextView
+            android:id="@+id/sex"
+            android:layout_below="@id/userName"
+            android:text="性别: 男"
+            android:layout_toRightOf="@id/age"
+            android:layout_marginTop="@dimen/x19"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/x19"
+        android:paddingBottom="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_marginLeft="@dimen/x60"
+            android:textColor="@color/black"
+            android:text="设置评分: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:background="@drawable/pink_editext_border"
+            android:id="@+id/score"
+            android:layout_width="@dimen/x300"
+            android:layout_height="@dimen/x90" />
+
+        <Button
+            android:background="#00eedd"
+            android:textSize="19sp"
+            android:text="提交"
+            android:id="@+id/scoreButtom"
+            android:layout_width="@dimen/x160"
+            android:layout_height="@dimen/x90" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -75,24 +75,42 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
-    public void isgoodman(RequestBody requestBody, List<File> fileList,Observer observer) {
+    //
+    public void isgoodman(RequestBody requestBody, List<File> fileList, Observer observer) {
 
         MultipartBody.Part[] partList = filesMultipartBody(fileList);
-            service.isgoodman(requestBody,partList)
+        service.isgoodman(requestBody, partList)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-
     }
 
+    public void getIsGoodMan(String code, Observer observer) {
+        service.getIsGoodMan(code)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    //  管理员模块
+    public void managerUploadScore(String userId,int score, Observer observer) {
+        service.managerUploadScore(userId,score)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+//    管理员模块
 
     /**
      * 通过id获取旅游信息页面
+     *
      * @param id
      * @param observer
      */
-    public void getView_show_dao(Long id,Observer observer){
+    public void getView_show_dao(Long id, Observer observer) {
         service.getViewShowDao(id)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -102,10 +120,11 @@ public class HttpMethods {
 
     /**
      * 通过id获取旅游信息页面
+     *
      * @param userId
      * @param observer
      */
-    public void getViewShowDaoByUserId(String userId,Observer observer){
+    public void getViewShowDaoByUserId(String userId, Observer observer) {
         service.getViewShowDaoByUserId(userId)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -114,7 +133,7 @@ public class HttpMethods {
     }
 
 
-    public void searchByKeyWord(String keyWord,Observer observer){
+    public void searchByKeyWord(String keyWord, Observer observer) {
         service.searchByKeyWord(keyWord)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -124,10 +143,11 @@ public class HttpMethods {
 
     /**
      * findViewShow，通过type
+     *
      * @param type
      * @param observer
      */
-    public void getFind_item(int type,Observer observer){
+    public void getFind_item(int type, Observer observer) {
         service.getFindItem(type)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -135,30 +155,32 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
-    public void getFollow(String userId,Observer observer){
-        service.getFollow(userId,3)
+    public void getFollow(String userId, Observer observer) {
+        service.getFollow(userId, 3)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void getStar(String userId,Observer observer){
-        service.getStar(userId,0)
+    public void getStar(String userId, Observer observer) {
+        service.getStar(userId, 0)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-    public void getCollection(String userId,Observer observer){
-        service.getCollection(userId,1)
+
+    public void getCollection(String userId, Observer observer) {
+        service.getCollection(userId, 1)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-    public void getStarColllection(String view_show_id,Observer observer){
-        service.getStarCollection(view_show_id,4)
+
+    public void getStarColllection(String view_show_id, Observer observer) {
+        service.getStarCollection(view_show_id, 4)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -167,10 +189,11 @@ public class HttpMethods {
 
     /**
      * 通过ViewShowId进行查询
+     *
      * @param view_show_id
      * @param observer
      */
-    public void getCommentByViewShow(String view_show_id,Observer observer){
+    public void getCommentByViewShow(String view_show_id, Observer observer) {
         service.getCommentByViewShowId(view_show_id)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -178,46 +201,42 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
-    public void comment(String userId,String viewShowId,String comment,Observer observer){
-        service.comment(userId,viewShowId,comment)
+    public void comment(String userId, String viewShowId, String comment, Observer observer) {
+        service.comment(userId, viewShowId, comment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void feedBack(String userId,String title,String content,Observer observer){
-        service.feedBack(userId,title,content)
+    public void feedBack(String userId, String title, String content, Observer observer) {
+        service.feedBack(userId, title, content)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-
 
 
     /**
-     *
-     * @param first view_show_id 或者 follower
+     * @param first  view_show_id 或者 follower
      * @param second who_star or who_collection or followed
      * @param code
      */
-    public void star_collection_follow(String first,String second,int code,Observer observer){
-        service.star_collection_follow(first,second,code)
+    public void star_collection_follow(String first, String second, int code, Observer observer) {
+        service.star_collection_follow(first, second, code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-
-
 
 
     /**
      * insert:Parameters: who_star、view_show_id code = 1
      */
-    public void add_Star(String view_show_id ,String who_star,int code,Observer observer){
-        service.add_Star(view_show_id,who_star,code)
+    public void add_Star(String view_show_id, String who_star, int code, Observer observer) {
+        service.add_Star(view_show_id, who_star, code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -225,36 +244,35 @@ public class HttpMethods {
     }
 
     /**
-     *
      * @param view_show_id
      * @param who_collection
      * @param code
      * @param observer
      */
-    public void add_Collection(String view_show_id,String who_collection,int code,Observer observer){
-        service.add_Collection(view_show_id,who_collection,code)
+    public void add_Collection(String view_show_id, String who_collection, int code, Observer observer) {
+        service.add_Collection(view_show_id, who_collection, code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void add_Follow(String follower,String followed,int code,Observer observer){
-        service.add_Follow(follower,followed,code)
+    public void add_Follow(String follower, String followed, int code, Observer observer) {
+        service.add_Follow(follower, followed, code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-
 
 
     /**
      * 上传图片，参数为List集合和Observer对象
+     *
      * @param fileList
      * @param observer
      */
-    public void uploadFileList(List<File> fileList, Observer observer){
+    public void uploadFileList(List<File> fileList, Observer observer) {
 
         MultipartBody body = filesToMultipartBody(fileList);
 
@@ -267,15 +285,16 @@ public class HttpMethods {
 
     /**
      * 请求文体，请求文件集合，observer
+     *
      * @param requestBody
      * @param fileList
      * @param observer
      */
-    public void uploadEditText(RequestBody requestBody, List<File> fileList, Observer observer){
+    public void uploadEditText(RequestBody requestBody, List<File> fileList, Observer observer) {
 
         MultipartBody.Part[] partList = filesMultipartBody(fileList);
 
-        service.uploadFindview(requestBody,partList)
+        service.uploadFindview(requestBody, partList)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -285,13 +304,14 @@ public class HttpMethods {
 
     /**
      * 注册操作
+     *
      * @param map
      * @param observer
      */
-    public void Login_check(Map map,Observer observer){
+    public void Login_check(Map map, Observer observer) {
         //注册，直接传一个map进来
-        String json  = new Gson().toJson(map);
-        service.login_check(json,0)
+        String json = new Gson().toJson(map);
+        service.login_check(json, 0)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -300,30 +320,31 @@ public class HttpMethods {
 
     /**
      * 登录
+     *
      * @param map
      * @param observer
      */
-    public void login_check(Map map, Observer observer){
-        String json  = new Gson().toJson(map);
-        service.login_check(json,1)
+    public void login_check(Map map, Observer observer) {
+        String json = new Gson().toJson(map);
+        service.login_check(json, 1)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void changePassword(Map map,Observer observer){
-        String json  = new Gson().toJson(map);
-        service.login_check(json,3)
+    public void changePassword(Map map, Observer observer) {
+        String json = new Gson().toJson(map);
+        service.login_check(json, 3)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void loginByMessageCode(Map map,Observer observer){
-        String json  = new Gson().toJson(map);
-        service.login_check(json,2)
+    public void loginByMessageCode(Map map, Observer observer) {
+        String json = new Gson().toJson(map);
+        service.login_check(json, 2)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -347,10 +368,11 @@ public class HttpMethods {
 
     /**
      * 获取验证码
+     *
      * @param phone
      * @param observer
      */
-    public void getMessageCode(String phone,Observer observer){
+    public void getMessageCode(String phone, Observer observer) {
         service.getMessageCode(phone)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -359,17 +381,17 @@ public class HttpMethods {
     }
 
 
-
     /**
      * 上传setting
+     *
      * @param setting
      * @param observer
      */
-    public void Person_settting(Person_setting setting, Observer observer){
+    public void Person_settting(Person_setting setting, Observer observer) {
 //        MultipartBody.Part[] partList = filesMultipartBody(fileList);
         String json = new Gson().toJson(setting);
-         service.setPersonSettiong(json)
-                 .subscribeOn(Schedulers.io())
+        service.setPersonSettiong(json)
+                .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -377,22 +399,23 @@ public class HttpMethods {
 
     /**
      * 上传头像
+     *
      * @param id
      * @param fileList
      * @param observer
      */
-    public void HeadImageUpload(String id,List<File> fileList, Observer observer){
+    public void HeadImageUpload(String id, List<File> fileList, Observer observer) {
         MultipartBody.Part[] partList = filesMultipartBody(fileList);
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), id);
-        service.uploadHeadImage(requestBody,partList)
+        service.uploadHeadImage(requestBody, partList)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public void getHeadImage(String phone, Observer observer){
+    public void getHeadImage(String phone, Observer observer) {
         service.getHeadImage(phone)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -404,10 +427,9 @@ public class HttpMethods {
     //对外的方法end=====================================================================================================
 
 
-
     public static MultipartBody.Part[] filesMultipartBody(List<File> fileList) {
         MultipartBody.Part[] partArray = new MultipartBody.Part[fileList.size()];
-        for(int i=0;i<fileList.size();++i){
+        for (int i = 0; i < fileList.size(); ++i) {
             File file = fileList.get(i);
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file",
                     file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
@@ -417,9 +439,9 @@ public class HttpMethods {
     }
 
 
-
     /**
      * 图片，构造MultipartBody
+     *
      * @param fileList
      * @return
      */
@@ -443,12 +465,10 @@ public class HttpMethods {
     }
 
     //判断文件类型
-    private static String guessMimeType(String path)
-    {
+    private static String guessMimeType(String path) {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         String contentTypeFor = fileNameMap.getContentTypeFor(path);
-        if (contentTypeFor == null)
-        {
+        if (contentTypeFor == null) {
             contentTypeFor = "application/octet-stream";
         }
         return contentTypeFor;

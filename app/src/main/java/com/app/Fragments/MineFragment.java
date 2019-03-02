@@ -24,6 +24,7 @@ import com.app.activity.Authenticate;
 import com.app.activity.EditOwnData;
 import com.app.activity.Follow_collection_star;
 import com.app.activity.Login;
+import com.app.activity.ManagerEntity;
 import com.app.activity.Mineitem;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.commonAdapter.MultiItemTypeSupport;
@@ -47,7 +48,6 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 
-
 /**
  * 特别提醒，由于bug，在设置多种类型的item的时候，由于使用position来绑定视图数据，因此，每增加一种类型要空掉第一个数据
  * Created by donglinghao on 2016-01-28.
@@ -58,7 +58,7 @@ public class MineFragment extends Fragment {
      */
     private RecyclerView recyclerView;
     private MineRecycleItemDao mineRecycleItemDaoData;
-//    private static SharedPreferencesHelper helper;
+    //    private static SharedPreferencesHelper helper;
     ImageView settingImage;
     private CircleImageView head_image;
     public static final int REQUEST_CODE_IMAGE = 0000;
@@ -88,9 +88,9 @@ public class MineFragment extends Fragment {
             R.drawable.mine_order, R.drawable.mine_chage_password,
             R.drawable.mine_feedback, R.drawable.mine_back_login,
             R.drawable.mine_add_account,
-            R.drawable.mine_about,R.drawable.mine_feedback};
+            R.drawable.mine_about, R.drawable.mine_feedback};
     String[] mineItem = {
-            "账号", "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于","管理员入口"
+            "账号", "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于", "管理员入口"
     };
     //====================图片对应关系==============================================
 
@@ -162,7 +162,7 @@ public class MineFragment extends Fragment {
                                 String b = "";
 //                                b = helper.getString("isAlreadyLogin");
                                 b = StringUtil.getValue("isAlreadyLogin");
-                                Log.e("myindex",""+mineRecycleItemDao.getIndex()+" -->"+ mineRecycleItemDao.getMessage());
+                                Log.e("myindex", "" + mineRecycleItemDao.getIndex() + " -->" + mineRecycleItemDao.getMessage());
 
                                 switch (mineRecycleItemDao.getIndex()) {
                                     case 1://申请成为导游
@@ -238,10 +238,14 @@ public class MineFragment extends Fragment {
                                             getActivity().startActivity(intent_login);
                                         }
                                         break;
-                                    default://关于
+                                    case 8://关于
                                         Intent intent8 = new Intent(getActivity(), Mineitem.class);
                                         intent8.putExtra("index", "8");
                                         getActivity().startActivity(intent8);
+                                        break;
+                                    default:
+                                        Intent intent9 = new Intent(getActivity(), ManagerEntity.class);
+                                        startActivity(intent9);
                                         break;
                                 }
                             }
@@ -326,7 +330,7 @@ public class MineFragment extends Fragment {
 
                                     @Override
                                     public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
-                                        HeadImage headImage  = headImageResponseResult.getData();
+                                        HeadImage headImage = headImageResponseResult.getData();
                                         CircleImageView circleImageView = holder.itemView.findViewById(R.id.head_image);
                                         RequestOptions options = new RequestOptions()
                                                 .centerCrop()
@@ -356,7 +360,7 @@ public class MineFragment extends Fragment {
                                 HttpMethods.getInstance()
                                         .getPerson(userID, observer);
                                 HttpMethods.getInstance()
-                                        .getHeadImage(userID.toString(),responseResultObserver);
+                                        .getHeadImage(userID.toString(), responseResultObserver);
 
                             } else {
                                 beforecheckin.setVisibility(View.GONE);
@@ -393,8 +397,6 @@ public class MineFragment extends Fragment {
         }
         return mRootView;
     }
-
-
 
 
     private void sendImageMessage(String path) {
