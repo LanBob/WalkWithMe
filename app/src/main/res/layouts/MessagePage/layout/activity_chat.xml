@@ -44,7 +44,6 @@
             android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-
             >
 
             <ImageView
@@ -105,11 +104,11 @@
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:padding="1dp"
                 android:layout_marginRight="10dp"
+                android:padding="1dp"
                 android:text="发送"
-                android:textSize="13dp"
                 android:textColor="@color/white"
+                android:textSize="13dp"
                 android:visibility="gone"
                 app:normalBackgroundColor="#127CD6"
                 app:pressedBackgroundColor="#0f519b"
@@ -142,7 +141,6 @@
             layout="@layout/include_add_layout"
             android:visibility="gone" />
     </RelativeLayout>
-
 
 
 </LinearLayout>

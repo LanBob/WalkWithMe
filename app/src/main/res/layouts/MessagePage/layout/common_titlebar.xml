@@ -45,7 +45,7 @@
             android:ellipsize="end"
             android:maxLength="10"
             android:singleLine="true"
-            android:text="联系人"
+            android:text="客服"
             android:textColor="#333"
              android:textSize="16dp" />
 

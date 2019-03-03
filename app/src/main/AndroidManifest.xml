@@ -110,5 +110,6 @@
         </activity>
         <activity android:name=".activity.ManagerGoodManActivity"/>
         <activity android:name=".activity.ManagerNeededScoreActivity"/>
+        <activity android:name=".activity.MessageInterScore"/>
     </application>
 </manifest>

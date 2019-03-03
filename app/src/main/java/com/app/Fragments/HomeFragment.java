@@ -166,10 +166,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void convert(Com_ViewHolder holder, final Find_item_dao find_item_dao) {
 
-                    holder.setText(R.id.home_mid_title,find_item_dao.getTitle());
-                    holder.setText(R.id.home_mid_money,"¥ " + find_item_dao.getMoney());
-                    holder.setText(R.id.home_mid_city,find_item_dao.getCity());
-                    holder.setText(R.id.home_mid_star,find_item_dao.getStar()+"");
+                    holder.setText(R.id.home_mid_title, find_item_dao.getTitle());
+                    holder.setText(R.id.home_mid_money, "¥ " + find_item_dao.getMoney());
+                    holder.setText(R.id.home_mid_city, find_item_dao.getCity());
+                    holder.setText(R.id.home_mid_star, find_item_dao.getStar() + "");
                     holder.setImageResource(R.id.home_mid_image, MyUrl.add_Path(find_item_dao.getDefaultpath()));
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -270,6 +270,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Throwable e) {
+                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
                 Log.e("error", e.getMessage());
             }
 
@@ -277,6 +278,7 @@ public class HomeFragment extends Fragment {
             public void onComplete() {
                 Log.e("com", "complete");
                 //可能会犯错，因为list= re，getList（）得到的不是同一个list对象
+                Toast.makeText(getActivity(),"成功进行访问",Toast.LENGTH_LONG).show();
                 adapter.notifyDataSetChanged();
             }
         };
@@ -322,12 +324,10 @@ public class HomeFragment extends Fragment {
         });
 
 
-
-
         //===========================Search
         final ImageLoopAdapter loopAdapter = new ImageLoopAdapter(mViewPager);
         mViewPager.setAdapter(loopAdapter);
-        mViewPager.setHintView(new ColorPointHintView(getContext(),Color.YELLOW,Color.WHITE));
+        mViewPager.setHintView(new ColorPointHintView(getContext(), Color.YELLOW, Color.WHITE));
 
 
         //设置全屏透明状态栏
@@ -376,7 +376,8 @@ public class HomeFragment extends Fragment {
                 if (!isExpand) {
                     expand();
                 }
-                tvSearch.setText("搜索当地导游和美景");
+//                tvSearch.setText("搜索当地导游和美景");
+                tvSearch.setHint("搜索当地导游和美景");
             }
         });
         tvSearch.setOnClickListener(new View.OnClickListener() {
@@ -385,8 +386,6 @@ public class HomeFragment extends Fragment {
                 if (!isExpand) {
                     expand();
                 }
-                if(!"搜索当地导游和美景".equals(tvSearch.getText().toString()))
-                tvSearch.setText("");
             }
         });
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -394,9 +393,12 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: earch fro " + tvSearch.getText().toString());
                 String keyWord = tvSearch.getText().toString().trim();
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("search",keyWord);
-                getActivity().startActivity(intent);
+
+                if (!"".equals(keyWord.trim())) {
+                    Intent intent = new Intent(getActivity(), SearchActivity.class);
+                    intent.putExtra("search", keyWord);
+                    getActivity().startActivity(intent);
+                }
             }
         });
 
@@ -500,11 +502,11 @@ public class HomeFragment extends Fragment {
 
     private void expand() {
         //设置伸展状态时的布局
-        tvSearch.setText("搜索当地导游和美景");
+        tvSearch.setHint("搜索当地导游和美景");
         RelativeLayout.LayoutParams LayoutParams = (RelativeLayout.LayoutParams) mSearchLayout.getLayoutParams();
         LayoutParams.width = LayoutParams.MATCH_PARENT;
         LayoutParams.setMargins(dip2px(10), dip2px(10), dip2px(10), dip2px(10));
-        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.white));
+//        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.white));
         mSearchLayout.setLayoutParams(LayoutParams);
         //开始动画
         beginDelayedTransition(mSearchLayout);
@@ -512,11 +514,11 @@ public class HomeFragment extends Fragment {
 
     private void reduce() {
         //设置收缩状态时的布局
-        tvSearch.setText("搜索");
+        tvSearch.setHint("搜索");
         RelativeLayout.LayoutParams LayoutParams = (RelativeLayout.LayoutParams) mSearchLayout.getLayoutParams();
         LayoutParams.width = dip2px(80);
         LayoutParams.setMargins(dip2px(10), dip2px(10), dip2px(10), dip2px(10));
-        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.search_color));
+//        mSearchLayout.setBackgroundColor(getResources().getColor(R.color.white));
         mSearchLayout.setLayoutParams(LayoutParams);
         //开始动画
         beginDelayedTransition(mSearchLayout);

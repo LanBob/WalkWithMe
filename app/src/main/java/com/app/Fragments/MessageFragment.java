@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.app.JMS.activity.SplashActivity;
 import com.app.R;
+import com.app.Util.StringUtil;
+import com.app.activity.MessageInterScore;
 import com.app.activity.Message_activity;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
@@ -35,6 +37,8 @@ public class MessageFragment extends Fragment {
     private Message_dao dao;
     private View mRootView;
     private String url;
+    private String userId;
+    private String isAlreadyLogin;
 
 
     @Nullable
@@ -42,10 +46,12 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mRootView == null) {
             mRootView = inflater.inflate(R.layout.message_fragment, container, false);
+            userId = StringUtil.getValue("username");
+            isAlreadyLogin = StringUtil.getValue("isAlreadyLogin");
 
             //=========三个消息类型，设置数据，数据来源================================================================
-            list = new ArrayList<Message_dao>(message_image.length);
-            recyclerView = (RecyclerView) mRootView.findViewById(R.id.message_recycleview);
+            list = new ArrayList(message_image.length);
+            recyclerView = mRootView.findViewById(R.id.message_recycleview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             //数据设置
@@ -68,18 +74,17 @@ public class MessageFragment extends Fragment {
                             Toast.makeText(getContext(), " " + message_dao.getMessage_name(), Toast.LENGTH_SHORT).show();
                             switch (message_dao.getMessage_name()) {
                                 case "联系客服":
-//                                    Intent intent = new Intent(getActivity(), Message_activity.class);
                                     Intent intent = new Intent(getActivity(), SplashActivity.class);
                                     intent.putExtra("chat_item", "daoyou");
                                     getActivity().startActivity(intent);
                                     break;
                                 case "消息":
-                                    if (true) {
-                                        Toast.makeText(getContext(), "消息未开放", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Intent intent1 = new Intent(getActivity(), Message_activity.class);
-                                        intent1.putExtra("chat_item", "xiaoxi");
+                                    if ("Y".equals(isAlreadyLogin) && userId != null && !"".equals(userId)) {
+                                        Intent intent1 = new Intent(getActivity(), MessageInterScore.class);
                                         getActivity().startActivity(intent1);
+
+                                    } else {
+                                        Toast.makeText(getContext(), "请先进行登录", Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                                 case "通知":

@@ -120,7 +120,7 @@
                 android:layout_marginTop="@dimen/y10"
                 android:layout_marginRight="@dimen/y10"
                 android:layout_marginBottom="@dimen/x10"
-                android:background="@drawable/shape_bg"
+                android:background="@drawable/textview_border"
                 android:orientation="horizontal"
                 android:gravity="center">
 
@@ -133,8 +133,8 @@
                     android:maxLines="1"
                     android:inputType="text"
                     android:gravity="center_horizontal"
-                    android:text=""
-                    android:textColor="#8A8A8A" />
+                    android:hint="搜索"
+                    android:textColor="@color/black" />
 
                 <ImageView
                     android:id="@+id/editextSearch"

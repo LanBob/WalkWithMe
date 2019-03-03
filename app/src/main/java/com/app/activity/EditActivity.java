@@ -169,10 +169,6 @@ public class EditActivity extends AppCompatActivity {
                 //=====================获取editText数据
                 String title = String.valueOf(editText.getText()).trim();
                 String money = String.valueOf(editMoney.getText()).trim();
-//                inputDetailAddress = findViewById(R.id.inputDetailAddress);
-//                inputRouteAddress  = findViewById(R.id.inputRouteAddress);
-//                switchViewEat = findViewById(R.id.switchViewEat);
-//                switchViewLive = findViewById(R.id.switchViewLive);
                 String detailAddress = String.valueOf(inputDetailAddress.getText()).trim();
                 String routeAddress = String.valueOf(inputRouteAddress.getText()).trim();
 
@@ -256,8 +252,8 @@ public class EditActivity extends AppCompatActivity {
 
                             @Override
                             public void onComplete() {
-                                Log.e("e", "complete");
-
+                                Toast.makeText(EditActivity.this, "发布成功", Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         };
 

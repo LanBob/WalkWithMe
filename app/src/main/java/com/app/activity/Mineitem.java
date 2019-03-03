@@ -203,6 +203,7 @@ public class Mineitem extends AppCompatActivity {
                 StringUtil.putValue("name", "");
                 StringUtil.putValue("score", "0");
 
+
                 Intent myintent = new Intent(Mineitem.this, MainActivity.class);
                 myintent.putExtra("position", 3);
                 finish();
@@ -351,7 +352,7 @@ public class Mineitem extends AppCompatActivity {
                 if(stringResponseResult.getCode() == 1){
                     Toast.makeText(Mineitem.this,"操作成功",Toast.LENGTH_SHORT).show();
                     for (int i =0;i<view_show_daoList.size();++i){
-                        if(stringResponseResult.getMessage().equals(view_show_daoList.get(i).getId())){
+                        if(stringResponseResult.getMessage().equals(String.valueOf(view_show_daoList.get(i).getId()))){
                             view_show_daoList.remove(i);
                             break;
                         }

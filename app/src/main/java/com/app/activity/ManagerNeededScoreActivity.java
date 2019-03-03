@@ -41,6 +41,7 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
     private String notInterScore = "未完成导游相互验证";
     private String completeInterScore = "已完成导游相互验证";
     private Observer<ResponseResult<List<View_show_dao>>> responseResultObserver;
+    private Observer<ResponseResult<String>> managerUpScoreObserVer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +67,13 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
                 } else {
                     holder.setText(R.id.state, completeInterScore);
                 }
+                String viewId = null;
+                if (view_show_dao.getId() != null) {
+                    viewId = String.valueOf(view_show_dao.getId());
+                }
+
+                final String finalViewId = viewId;
+
                 holder.itemView.findViewById(R.id.scoreButtom)
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -77,6 +85,10 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
                                     score = Integer.parseInt(scor);
                                     if (score >= 60 && score <= 100) {
                                         Toast.makeText(ManagerNeededScoreActivity.this, "评分" + score, Toast.LENGTH_SHORT).show();
+
+                                        HttpMethods.getInstance()
+                                                .managerUpScore(finalViewId, score, managerUpScoreObserVer);
+
                                     } else {
                                         Toast.makeText(ManagerNeededScoreActivity.this, "请检查分数60-100", Toast.LENGTH_SHORT).show();
                                     }
@@ -122,6 +134,58 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
             @Override
             public void onComplete() {
 
+            }
+        };
+
+        managerUpScoreObserVer = new Observer<ResponseResult<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<String> stringResponseResult) {
+                if (stringResponseResult != null) {
+
+                    String viewShowId = stringResponseResult.getMessage();
+                    Long viewId = null;
+                    if (viewShowId != null)
+                        viewId = Long.valueOf(viewShowId);
+                    if (viewShowId != null)
+                        if (stringResponseResult.getCode() == 0) {
+                            Toast.makeText(ManagerNeededScoreActivity.this, "该当地向导申请失败，低于140分", Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < neededScoreList.size(); ++i) {
+                                if (neededScoreList.get(i).getId().equals(viewId)) {
+                                    neededScoreList.remove(viewId);
+                                    break;
+                                }
+                            }
+                        } else {
+                            if ("wrong".equals(stringResponseResult.getMessage())) {
+                                Toast.makeText(ManagerNeededScoreActivity.this, "请稍后", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ManagerNeededScoreActivity.this, "该当地向导申请通过", Toast.LENGTH_SHORT).show();
+                                for (int i = 0; i < neededScoreList.size(); ++i) {
+                                    if (neededScoreList.get(i).getId().equals(viewId)) {
+                                        neededScoreList.remove(viewId);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                Toast.makeText(ManagerNeededScoreActivity.this, "请稍后", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+                neededScoreAdapter.notifyDataSetChanged();
             }
         };
     }

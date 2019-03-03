@@ -24,12 +24,14 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
     private LinearLayout top;
     private CardView isGoodMan;
     private CardView managerNeededScore;
+    private LinearLayout manager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manager);
         initView();
+        manager.setVisibility(View.GONE);
     }
 
     private void initView() {
@@ -38,6 +40,7 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
         checkPassWord = findViewById(R.id.checkPassWord);
         isGoodMan = findViewById(R.id.isGoodMan);
         managerNeededScore = findViewById(R.id.managerNeededScore);
+        manager = findViewById(R.id.manager);
         top = findViewById(R.id.top);
         top.setVisibility(View.VISIBLE);
         checkPassWord.setOnClickListener(this);
@@ -55,6 +58,7 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
                     if (s.equals(inputPass)) {
                         Toast.makeText(ManagerEntity.this, "认定成功", Toast.LENGTH_SHORT).show();
                         top.setVisibility(View.GONE);
+                        manager.setVisibility(View.VISIBLE);
                     }
                 } else {
                     Toast.makeText(ManagerEntity.this, "验证失败", Toast.LENGTH_SHORT).show();

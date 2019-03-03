@@ -100,6 +100,19 @@ public interface Service {
     @GET("app/up_view_show")
     Observable<ResponseResult<List<View_show_dao>>> managerNeededToScore(@Query("code") String code);
 
+    //    消息中查询要进行评分的ViewShow
+    @GET("app/interScore")
+    Observable<ResponseResult<View_show_dao>> messageGetViewShowToBeScore(@Query("code") String code,@Query("userId")String userId);
+
+    @FormUrlEncoded
+    @POST("app/interScore")
+    Observable<ResponseResult<String>>
+        messageUpScore(@Field("code") String code,
+                   @Field("viewShowId") String viewShowId,@Field("userId")String userId,@Field("score") int score);
+
+
+    @GET("app/manager")
+    Observable<ResponseResult<View_show_dao>> managerUpScore(@Query("viewShowId") String viewShowId,@Query("score")int score);
 
     //    管理员模块
 
@@ -155,6 +168,8 @@ public interface Service {
     @FormUrlEncoded
     @POST("login")
     Observable<ResponseResult<String>> login_check(@Field("data") String userJson, @Field("code") int code);
+
+
 
 
     /**

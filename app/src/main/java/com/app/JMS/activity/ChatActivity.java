@@ -87,10 +87,8 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
     @BindView(R.id.swipe_chat)
     SwipeRefreshLayout mSwipeRefresh;//下拉刷新
     private ChatAdapter mAdapter;
-//    public static final String mSenderId = "right";
-//    public static final String mTargetId = "left";
     public static String fromUserId = "1168";
-    public static String toUserId = "1158";
+    public static String toUserId = "13724158682";
     public static final int REQUEST_CODE_IMAGE = 0000;
     public static final int REQUEST_CODE_VEDIO = 1111;
     public static final int REQUEST_CODE_FILE = 2222;
@@ -104,6 +102,9 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        fromUserId = StringUtil.getValue("username");
+
         initContent();
     }
 
@@ -177,22 +178,6 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                 mReceiveMsgList.add(message);
                 mAdapter.addData(mReceiveMsgList.size()-1, mReceiveMsgList);
 
-//                switch (message.getMsgType()) {
-//                    case FILE:
-//                        Toast.makeText(ChatActivity.this,"无法接收文件",Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case TEXT:
-//
-//
-//                        break;
-//                    case AUDIO:
-//
-//                        break;
-//                    case IMAGE:
-//                        break;
-//                    case VIDEO:
-//                        break;
-//                }
             }
 
             @Override
@@ -221,32 +206,26 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         //下拉刷新模拟获取历史消息
+
 //        List<Message> mReceiveMsgList = new ArrayList<Message>();
-        //构建文本消息
-        Message mMessgaeText = getBaseReceiveMessage(MsgType.TEXT);
-        TextMsgBody mTextMsgBody = new TextMsgBody();
-        mTextMsgBody.setMessage("收到的消息");
-        mMessgaeText.setBody(mTextMsgBody);
-        mReceiveMsgList.add(mMessgaeText);
-        LogUtil.d("receive message " + mMessgaeText.toString());
 
-        //构建图片消息
-        Message mMessgaeImage = getBaseReceiveMessage(MsgType.IMAGE);
-        ImageMsgBody mImageMsgBody = new ImageMsgBody();
-        mImageMsgBody.setThumbUrl("http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg");
-        mMessgaeImage.setBody(mImageMsgBody);
-        mReceiveMsgList.add(mMessgaeImage);
-        ////删除
-        //构建文件消息
-//          Message mMessgaeFile=getBaseReceiveMessage(MsgType.FILE);
-//          FileMsgBody mFileMsgBody=new FileMsgBody();
-//          mFileMsgBody.setDisplayName("收到的文件");
-//          mFileMsgBody.setSize(12);
-//          mMessgaeFile.setBody(mFileMsgBody);
-        ////删除
+//        //构建文本消息
+//        Message mMessgaeText = getBaseReceiveMessage(MsgType.TEXT);
+//        TextMsgBody mTextMsgBody = new TextMsgBody();
+//        mTextMsgBody.setMessage("收到的消息");
+//        mMessgaeText.setBody(mTextMsgBody);
+//        mReceiveMsgList.add(mMessgaeText);
+//        LogUtil.d("receive message " + mMessgaeText.toString());
 
+//        //构建图片消息
+//        Message mMessgaeImage = getBaseReceiveMessage(MsgType.IMAGE);
+//        ImageMsgBody mImageMsgBody = new ImageMsgBody();
+//        mImageMsgBody.setThumbUrl("http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg");
+//        mMessgaeImage.setBody(mImageMsgBody);
+//        mReceiveMsgList.add(mMessgaeImage);
+        ////删除
 //          mReceiveMsgList.add(mMessgaeFile);
-        mAdapter.addData(0, mReceiveMsgList);
+//        mAdapter.addData(0, mReceiveMsgList);
         mSwipeRefresh.setRefreshing(false);
     }
 
@@ -371,6 +350,7 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
         mTextMsgBody.setMessage(hello);
         mMessgae.setBody(mTextMsgBody);
 
+
         //开始发送
         mAdapter.addData(mMessgae);
         //模拟两秒后发送成功
@@ -425,20 +405,6 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
-//    //文件消息
-//    private void sendFileMessage(String from, String to, final String path) {
-//        final Message mMessgae=getBaseSendMessage(MsgType.FILE);
-//        FileMsgBody mFileMsgBody=new FileMsgBody();
-//        mFileMsgBody.setLocalPath(path);
-//        mFileMsgBody.setDisplayName(FileUtils.getFileName(path));
-//        mFileMsgBody.setSize(FileUtils.getFileLength(path));
-//        mMessgae.setBody(mFileMsgBody);
-//        //开始发送
-//        mAdapter.addData( mMessgae);
-//        //模拟两秒后发送成功
-//        updateMsg(mMessgae);
-//
-//    }
 
     //语音消息
     private void sendAudioMessage(final String path, int time) {
@@ -501,7 +467,7 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
                 mAdapter.notifyItemChanged(position);
             }
-        }, 2000);
+        }, 1000);
 
     }
 

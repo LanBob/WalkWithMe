@@ -316,19 +316,21 @@ public class MineFragment extends Fragment {
                                     @Override
                                     public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
                                         HeadImage headImage = headImageResponseResult.getData();
-                                        CircleImageView circleImageView = holder.itemView.findViewById(R.id.head_image);
-                                        RequestOptions options = new RequestOptions()
-                                                .centerCrop()
-                                                .placeholder(R.drawable.gray_bg)
-                                                .error(R.drawable.chat_girl)
-                                                .priority(Priority.HIGH)
-                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                                        if (headImage != null && headImageResponseResult.getCode() == 1) {
+                                            CircleImageView circleImageView = holder.itemView.findViewById(R.id.head_image);
+                                            RequestOptions options = new RequestOptions()
+                                                    .centerCrop()
+                                                    .placeholder(R.drawable.gray_bg)
+                                                    .error(R.drawable.chat_girl)
+                                                    .priority(Priority.HIGH)
+                                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
-                                        Glide.with(getActivity())
-                                                .load(MyUrl.add_Path(headImage.getHead_image()))
-                                                // .listener(mRequestListener)
-                                                .apply(options)
-                                                .into(circleImageView);
+                                            Glide.with(getActivity())
+                                                    .load(MyUrl.add_Path(headImage.getHead_image()))
+                                                    // .listener(mRequestListener)
+                                                    .apply(options)
+                                                    .into(circleImageView);
+                                        }
                                     }
 
                                     @Override

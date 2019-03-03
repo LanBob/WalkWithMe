@@ -94,6 +94,26 @@ public class HttpMethods {
                 .subscribe(observer);
     }
 
+    //    消息查看ViewShow
+    public void messageGetViewShowToBeScore(String userId, Observer observer) {
+        service.messageGetViewShowToBeScore("0",userId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    //    消息进行评分
+    public void messageUpScore(String userId, String viewShowId,int score,Observer observer) {
+        service.messageUpScore("0",viewShowId,userId,score)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
+
     //  管理员模块
     public void managerUploadScore(String userId, int score, Observer observer) {
         service.managerUploadScore(userId, score)
@@ -105,6 +125,14 @@ public class HttpMethods {
 
     public void managerNeededToScore(Observer observer) {
         service.managerNeededToScore("0")
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void managerUpScore(String viewShowId, int score, Observer observer) {
+        service.managerUpScore(viewShowId, score)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
