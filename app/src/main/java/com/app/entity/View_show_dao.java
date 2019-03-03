@@ -11,6 +11,52 @@ public class View_show_dao {
     private BigDecimal money;
     private String defaultpath;
     private Long id;
+    private String route;
+    private String friendlyToEat;
+    private String firendlyToLive;
+    private String detailAddress;
+    private int score;
+    private String myTime;
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
+    }
+
+    public String getFriendlyToEat() {
+        return friendlyToEat;
+    }
+
+    public void setFriendlyToEat(String friendlyToEat) {
+        this.friendlyToEat = friendlyToEat;
+    }
+
+    public String getFirendlyToLive() {
+        return firendlyToLive;
+    }
+
+    public void setFirendlyToLive(String firendlyToLive) {
+        this.firendlyToLive = firendlyToLive;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     public String getMyTime() {
         return myTime;
@@ -20,7 +66,7 @@ public class View_show_dao {
         this.myTime = myTime;
     }
 
-    private String myTime;
+
 
 //    private int star;
 //    private int collection;

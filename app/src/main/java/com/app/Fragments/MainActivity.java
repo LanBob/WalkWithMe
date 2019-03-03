@@ -24,10 +24,16 @@ import android.widget.TextView;
 
 import com.app.R;
 import com.app.Util.LoadingDialogUtil;
+import com.app.Util.StringUtil;
+import com.app.entity.IsGoodMan;
+import com.app.modle.HttpMethods;
+import com.app.modle.ResponseResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import site.gemus.openingstartanimation.OpeningStartAnimation;
 
 
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.tab_message,
             R.drawable.tab_mine
     };
+
 //    private WebSocket mwebSocket;
 
     public static Context getContext() {
@@ -57,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         return context;
     }
 
+
+//    评分相关
+    private int score;
+    private Observer<ResponseResult<IsGoodMan>> isGoodManObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-
         initView();
 
         initEvent();
@@ -168,6 +178,51 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        产生个人评分分数
+        isGoodManObserver = new Observer<ResponseResult<IsGoodMan>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<IsGoodMan> isGoodManResponseResult) {
+                if(isGoodManResponseResult.getData() == null){
+//                    如果返回为空，证明没有进行评分
+                    score = 0;
+                    StringUtil.putValue("score",String.valueOf(score));
+                    Log.e("score","返回为空，证明没有进行评分");
+                }else {
+                    score = isGoodManResponseResult.getData().getScore();
+                    StringUtil.putValue("score",String.valueOf(score));
+                    Log.e("score","进行评分" + isGoodManResponseResult.getData().getScore());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        String s = StringUtil.getValue("score");
+        String userId =  StringUtil.getValue("username");
+        if(userId == null){
+            userId = "1158";
+        }
+        if(s == null || "".equals(s.trim()) || "0".equals(s)){
+//            没有进行评分
+            HttpMethods.getInstance()
+                    .getScoreByUserId(userId,isGoodManObserver);
+        }else {
+            Log.e("score","评分为" + s);
+        }
 
     }
 

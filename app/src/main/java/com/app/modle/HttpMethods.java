@@ -95,14 +95,52 @@ public class HttpMethods {
     }
 
     //  管理员模块
-    public void managerUploadScore(String userId,int score, Observer observer) {
-        service.managerUploadScore(userId,score)
+    public void managerUploadScore(String userId, int score, Observer observer) {
+        service.managerUploadScore(userId, score)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+    public void managerNeededToScore(Observer observer) {
+        service.managerNeededToScore("0")
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
 //    管理员模块
+
+
+    public void getViewShowByUserId(String userId, Observer observer) {
+        service.getViewShowByUserId("1", userId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
+    public void getScoreByUserId(String userId, Observer observer) {
+        service.getScoreByUserId("2", userId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    //    个人删除ViewShow
+    public void deleteViewShowById(String viewId, Observer observer) {
+        service.deleteViewShowById("0", viewId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 
     /**
      * 通过id获取旅游信息页面

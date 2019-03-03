@@ -71,7 +71,7 @@
                 <com.sendtion.xrichtext.RichTextEditor
                     android:id="@+id/et_new_content"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/y580"
+                    android:layout_height="@dimen/y780"
                     android:layout_marginLeft="@dimen/x20"
                     android:layout_marginRight="@dimen/x20"
                     app:rt_editor_image_bottom="10"
@@ -120,6 +120,7 @@
 
             </LinearLayout>
 
+
             <View
                 android:id="@+id/nothing_view1"
                 android:layout_width="match_parent"
@@ -127,11 +128,124 @@
                 android:layout_below="@id/LL_position"
                 android:background="#CEDADD" />
 
+            <!--增加输入功能-->
+            <LinearLayout
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nothing_view1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x40"
+                    android:layout_height="@dimen/x40"
+                    android:src="@drawable/sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x40"
+                    android:layout_margin="@dimen/x10"
+                    android:text="详细地址 :    "
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/inputDetailAddress"
+                    android:hint="输入地址"
+                    android:background="@drawable/textview_border"
+                    android:textSize="15sp"
+                    android:layout_margin="@dimen/x10"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x40" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/route"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x40"
+                    android:layout_height="@dimen/x40"
+                    android:src="@drawable/sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x40"
+                    android:layout_margin="@dimen/x10"
+                    android:text="推荐路线 :    "
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/inputRouteAddress"
+                    android:hint="输入路线信息"
+                    android:background="@drawable/textview_border"
+                    android:textSize="15sp"
+                    android:layout_margin="@dimen/x10"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x40" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eatLive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/route"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x40"
+                    android:layout_height="@dimen/x40"
+                    android:src="@drawable/sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x40"
+                    android:layout_margin="@dimen/x10"
+                    android:text="是否方便吃？:"
+                    android:textSize="17sp" />
+
+                <com.app.view.SwitchView
+                    android:id="@+id/switchViewEat"
+                    android:layout_width="@dimen/x110"
+                    android:layout_height="@dimen/x65"
+                    android:layout_marginLeft="@dimen/x15" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x40"
+                    android:layout_margin="@dimen/x10"
+                    android:text="是否方便住？:  "
+                    android:textSize="17sp" />
+
+                <com.app.view.SwitchView
+                    android:id="@+id/switchViewLive"
+                    android:layout_width="@dimen/x110"
+                    android:layout_height="@dimen/x65"
+                    android:layout_marginLeft="@dimen/x15" />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/nothing_view11"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x10"
+                android:layout_below="@id/eatLive"
+                android:background="#CEDADD" />
+            <!--增加输入功能-->
+
+
             <LinearLayout
                 android:id="@+id/LL_choose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view1"
+                android:layout_below="@id/nothing_view11"
                 android:orientation="horizontal">
 
                 <ImageView

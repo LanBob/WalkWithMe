@@ -1,8 +1,11 @@
 package com.app.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.R;
+import com.app.Util.LoadingDialogUtil;
+import com.app.Util.MyUrl;
 import com.app.Util.StringUtil;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.Fragments.MainActivity;
 //import com.app.MainApplication;
+import com.app.entity.View_show_dao;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.view.StepDialog;
@@ -60,9 +66,15 @@ public class Mineitem extends AppCompatActivity {
     private ImageView imageView;
 
     //我的旅行
-//    private RecyclerView mytraval_recyclerView;
-    private TextView mytraval_textView;
-//    private List<Mytraval_dao> mytraval_list;
+    private RecyclerView myViewShow;
+    private RecyclerView.Adapter myViewShowAdapter;
+    private List<View_show_dao> view_show_daoList;
+    private Observer<ResponseResult<List<View_show_dao>>> responseResultObserver;
+    private String notInterScore = "未完成导游相互验证";
+    private String completeInterScore = "系统未完成验证";
+    private String failedScore = "申请当地旅游点失败";
+    private String pass = "验证通过";
+    private LoadingDialogUtil loadingDialogUtil;
 
 
     //发现关注=========================================
@@ -84,6 +96,7 @@ public class Mineitem extends AppCompatActivity {
     private EditText change_password_new;
     private Observer<ResponseResult<String>> observer;
     private String userId;
+    private Observer<ResponseResult<String>> deleteObserver;
 
 
     @Override
@@ -92,9 +105,11 @@ public class Mineitem extends AppCompatActivity {
         Intent intent = getIntent();
         int index = -1;
         index = Integer.parseInt(intent.getStringExtra("index"));
-        Log.e("index", "" + index);
         userId = "";
         userId = StringUtil.getValue("username");
+        view_show_daoList = new ArrayList<>();
+
+        initData();
         switch (index) {
             case 1:
 
@@ -115,41 +130,16 @@ public class Mineitem extends AppCompatActivity {
                 actionBar.setTitle("我的旅行");
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
+
                 //============================获取订单消息,无或者recyclerView
-//                mytraval_recyclerView = (RecyclerView) findViewById(R.id.mine_item_mytraval_recyclerview);
-                mytraval_textView = (TextView) findViewById(R.id.mine_item_mytraval_nothing);
+                myViewShow = findViewById(R.id.myViewShow);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Mineitem.this);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                myViewShow.setLayoutManager(linearLayoutManager);
+                myViewShow.setAdapter(myViewShowAdapter);
 
-//                mytraval_list = new ArrayList<>();
-//                Mytraval_dao dao = new Mytraval_dao();
-//                dao.setTitle("欢迎您");
-//                dao.setPosition("广州");
-//                dao.setMoney(new BigDecimal(50.0));
-//                mytraval_list.add(dao);
-//
-//                if (mytraval_list.size() > 0) {
-//                    mytraval_textView.setVisibility(View.GONE);
-//                    mytraval_recyclerView.setVisibility(View.VISIBLE);
-//                    mytraval_recyclerView.setLayoutManager(new LinearLayoutManager(Mineitem.this));
-//
-//                    mytraval_recyclerView.setAdapter(new Com_Adapter<Mytraval_dao>(Mineitem.this, R.layout.main_item_2_item, mytraval_list) {
-//                        @Override
-//                        public void convert(Com_ViewHolder holder, Mytraval_dao mytraval_dao) {
-//                            holder.setText(R.id.main_item_2_item_title, mytraval_dao.getTitle());
-//                            holder.setText(R.id.main_item_2_item_position, mytraval_dao.getPosition());
-//                            holder.setText(R.id.main_item_2_item_money, mytraval_dao.getMoney().toString());
-//                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    Toast.makeText(Mineitem.this, "show 订单", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
-//                    });
-//                } else {
-//                    mytraval_textView.setVisibility(View.VISIBLE);
-//                    mytraval_recyclerView.setVisibility(View.GONE);
-//                }
-
+                HttpMethods.getInstance()
+                        .getViewShowByUserId(userId, responseResultObserver);
                 //============================
 
                 break;
@@ -171,7 +161,7 @@ public class Mineitem extends AppCompatActivity {
                         String old_password = change_password_old.getText().toString();
                         String new_password = change_password_new.getText().toString();
 
-                        if(username.length() <= 1 || old_password.length() <= 1 || new_password.length() <= 1){
+                        if (username.length() <= 1 || old_password.length() <= 1 || new_password.length() <= 1) {
                         }
                     }
                 });
@@ -194,33 +184,24 @@ public class Mineitem extends AppCompatActivity {
                         String title = feedback_editText_title.getText().toString();
                         String body = feedback_editText_body.getText().toString();
 
-                        if(title.length() <= 1 || body.length() <= 1){
-                            Toast.makeText(Mineitem.this,"问题标题或内容不能为空",Toast.LENGTH_SHORT).show();
-                        }else if(title.length() > 20 || body.length() > 100){
-                            Toast.makeText(Mineitem.this,"问题标题或内容超限制",Toast.LENGTH_SHORT).show();
-                        }else{
+                        if (title.length() <= 1 || body.length() <= 1) {
+                            Toast.makeText(Mineitem.this, "问题标题或内容不能为空", Toast.LENGTH_SHORT).show();
+                        } else if (title.length() > 20 || body.length() > 100) {
+                            Toast.makeText(Mineitem.this, "问题标题或内容超限制", Toast.LENGTH_SHORT).show();
+                        } else {
                             HttpMethods.getInstance()
-                                    .feedBack(userId,title,body,observer);
+                                    .feedBack(userId, title, body, observer);
                         }
                     }
                 });
                 break;
             case 6:
                 setContentView(R.layout.main_item_6);
-                /*
-                actionBar = getSupportActionBar();
-                actionBar.setTitle("退出登录");
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
-                */
-
                 //马上又跳回来
-//                new SharedPreferencesHelper(MainApplication.getContext(), "in")
-//                helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "N"));
                 StringUtil.putValue("isAlreadyLogin", "N");
-//                new SharedPreferencesHelper(MainApplication.getContext(), "user")
-//                helper.putValues(new SharedPreferencesHelper.ContentValue("username", ""));
                 StringUtil.putValue("username", "");
+                StringUtil.putValue("name", "");
+                StringUtil.putValue("score", "0");
 
                 Intent myintent = new Intent(Mineitem.this, MainActivity.class);
                 myintent.putExtra("position", 3);
@@ -245,6 +226,10 @@ public class Mineitem extends AppCompatActivity {
                 break;
         }
 
+    }
+
+    private void initData() {
+        loadingDialogUtil = new LoadingDialogUtil(Mineitem.this);
         observer = new Observer<ResponseResult<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -253,10 +238,10 @@ public class Mineitem extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<String> stringResponseResult) {
-                if(stringResponseResult.getCode() == 0){
-                    Toast.makeText(Mineitem.this,"反馈失败,请稍后",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(Mineitem.this,"已完成，感谢您的反馈！",Toast.LENGTH_LONG).show();
+                if (stringResponseResult.getCode() == 0) {
+                    Toast.makeText(Mineitem.this, "反馈失败,请稍后", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Mineitem.this, "已完成，感谢您的反馈！", Toast.LENGTH_LONG).show();
                     feedback_editText_title.setText("");
                     feedback_editText_body.setText("");
                 }
@@ -270,6 +255,122 @@ public class Mineitem extends AppCompatActivity {
             @Override
             public void onComplete() {
 
+            }
+        };
+
+        responseResultObserver = new Observer<ResponseResult<List<View_show_dao>>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<List<View_show_dao>> listResponseResult) {
+                List<View_show_dao> list = listResponseResult.getData();
+                if (list != null) {
+                    view_show_daoList.clear();
+                    view_show_daoList.addAll(list);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        myViewShowAdapter = new Com_Adapter<View_show_dao>(Mineitem.this, R.layout.main_item_2_item, view_show_daoList) {
+
+            @Override
+            public void convert(Com_ViewHolder holder, final View_show_dao view_show_dao) {
+                if (view_show_dao != null) {
+                    holder.setImageResource(R.id.main_item_2_item_iamgeview, MyUrl.add_Path(view_show_dao.getDefaultpath()));
+                    holder.setText(R.id.main_item_2_item_title, view_show_dao.getTitle());
+                    holder.setText(R.id.mytime, view_show_dao.getMyTime());
+                    holder.setText(R.id.main_item_2_item_money, "¥ " + view_show_dao.getMoney());
+                    if (view_show_dao.getScore() < 60) {
+                        holder.setText(R.id.main_item_2_item_state, "状态:" + notInterScore);
+                    } else if (view_show_dao.getScore() >= 60 && view_show_dao.getScore() <= 100) {
+                        holder.setText(R.id.main_item_2_item_state, "状态:" + completeInterScore);
+                    } else if (view_show_dao.getScore() >= 120 && view_show_dao.getScore() < 140) {
+                        holder.setText(R.id.main_item_2_item_state, "状态:" + failedScore);
+                    } else if (view_show_dao.getScore() >= 140) {
+                        holder.setText(R.id.main_item_2_item_state, "状态:" + pass);
+                    }
+
+                    holder.itemView.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(Mineitem.this);
+                            dialog.setTitle("请选择");
+                            dialog.setMessage("删除后无法恢复,确定吗？");
+                            dialog.setCancelable(false);
+                            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+//                                    确定删除
+                                    HttpMethods.getInstance()
+                                            .deleteViewShowById(String.valueOf(view_show_dao.getId()),deleteObserver);
+                                }
+                            });
+                            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(Mineitem.this,"您取消了操作",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
+                    holder.itemView.findViewById(R.id.show).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Mineitem.this,PersonMainPage.class);
+                            intent.putExtra("viewID",view_show_dao.getId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+        };
+
+        deleteObserver = new Observer<ResponseResult<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                loadingDialogUtil.show();
+            }
+
+            @Override
+            public void onNext(ResponseResult<String> stringResponseResult) {
+                if(stringResponseResult.getCode() == 1){
+                    Toast.makeText(Mineitem.this,"操作成功",Toast.LENGTH_SHORT).show();
+                    for (int i =0;i<view_show_daoList.size();++i){
+                        if(stringResponseResult.getMessage().equals(view_show_daoList.get(i).getId())){
+                            view_show_daoList.remove(i);
+                            break;
+                        }
+                    }
+                }else {
+                    Toast.makeText(Mineitem.this,"操作失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                loadingDialogUtil.cancel();
+            }
+
+            @Override
+            public void onComplete() {
+                loadingDialogUtil.cancel();
+                myViewShowAdapter.notifyDataSetChanged();
             }
         };
     }

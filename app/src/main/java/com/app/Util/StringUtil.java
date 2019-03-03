@@ -51,11 +51,13 @@ public class StringUtil {
      * {
      *     "name":登录框的账号
      *     "password":登录框的密码
+     *     "first":是否首次登录
+     *     "remenberPassword":是否记住密码，取值Y或N
+     *
      *     "isAlreadyLogin":是否已经登录，取值：Y或N
      *     "username":登录的账号，等于手机号
      *     "isAlreadySetOwnData":是否设置了个人信息,取值:Y或N
-     *     "remenberPassword":是否记住密码，取值Y或N
-     *     "first":是否首次登录
+     *     "score":评分
      * }
      * @param key
      * @param value
@@ -64,9 +66,9 @@ public class StringUtil {
         helper.putValues(new SharedPreferencesHelper.ContentValue(key,value));
     }
 
-    public static String millToTime(String mill){
+    public static String millToTime(Long mill){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String sd = sdf.format(new Date(Long.parseLong(mill)));
+        String sd = sdf.format(new Date(mill));
         return sd;
     }
 
@@ -313,6 +315,8 @@ public class StringUtil {
     public static boolean isInteger(String str) {
         //加或减出现一次或者零次，然后数字出现任意次
 //        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        if(str == null || "".equals(str))
+            return false;
         Pattern pattern = Pattern.compile("^[\\d]*$");
         return pattern.matcher(str).matches();
     }

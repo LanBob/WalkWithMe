@@ -25,7 +25,9 @@ import android.widget.Toast;
 
 import com.app.R;
 import com.app.Util.MyUrl;
+import com.app.Util.StringUtil;
 import com.app.activity.EditActivity;
+import com.app.activity.Login;
 import com.app.activity.PersonMainPage;
 import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
@@ -58,6 +60,7 @@ public class FindFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     //==========================================================
     private List<Find_item_dao> find_item_list;
+    private int score;
 
     private static List<Find_item_dao>[] find_item_array;
 
@@ -97,8 +100,24 @@ public class FindFragment extends Fragment {
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditActivity.class);
-                getActivity().startActivity(intent);
+                String alreadyLogin = StringUtil.getValue("isAlreadyLogin");
+                if ("Y".equals(alreadyLogin)) {
+
+                    String score = StringUtil.getValue("score");
+                    if (score == null || "".equals(score.trim()) || "0".equals(score)) {
+//                    不能进行发布消息，提示首先要完成认证
+                        Toast.makeText(getContext(), "您的导游评分低于60，请先申请成为导游", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(getActivity(), EditActivity.class);
+                        getActivity().startActivity(intent);
+                    }
+                }else {
+                    Toast.makeText(getContext(), "请进行登录", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), Login.class);
+                    startActivity(intent);
+                }
+
+
             }
         });
         //=========================================设置下拉刷新
@@ -202,7 +221,7 @@ public class FindFragment extends Fragment {
                 }
             };
             getData(position);
-            if(position == 0)
+            if (position == 0)
                 getData(0);
             recyclerView.setAdapter(adapter);
             //==============================================================================================
@@ -245,7 +264,7 @@ public class FindFragment extends Fragment {
     //===================================获取数据,并刷新数据
     private void getData(final int position) {
 
-        if (find_item_array[position].size() == 0 || find_item_array[position] ==null) {
+        if (find_item_array[position].size() == 0 || find_item_array[position] == null) {
             Observer<ResponseResult<List<Find_item_dao>>> observer = new Observer<ResponseResult<List<Find_item_dao>>>() {
                 @Override
                 public void onSubscribe(Disposable d) {
@@ -273,7 +292,7 @@ public class FindFragment extends Fragment {
 
                 @Override
                 public void onComplete() {
-                   // Toast.makeText(getContext(),"加载" + position +"完成",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(),"加载" + position +"完成",Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -281,13 +300,13 @@ public class FindFragment extends Fragment {
                         }
                     });
                     adapter.notifyDataSetChanged();
-                    if(position == 0)
+                    if (position == 0)
                         refreshLayout();
                 }
             };
 
             HttpMethods.getInstance()
-                    .getFind_item(position+1, observer);
+                    .getFind_item(position + 1, observer);
         }
     }
 

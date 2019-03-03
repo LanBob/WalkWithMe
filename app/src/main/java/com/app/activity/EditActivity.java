@@ -24,6 +24,7 @@ import com.app.Util.StringUtil;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.View_show_dao;
+import com.app.view.SwitchView;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -66,7 +67,7 @@ public class EditActivity extends AppCompatActivity {
     private EditText editText;
     String items[] = new String[]{"风景", "摄影", "手工", "人文", "养生", "节日", "风景", "其他"};
     int items_int[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
-    private String defalut_path;
+
 
     //=====================================
     private OptionsPickerView pvOptions;
@@ -75,28 +76,30 @@ public class EditActivity extends AppCompatActivity {
     ArrayList<List<List<String>>> districtList = new ArrayList<>();
     //=====================================
 
+    //    =============================新增四个模块
+    private EditText inputDetailAddress;
+    private EditText inputRouteAddress;
+    private SwitchView switchViewEat;
+    private SwitchView switchViewLive;
+
+    private String eat = "";
+    private String live = "";
+    private String defalut_path;
+    private String city = "";
+//    =============================新增四个模块
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editxml);
-
-        mSelectPath = new ArrayList<>();
         actionBar = getSupportActionBar();
-        imageButton = (ImageView) findViewById(R.id.edit_camera);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle("Edit");
-        richTextEditor = (RichTextEditor) findViewById(R.id.et_new_content);
-        type_choose_textView = findViewById(R.id.type_choose);
-        save_textView = findViewById(R.id.save_view);
-        position_textView = findViewById(R.id.positiong_choose);
-//        show_view = findViewById(R.id.show);
-        editText = findViewById(R.id.et_new_title);
-        editMoney = findViewById(R.id.editMoney);
+        initView();
+        initData();
         userId = StringUtil.getValue("username");
-
-        viewshow_dao = new View_show_dao();
-
         if (pvOptions == null) {
             option_city(EditActivity.this);
         }
@@ -137,6 +140,27 @@ public class EditActivity extends AppCompatActivity {
             }
 
         });
+        switchViewEat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (switchViewEat.isOpened()) {
+                    eat = "是";
+                } else {
+                    eat = "否";
+                }
+            }
+        });
+        switchViewLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (switchViewLive.isOpened()) {
+                    eat = "是";
+                } else {
+                    eat = "否";
+                }
+            }
+        });
+
 
         //设置数据
         save_textView.setOnClickListener(new View.OnClickListener() {
@@ -145,17 +169,26 @@ public class EditActivity extends AppCompatActivity {
                 //=====================获取editText数据
                 String title = String.valueOf(editText.getText()).trim();
                 String money = String.valueOf(editMoney.getText()).trim();
+//                inputDetailAddress = findViewById(R.id.inputDetailAddress);
+//                inputRouteAddress  = findViewById(R.id.inputRouteAddress);
+//                switchViewEat = findViewById(R.id.switchViewEat);
+//                switchViewLive = findViewById(R.id.switchViewLive);
+                String detailAddress = String.valueOf(inputDetailAddress.getText()).trim();
+                String routeAddress = String.valueOf(inputRouteAddress.getText()).trim();
+
                 BigDecimal bigDecimal = null;
-                Double d  = 0.0;
-                if(StringUtil.isBigDecimal(money)){
+                Double d = 0.0;
+                if (StringUtil.isBigDecimal(money)) {
                     bigDecimal = new BigDecimal(money);
                     d = bigDecimal.doubleValue();
                 }
 
-                if (title != null && money != null && !"".equals(title) && !"".equals(money) && StringUtil.isBigDecimal(money) && d >= 0) {
+                if (title != null && money != null && !"".equals(title) &&
+                        !"".equals(money) && StringUtil.isBigDecimal(money) && d >= 0
+                        && detailAddress != null && !"".equals(detailAddress)
+                        && routeAddress != null && !"".equals(routeAddress)) {
 
-                    viewshow_dao.setTitle(title);
-                    //=====================
+
                     loadingDialogUtil = new LoadingDialogUtil(EditActivity.this);
                     loadingDialogUtil.setCanceledOnTouchOutside(false);
                     loadingDialogUtil.show();
@@ -183,14 +216,17 @@ public class EditActivity extends AppCompatActivity {
                         viewshow_dao.setIntroduce(content.toString());
                         viewshow_dao.setMoney(bigDecimal);
                         viewshow_dao.setUser_id(Long.valueOf(userId));
-//                    viewshow_dao.setStar(0);
-//                    viewshow_dao.setCollection(0);
-//                    viewshow_dao.setInterest(0);
                         viewshow_dao.setDefaultpath(defalut_path);
+                        viewshow_dao.setCity(city);
+                        viewshow_dao.setTitle(title);
+                        String time = StringUtil.millToTime(System.currentTimeMillis());
+                        viewshow_dao.setMyTime(time);
+                        viewshow_dao.setDetailAddress(detailAddress);
+                        viewshow_dao.setRoute(routeAddress);
+                        viewshow_dao.setFirendlyToLive(live);
+                        viewshow_dao.setFriendlyToEat(eat);
+                        viewshow_dao.setScore(0);
 
-                        String times = System.currentTimeMillis() + "";
-                        String l = times.substring(3);
-                        viewshow_dao.setId(Long.valueOf(l));
 
                         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
@@ -227,14 +263,34 @@ public class EditActivity extends AppCompatActivity {
 
                         HttpMethods.getInstance()
                                 .uploadEditText(requestBody, files, observer);
-//                        show_view.setText(viewshow_dao.getType() + "\n" + viewshow_dao.getCity() + "\n\n"
-//                                + viewshow_dao.getIntroduce());
                     }
-                }else {
-                    Toast.makeText(EditActivity.this,"请检查标题或者价格",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EditActivity.this, "请检查标题或者价格", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void initData() {
+        mSelectPath = new ArrayList<>();
+        viewshow_dao = new View_show_dao();
+        eat = "否";
+        live = "否";
+    }
+
+    private void initView() {
+        imageButton = findViewById(R.id.edit_camera);
+        richTextEditor = findViewById(R.id.et_new_content);
+        type_choose_textView = findViewById(R.id.type_choose);
+        save_textView = findViewById(R.id.save_view);
+        position_textView = findViewById(R.id.positiong_choose);
+        editText = findViewById(R.id.et_new_title);
+        editMoney = findViewById(R.id.editMoney);
+
+        inputDetailAddress = findViewById(R.id.inputDetailAddress);
+        inputRouteAddress = findViewById(R.id.inputRouteAddress);
+        switchViewEat = findViewById(R.id.switchViewEat);
+        switchViewLive = findViewById(R.id.switchViewLive);
     }
 
     private void option_city(Context context) {
@@ -254,7 +310,7 @@ public class EditActivity extends AppCompatActivity {
                         + cityList.get(options1).get(options2)
                         + districtList.get(options1).get(options2).get(options3);
                 position_textView.setText(tx);
-                viewshow_dao.setCity(tx);
+                city = tx;
 
             }
         }).setSubmitText("确定")//确定按钮文字

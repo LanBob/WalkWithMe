@@ -1,7 +1,9 @@
 package com.app.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -57,7 +59,6 @@ public class PersonMainPage extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ImageView main_top_imageView;
     private ActionBar actionBar;
-    private TextView title_view;
     private List<Person_main_page_dao> list_dao;
     private Person_main_page_dao dao;
     private ImageView content_imageview;
@@ -79,7 +80,6 @@ public class PersonMainPage extends AppCompatActivity {
     private TextView upMytime;
 
 
-//    private View_show_dao viewshow_dao;
     private TextView content_textview;
     private ShineButton star_button;
     private ShineButton collection_button;
@@ -110,6 +110,9 @@ public class PersonMainPage extends AppCompatActivity {
     //RecyclerView评论
     private RecyclerView.Adapter adapter;
     private List<CommentDao> commentDaoList;
+    private TextView eat;
+    private TextView live;
+    private TextView scoreTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +124,10 @@ public class PersonMainPage extends AppCompatActivity {
         view_show_id = intent.getLongExtra("viewID", 1L);
         commentDaoList = new ArrayList<>();
         upMytime = findViewById(R.id.upMytime);
+        eat = findViewById(R.id.eat);
+        live = findViewById(R.id.live);
 
+        scoreTextView = findViewById(R.id.score);
         initData();
         initView();
 
@@ -190,7 +196,6 @@ public class PersonMainPage extends AppCompatActivity {
         toolbar = findViewById(R.id.main_page_toolBar);
         collapsingToolbarLayout = findViewById(R.id.main_page_collapsing);
         main_top_imageView = findViewById(R.id.main_page_top_imageview);
-        title_view = findViewById(R.id.main_page_title);
         main_page_position_name = findViewById(R.id.main_page_position_name);
         personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
         headImage = findViewById(R.id.headImage);
@@ -279,7 +284,7 @@ public class PersonMainPage extends AppCompatActivity {
             public void convert(Com_ViewHolder holder, CommentDao commentDao) {
                 holder.setText(R.id.commentName, commentDao.getUserName());
                 holder.setText(R.id.commentComment, commentDao.getComment());
-                holder.setText(R.id.mytime,StringUtil.millToTime(commentDao.getMytime()));
+                holder.setText(R.id.mytime,StringUtil.millToTime(Long.valueOf(commentDao.getMytime())));
                 holder.setImageResource(R.id.commentHeadImage, MyUrl.add_Path(commentDao.getDefaultImage()));
             }
         };
@@ -314,8 +319,23 @@ public class PersonMainPage extends AppCompatActivity {
                 view_show_id = dao.getId();
                 main_page_position_name.setText(dao.getCity());
                 personMainPageMoney.setText("¥ " + dao.getMoney());
-                Log.e("mytime",dao.getMyTime());
                 upMytime.setText(dao.getMyTime());
+                if("是".equals(dao.getFriendlyToEat())){
+                    eat.setTextColor(getResources().getColor(R.color.blue));
+                    eat.setText("餐饮方便： √");
+                }else {
+                    eat.setTextColor(getResources().getColor(R.color.gray));
+                    eat.setText("餐饮不方便： ×");
+                }
+                if("是".equals(dao.getFirendlyToLive())){
+                    eat.setText("住宿方便： √");
+                    eat.setTextColor(getResources().getColor(R.color.blue));
+                }else {
+                    eat.setTextColor(getResources().getColor(R.color.gray));
+                    eat.setText("住宿不方便： ×");
+                }
+                scoreTextView.setText("综合评分: " + dao.getScore());
+
 
                 //设置背景图
                 String bgurl = MyUrl.add_Path(dao.getDefaultpath());
@@ -360,11 +380,28 @@ public class PersonMainPage extends AppCompatActivity {
                         content_textview.setText("   " + s);
                     }//
                 }
+//                增加线路和详细地址
+                content_textview = new TextView(PersonMainPage.this);
+                content_textview.setLayoutParams(lp);
+                content_textview.setPadding(30, 30, 15, 30);
+                view.addView(content_textview);
+                content_textview.setText("详细地址："+dao.getDetailAddress());
+
+                content_textview = new TextView(PersonMainPage.this);
+                content_textview.setLayoutParams(lp);
+                content_textview.setPadding(30, 30, 15, 30);
+                view.addView(content_textview);
+                content_textview.setText("推荐路线："+dao.getRoute());
+//                增加线路和详细地址
+
+
+
+
+                ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,100);
                 //for结束，内容展示完成，增加一个评论按钮
                 ImageView commont = new ImageView(PersonMainPage.this);
                 commont.setImageResource(R.drawable.pinglun);
-                ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,100);
                 commont.setLayoutParams(layoutParams);
                 commont.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -383,7 +420,6 @@ public class PersonMainPage extends AppCompatActivity {
                             }
                         });
                         dialog.show();
-//                        Toast.makeText(PersonMainPage.this,"评论",Toast.LENGTH_SHORT).show();
                     }
                 });
                 view.addView(commont);

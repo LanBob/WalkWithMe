@@ -58,15 +58,9 @@ public class MineFragment extends Fragment {
      */
     private RecyclerView recyclerView;
     private MineRecycleItemDao mineRecycleItemDaoData;
-    //    private static SharedPreferencesHelper helper;
     ImageView settingImage;
     private CircleImageView head_image;
     public static final int REQUEST_CODE_IMAGE = 0000;
-
-    //    private SharedPreferences sharedPreferences;
-//    static {
-//        helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-//    }
 
 
     //设置View对象
@@ -157,10 +151,8 @@ public class MineFragment extends Fragment {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                Toast.makeText(getContext(), "-- " + mineRecycleItemDao.getMessage(), Toast.LENGTH_SHORT).show();
                                 //控制跳转  , "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
                                 String b = "";
-//                                b = helper.getString("isAlreadyLogin");
                                 b = StringUtil.getValue("isAlreadyLogin");
                                 Log.e("myindex", "" + mineRecycleItemDao.getIndex() + " -->" + mineRecycleItemDao.getMessage());
 
@@ -264,15 +256,11 @@ public class MineFragment extends Fragment {
                             }
                         });
 
-//                        String b = new SharedPreferencesHelper(MainApplication.getContext(), "in")
-//                        String b = helper.getString("isAlreadyLogin");
                         String b = StringUtil.getValue("isAlreadyLogin");
 
                         //如果已经登录，那么通过id和token去请求数据，请求成功，则获取数据并保存
                         if ("Y".equals(b)) {
-//                            final String username = helper.getString("username");
                             final String username = StringUtil.getValue("username");
-//                            boolean isAlreadySetOwnData = helper.getBoolean("isAlreadySetOwnData", false);
                             String isAlreadySetOwnData = StringUtil.getValue("isAlreadySetOwnData");
                             Long userID = null;
                             if (username != null)
@@ -304,9 +292,6 @@ public class MineFragment extends Fragment {
                                             mine_head_textView_name.setText(person_setting.getAlias());
                                             mine_head_textView_sex.setText(person_setting.getSex());
                                             mine_head_textView_introduce.setText(person_setting.getIntroduce());
-//                                        new SharedPreferencesHelper(MainApplication.getContext(), "userId")
-//                                            helper.putValues(new SharedPreferencesHelper.ContentValue("userId", personResponseResult.getData().getId()));
-//                                            StringUtil.putValue("username",personResponseResult.getData().getId());
                                         }
 
                                     }
@@ -398,9 +383,5 @@ public class MineFragment extends Fragment {
         return mRootView;
     }
 
-
-    private void sendImageMessage(String path) {
-        System.out.println(path);
-    }
 }
 

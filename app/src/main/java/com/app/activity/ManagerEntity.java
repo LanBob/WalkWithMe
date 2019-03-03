@@ -23,6 +23,7 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
     private String inputPass = "";
     private LinearLayout top;
     private CardView isGoodMan;
+    private CardView managerNeededScore;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,10 +37,12 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
         passWord = findViewById(R.id.passWord);
         checkPassWord = findViewById(R.id.checkPassWord);
         isGoodMan = findViewById(R.id.isGoodMan);
+        managerNeededScore = findViewById(R.id.managerNeededScore);
         top = findViewById(R.id.top);
         top.setVisibility(View.VISIBLE);
         checkPassWord.setOnClickListener(this);
         isGoodMan.setOnClickListener(this);
+        managerNeededScore.setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +63,11 @@ public class ManagerEntity extends AppCompatActivity implements View.OnClickList
             case R.id.isGoodMan:
                 Intent intent = new Intent(ManagerEntity.this,ManagerGoodManActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.managerNeededScore:
+//
+                Intent intent1 = new Intent(ManagerEntity.this,ManagerNeededScoreActivity.class);
+                startActivity(intent1);
                 break;
         }
     }
