@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.app.R;
 import com.app.Util.CityUtil;
 import com.app.Util.LoadingDialogUtil;
+import com.app.Util.LogOutUtil;
 import com.app.Util.StringUtil;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
@@ -137,6 +138,7 @@ public class EditActivity extends AppCompatActivity {
                         .multi() // 多选模式, 默认模式;
                         .origin(mSelectPath) // 默认已选择图片. 只有在选择模式为多选时有效
                         .start(EditActivity.this, REQUEST_IMAGE);
+
             }
 
         });
@@ -154,9 +156,9 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (switchViewLive.isOpened()) {
-                    eat = "是";
+                    live = "是";
                 } else {
-                    eat = "否";
+                    live = "否";
                 }
             }
         });
@@ -180,10 +182,9 @@ public class EditActivity extends AppCompatActivity {
                 }
 
                 if (title != null && money != null && !"".equals(title) &&
-                        !"".equals(money) && StringUtil.isBigDecimal(money) && d >= 0
+                        !"".equals(money) && StringUtil.isBigDecimal(money) && d > 0
                         && detailAddress != null && !"".equals(detailAddress)
                         && routeAddress != null && !"".equals(routeAddress)) {
-
 
                     loadingDialogUtil = new LoadingDialogUtil(EditActivity.this);
                     loadingDialogUtil.setCanceledOnTouchOutside(false);
@@ -216,6 +217,7 @@ public class EditActivity extends AppCompatActivity {
                         viewshow_dao.setCity(city);
                         viewshow_dao.setTitle(title);
                         String time = StringUtil.millToTime(System.currentTimeMillis());
+                        LogOutUtil.d("time" + time);
                         viewshow_dao.setMyTime(time);
                         viewshow_dao.setDetailAddress(detailAddress);
                         viewshow_dao.setRoute(routeAddress);
@@ -228,31 +230,36 @@ public class EditActivity extends AppCompatActivity {
 
                         String json = gson.toJson(viewshow_dao);
 
-                        Log.e("json", json);
+//                        Log.e("json", json);
+                        LogOutUtil.d(json);
 
                         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), json);
 
                         Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
                             @Override
                             public void onSubscribe(Disposable d) {
-                                Log.e("re", "re");
+
                             }
 
                             @Override
                             public void onNext(ResponseResult<String> stringResponseResult) {
-                                Log.e("result_eidttext", stringResponseResult.getData());
+                                if(stringResponseResult.getCode() == 0){
+                                    Toast.makeText(EditActivity.this, "发布失败", Toast.LENGTH_LONG).show();
+                                }else {
+                                    Toast.makeText(EditActivity.this, "发布成功", Toast.LENGTH_LONG).show();
+                                }
                                 loadingDialogUtil.cancel();
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                Log.e("e", "error_message" + e.getMessage());
+//                                Log.e("e", "error_message" + e.getMessage());
+                                LogOutUtil.d(e.getMessage());
                                 loadingDialogUtil.cancel();
                             }
 
                             @Override
                             public void onComplete() {
-                                Toast.makeText(EditActivity.this, "发布成功", Toast.LENGTH_LONG).show();
                                 finish();
                             }
                         };
