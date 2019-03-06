@@ -59,7 +59,9 @@ import io.reactivex.annotations.NonNull;
 import okhttp3.WebSocket;
 import okio.ByteString;
 
-
+/**
+ * 第一步、setWebSocket(fromUserId);
+ */
 public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.llContent)
@@ -178,6 +180,7 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                 mReceiveMsgList.add(message);
                 mAdapter.addData(mReceiveMsgList.size()-1, mReceiveMsgList);
 
+
             }
 
             @Override
@@ -196,7 +199,6 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
         };
 
         String url = MyUrl.add_Wsurl(fromUserId);
-        Log.e("webweb", "ww" + url);
 
         WebSocketUtil.getInstance()
                 .connect(url, this, webSocketSubscriber);
@@ -350,7 +352,6 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
         mTextMsgBody.setMessage(hello);
         mMessgae.setBody(mTextMsgBody);
 
-
         //开始发送
         mAdapter.addData(mMessgae);
         //模拟两秒后发送成功
@@ -419,7 +420,11 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
         updateMsg(mMessgae);
     }
 
-
+    /**
+     * 设置从谁发来，到谁那里去
+     * @param msgType
+     * @return
+     */
     private Message getBaseSendMessage(MsgType msgType) {
         Message mMessgae = new Message();
         mMessgae.setUuid(UUID.randomUUID() + "");
@@ -467,7 +472,7 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
                 mAdapter.notifyItemChanged(position);
             }
-        }, 1000);
+        }, 500);
 
     }
 
