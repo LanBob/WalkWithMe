@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.app.JMS.activity.ChatListActivity;
 import com.app.JMS.activity.SplashActivity;
 import com.app.R;
 import com.app.Util.StringUtil;
@@ -66,44 +67,51 @@ public class MessageFragment extends Fragment {
             recyclerView.setAdapter(new Com_Adapter<Message_dao>(getContext(), R.layout.message_recyclerview_item, list) {
                 @Override
                 public void convert(Com_ViewHolder holder, final Message_dao message_dao) {
-                    holder.setText(R.id.message_text, message_dao.getMessage_name());
-                    holder.setImageResource(R.id.message_image, message_dao.getMessage_image());
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getContext(), " " + message_dao.getMessage_name(), Toast.LENGTH_SHORT).show();
-                            switch (message_dao.getMessage_name()) {
-                                case "联系客服":
-                                    Intent intent = new Intent(getActivity(), SplashActivity.class);
-                                    intent.putExtra("chat_item", "daoyou");
-                                    getActivity().startActivity(intent);
-                                    break;
-                                case "消息":
-                                    if ("Y".equals(isAlreadyLogin) && userId != null && !"".equals(userId)) {
-                                        Intent intent1 = new Intent(getActivity(), MessageInterScore.class);
-                                        getActivity().startActivity(intent1);
+                    if(message_dao != null){
+                        holder.setText(R.id.message_text, message_dao.getMessage_name());
+                        holder.setImageResource(R.id.message_image, message_dao.getMessage_image());
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getContext(), " " + message_dao.getMessage_name(), Toast.LENGTH_SHORT).show();
+                                switch (message_dao.getMessage_name()) {
+                                    case "联系客服":
+                                        if("N".equals(isAlreadyLogin) || userId == null || !StringUtil.isMobile(userId)){
+                                            Toast.makeText(getContext(), "通知未开放", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            Intent intent = new Intent(getActivity(), ChatListActivity.class);
+                                            intent.putExtra("chat_item", "daoyou");
+                                            getActivity().startActivity(intent);
+                                        }
 
-                                    } else {
-                                        Toast.makeText(getContext(), "请先进行登录", Toast.LENGTH_SHORT).show();
-                                    }
-                                    break;
-                                case "通知":
-                                    if (true) {
-                                        Toast.makeText(getContext(), "通知未开放", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Intent intent0 = new Intent(getActivity(), Message_activity.class);
-                                        intent0.putExtra("chat_item", "tongzhi");
-                                        getActivity().startActivity(intent0);
-                                    }
-                                    break;
-                                default:
-                                    Intent intent3 = new Intent(getActivity(), Message_activity.class);
-                                    intent3.putExtra("chat_item", "daoyou");
-                                    getActivity().startActivity(intent3);
-                                    break;
+                                        break;
+                                    case "消息":
+                                        if ("Y".equals(isAlreadyLogin) && userId != null && !"".equals(userId)) {
+                                            Intent intent1 = new Intent(getActivity(), MessageInterScore.class);
+                                            getActivity().startActivity(intent1);
+                                        } else {
+                                            Toast.makeText(getContext(), "请先进行登录", Toast.LENGTH_SHORT).show();
+                                        }
+                                        break;
+                                    case "通知":
+                                        if (true) {
+                                            Toast.makeText(getContext(), "通知未开放", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Intent intent0 = new Intent(getActivity(), Message_activity.class);
+                                            intent0.putExtra("chat_item", "tongzhi");
+                                            getActivity().startActivity(intent0);
+                                        }
+                                        break;
+                                    default:
+                                        Intent intent3 = new Intent(getActivity(), Message_activity.class);
+                                        intent3.putExtra("chat_item", "daoyou");
+                                        getActivity().startActivity(intent3);
+                                        break;
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+
                 }
             });
 

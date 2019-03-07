@@ -90,7 +90,6 @@ public class ChatAdapter extends BaseQuickAdapter<Message, BaseViewHolder> {
         setContent(helper, item);
         setStatus(helper, item);
         setOnClick(helper, item);
-
     }
 
 
@@ -171,6 +170,11 @@ public class ChatAdapter extends BaseQuickAdapter<Message, BaseViewHolder> {
         if (msgContent instanceof AudioMsgBody) {
             helper.addOnClickListener(R.id.rlAudio);
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
 }

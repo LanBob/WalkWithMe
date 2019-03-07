@@ -8,7 +8,6 @@ import com.app.entity.Person_dao;
 import com.app.entity.Person_setting;
 import com.app.entity.Star_collection;
 import com.app.entity.View_show_dao;
-import com.app.entity.Person;
 
 
 import java.util.List;
@@ -112,7 +111,7 @@ public interface Service {
 
 
     @GET("app/manager")
-    Observable<ResponseResult<View_show_dao>> managerUpScore(@Query("viewShowId") String viewShowId,@Query("score")int score);
+    Observable<ResponseResult<String>> managerUpScore(@Query("viewShowId") String viewShowId,@Query("score")int score);
 
     //    管理员模块
 

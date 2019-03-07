@@ -2,16 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/s"
     android:background="@drawable/bg"
     android:orientation="vertical">
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/aftercheckin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/ss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -80,24 +83,24 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/beforecheckin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <com.app.view.CircleImageView
             android:id="@+id/uncheckin_heaed_image"
             android:layout_width="@dimen/x150"
             android:layout_height="@dimen/x150"
-            android:layout_below="@id/setting"
             android:layout_marginLeft="@dimen/x300"
             android:src="@drawable/gril" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y30"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/y10"
             android:gravity="center"
             android:text="请登录"
             android:textColor="#0D0E0E"

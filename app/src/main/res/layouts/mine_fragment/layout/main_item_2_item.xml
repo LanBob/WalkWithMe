@@ -28,7 +28,7 @@
             android:layout_marginLeft="@dimen/x15"
             android:layout_toRightOf="@id/main_item_2_item_iamgeview"
             android:text="XX欢迎你"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/main_item_2_item_state"
@@ -38,13 +38,16 @@
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginTop="@dimen/x30"
             android:layout_toRightOf="@id/main_item_2_item_iamgeview"
+            android:textSize="16sp"
             android:text="状态: 未完成导游验证" />
 
         <TextView
+            android:layout_marginTop="@dimen/y15"
             android:id="@+id/s"
             android:layout_below="@id/main_item_2_item_state"
             android:layout_marginLeft="@dimen/x15"
             android:layout_toRightOf="@id/main_item_2_item_iamgeview"
+            android:textSize="16sp"
             android:text="发布时间"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -52,6 +55,8 @@
         <TextView
             android:layout_marginLeft="@dimen/x10"
             android:layout_toRightOf="@id/s"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/y15"
             android:layout_below="@id/main_item_2_item_state"
             android:text="2019-03-02 15:31:20"
             android:id="@+id/mytime"

@@ -29,7 +29,7 @@ public class LoadingDialogUtil extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_loading);
         tv = (TextView)this.findViewById(R.id.tv);
-        tv.setText("正在上传中...");
+        tv.setText("正在操作中...");
         LinearLayout linearLayout = (LinearLayout)this.findViewById(R.id.LLinearLayout);
 
         linearLayout.getBackground().setAlpha(210);

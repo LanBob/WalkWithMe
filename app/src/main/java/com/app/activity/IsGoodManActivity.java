@@ -1,8 +1,10 @@
 package com.app.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sendtion.xrichtext.RichTextEditor;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +39,11 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class IsGoodManActivity extends AppCompatActivity implements View.OnClickListener{
+public class IsGoodManActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText inputUserName;
     private RichTextEditor richText;
-    private Button submit;
+    private TextView submit;
     private ArrayList<String> mSelectPath;
     private ImageView tocamera;
     private static final int REQUEST_IMAGE = 2;
@@ -74,12 +78,12 @@ public class IsGoodManActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onNext(ResponseResult<String> stringResponseResult) {
                 loadingDialogUtil.cancel();
-                if(stringResponseResult.getCode() ==1){
-                    Toast.makeText(IsGoodManActivity.this,"操作成功",Toast.LENGTH_LONG).show();
+                if (stringResponseResult.getCode() == 1) {
+                    Toast.makeText(IsGoodManActivity.this, "操作成功", Toast.LENGTH_LONG).show();
                     inputAge.setText("");
                     inputUserName.setText("");
-                }else {
-                    Toast.makeText(IsGoodManActivity.this,"操作失败",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(IsGoodManActivity.this, "操作失败", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -91,6 +95,7 @@ public class IsGoodManActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete() {
                 loadingDialogUtil.cancel();
+                finish();
             }
         };
 
@@ -114,14 +119,14 @@ public class IsGoodManActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submit:
                 String userName = inputUserName.getText().toString().trim();
                 String age = inputAge.getText().toString().trim();
-                if(userName != null && age!=null &&userName != "" && age!="" && StringUtil.isInteger(age)){
+                if (userName != null && age != null && userName != "" && age != "" && StringUtil.isInteger(age)) {
                     List<RichTextEditor.EditData> editList = richText.buildEditData();
                     StringBuffer content = new StringBuffer();
-                    List<File> files = new ArrayList<>();
+                    final List<File> files = new ArrayList<>();
 
                     for (RichTextEditor.EditData itemData : editList) {
                         if (itemData.inputStr != null) {
@@ -136,36 +141,59 @@ public class IsGoodManActivity extends AppCompatActivity implements View.OnClick
                             files.add(f);
                         }
                     }
-                    isGoodMan = new IsGoodMan();
-                    isGoodMan.setAge(age);
-                    isGoodMan.setIntroduce(content.toString());
-                    isGoodMan.setUserName(userName);
-                    isGoodMan.setScore(0);
-                    if(userId =="" || userId == null){
-                        userName = "1";
+
+                    if (files.size() > 0) {
+                        isGoodMan = new IsGoodMan();
+                        isGoodMan.setAge(age);
+                        isGoodMan.setIntroduce(content.toString());
+                        isGoodMan.setUserName(userName);
+                        isGoodMan.setScore(0);
+                        if ("".equals(userId) || userId == null) {
+                            userName = "1";
+                        }
+                        isGoodMan.setUserId(userId);
+                        isGoodMan.setSex(sex);
+
+                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                        String json = gson.toJson(isGoodMan);
+                        final RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), json);
+
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(IsGoodManActivity.this);
+                        dialog.setTitle("请选择");
+                        dialog.setMessage("资料上传后，将等待工作人员及进行评分认定？");
+                        dialog.setCancelable(false);
+                        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+//                                    确定删除
+                                HttpMethods.getInstance()
+                                        .isgoodman(requestBody, files, upIsGoodManObserver);
+                            }
+                        });
+                        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(IsGoodManActivity.this,"您取消了操作",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        dialog.show();
+
+
+                    } else {
+                        Toast.makeText(IsGoodManActivity.this, "至少选择一张图片", Toast.LENGTH_SHORT).show();
                     }
-                    isGoodMan.setUserId(userId);
-                    isGoodMan.setSex(sex);
 
-                    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-                    String json = gson.toJson(isGoodMan);
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), json);
-
-                    HttpMethods.getInstance()
-                            .isgoodman(requestBody,files,upIsGoodManObserver);
-
-                    Toast.makeText(IsGoodManActivity.this,isGoodMan.getIntroduce(),Toast.LENGTH_LONG).show();
-                }else {
-                    Toast.makeText(IsGoodManActivity.this,"请检查姓名或年龄",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(IsGoodManActivity.this, "请检查姓名或年龄", Toast.LENGTH_SHORT).show();
                 }
                 //提交
                 break;
             case R.id.sexButtom:
                 isOpen = sexButtom.isOpened();
-                if(isOpen){
+                if (isOpen) {
                     sex = "女";
                     sexName.setText(sex);
-                }else {
+                } else {
                     sex = "男";
                     sexName.setText(sex);
                 }

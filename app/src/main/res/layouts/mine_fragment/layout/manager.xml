@@ -33,7 +33,7 @@
                     android:layout_height="@dimen/y80"
                     android:layout_marginLeft="@dimen/x60"
                     android:layout_marginRight="@dimen/x60"
-                    android:background="@drawable/pink_editext_border"
+                    android:background="@drawable/textview_border"
                     android:password="true" />
 
                 <Button
@@ -43,7 +43,7 @@
                     android:layout_marginLeft="@dimen/x60"
                     android:layout_marginTop="@dimen/y30"
                     android:layout_marginRight="@dimen/x60"
-                    android:background="#E77DC4"
+                    android:background="#48CAB9"
                     android:text="验证"
                     android:textSize="19sp" />
 

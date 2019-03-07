@@ -74,7 +74,6 @@ public class ManagerGoodManActivity extends AppCompatActivity implements View.On
                                         if (score >= 60 && score <= 100) {
                                             HttpMethods.getInstance()
                                                     .managerUploadScore(isGoodMan.getUserId(), score, upScore);
-                                            Toast.makeText(ManagerGoodManActivity.this, "提交的人未" + isGoodMan.getUserId() + ",分数" + score, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(ManagerGoodManActivity.this, "请检查分数60-100", Toast.LENGTH_SHORT).show();
                                         }

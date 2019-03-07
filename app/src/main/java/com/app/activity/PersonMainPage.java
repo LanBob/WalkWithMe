@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.app.R;
 import com.app.Util.LoadingDialogUtil;
+import com.app.Util.LogOutUtil;
 import com.app.Util.MyUrl;
 import com.app.Util.StringUtil;
 import com.app.commonAdapter.Com_Adapter;
@@ -70,7 +71,7 @@ public class PersonMainPage extends AppCompatActivity {
     private TextView main_page_position_name;
     private TextView personMainPageMoney;
     private CircleImageView headImage;
-    ///
+
     private DrawerLayout mDrawerLayout = null;
     private LinearLayout leftChat;
     private LinearLayout leftMainPage;
@@ -79,20 +80,13 @@ public class PersonMainPage extends AppCompatActivity {
 
     private TextView upMytime;
 
-
     private TextView content_textview;
     private ShineButton star_button;
     private ShineButton collection_button;
     LoadingDialogUtil loadingDialogUtil;
-//    private Long userID;
     private Long view_show_id = 0L;
-//    String user = "";
     private String follower;
     private String followed;
-//    private static SharedPreferencesHelper helper;
-//    static {
-//        helper = new SharedPreferencesHelper(MainApplication.getContext(),"loginState");
-//    }
 
     //===================
     Observer<ResponseResult<View_show_dao>> view_show_observer;
@@ -120,8 +114,11 @@ public class PersonMainPage extends AppCompatActivity {
         setContentView(R.layout.person_main_page);
         follower = StringUtil.getValue("username");
         Intent intent = getIntent();
+
         //============================================================通过ID获取数据
         view_show_id = intent.getLongExtra("viewID", 1L);
+
+        LogOutUtil.d("viewShowId" + view_show_id);
         commentDaoList = new ArrayList<>();
         upMytime = findViewById(R.id.upMytime);
         eat = findViewById(R.id.eat);
@@ -147,8 +144,8 @@ public class PersonMainPage extends AppCompatActivity {
                     goodView.setText("赞！ +1");
                     goodView.show(v);
 
-                HttpMethods.getInstance()
-                        .add_Star(view_show_id.toString(),follower,1,star_observer);
+                    HttpMethods.getInstance()
+                            .add_Star(view_show_id.toString(), follower, 1, star_observer);
 
                 } else {
                     isYes = false;
@@ -156,7 +153,7 @@ public class PersonMainPage extends AppCompatActivity {
                     goodView.setText("不喜欢 -1");
                     goodView.show(v);
                     HttpMethods.getInstance()
-                            .add_Star(view_show_id.toString(),follower,0,star_observer);
+                            .add_Star(view_show_id.toString(), follower, 0, star_observer);
                 }
             }
         });
@@ -165,18 +162,18 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(isCollection == false){//如果没有点赞
+                if (isCollection == false) {//如果没有点赞
                     isCollection = true;
-                    collection_num.setText((Integer.parseInt(collection_num.getText().toString()) +1) +"");
+                    collection_num.setText((Integer.parseInt(collection_num.getText().toString()) + 1) + "");
 
                     HttpMethods.getInstance()
-                            .add_Collection(view_show_id.toString(),follower,1,collection_observer);
+                            .add_Collection(view_show_id.toString(), follower, 1, collection_observer);
 
-                }else{
+                } else {
                     isCollection = false;
-                    collection_num.setText((Integer.parseInt(collection_num.getText().toString()) -1) +"");
+                    collection_num.setText((Integer.parseInt(collection_num.getText().toString()) - 1) + "");
                     HttpMethods.getInstance()
-                            .add_Collection(view_show_id.toString(),follower,0,collection_observer);
+                            .add_Collection(view_show_id.toString(), follower, 0, collection_observer);
                 }
             }
         });
@@ -185,6 +182,30 @@ public class PersonMainPage extends AppCompatActivity {
         //view_show_id
         HttpMethods.getInstance()
                 .getView_show_dao(view_show_id, mainObserver);
+        /**
+         * 获取有多少个点赞和收藏
+         */
+        HttpMethods.getInstance()
+                .getStarColllection(view_show_id.toString(), star_collection_observer);
+
+        HttpMethods.getInstance()
+                .getHeadImage(follower, headImageObserver);
+
+        HttpMethods.getInstance()
+                .getCommentByViewShow(view_show_id.toString(), getCommentObserver);
+
+        /**
+         * 获取点赞
+         */
+        HttpMethods.getInstance()
+                .star_collection_follow(view_show_id.toString(), follower, 0, star_collection_follow);
+
+        /**
+         * 获取是否收藏
+         */
+        HttpMethods.getInstance()
+                .star_collection_follow(view_show_id.toString(), follower, 1, star_collection_follow);
+
         //===========加载主界面=================================================
     }
 
@@ -199,7 +220,7 @@ public class PersonMainPage extends AppCompatActivity {
         main_page_position_name = findViewById(R.id.main_page_position_name);
         personMainPageMoney = findViewById(R.id.PersonMainPageMoney);
         headImage = findViewById(R.id.headImage);
-        star_button =  findViewById(R.id.person_page_yes_no);
+        star_button = findViewById(R.id.person_page_yes_no);
         collection_button = findViewById(R.id.person_page_collection);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         leftMainPage = findViewById(R.id.leftMainPage);
@@ -260,16 +281,16 @@ public class PersonMainPage extends AppCompatActivity {
         leftMainPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PersonMainPage.this,"请求主页",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(PersonMainPage.this,OwnMainPage.class);
-                intent.putExtra("userId",followed);
+                Toast.makeText(PersonMainPage.this, "请求主页", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PersonMainPage.this, OwnMainPage.class);
+                intent.putExtra("userId", followed);
                 startActivity(intent);
             }
         });
         leftChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PersonMainPage.this,"请求联系 Ta",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "请求联系 Ta", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -278,13 +299,13 @@ public class PersonMainPage extends AppCompatActivity {
         loadingDialogUtil = new LoadingDialogUtil(PersonMainPage.this);
         loadingDialogUtil.setCanceledOnTouchOutside(false);
 
-        adapter = new Com_Adapter<CommentDao>(PersonMainPage.this,R.layout.comment,commentDaoList){
+        adapter = new Com_Adapter<CommentDao>(PersonMainPage.this, R.layout.comment, commentDaoList) {
 
             @Override
             public void convert(Com_ViewHolder holder, CommentDao commentDao) {
                 holder.setText(R.id.commentName, commentDao.getUserName());
                 holder.setText(R.id.commentComment, commentDao.getComment());
-                holder.setText(R.id.mytime,StringUtil.millToTime(Long.valueOf(commentDao.getMytime())));
+                holder.setText(R.id.mytime, StringUtil.millToTime(Long.valueOf(commentDao.getMytime())));
                 holder.setImageResource(R.id.commentHeadImage, MyUrl.add_Path(commentDao.getDefaultImage()));
             }
         };
@@ -320,17 +341,17 @@ public class PersonMainPage extends AppCompatActivity {
                 main_page_position_name.setText(dao.getCity());
                 personMainPageMoney.setText("¥ " + dao.getMoney());
                 upMytime.setText(dao.getMyTime());
-                if("是".equals(dao.getFriendlyToEat())){
+                if ("是".equals(dao.getFriendlyToEat())) {
                     eat.setTextColor(getResources().getColor(R.color.blue));
                     eat.setText("餐饮方便： √");
-                }else {
+                } else {
                     eat.setTextColor(getResources().getColor(R.color.gray));
                     eat.setText("餐饮不方便： ×");
                 }
-                if("是".equals(dao.getFirendlyToLive())){
+                if ("是".equals(dao.getFirendlyToLive())) {
                     eat.setText("住宿方便： √");
                     eat.setTextColor(getResources().getColor(R.color.blue));
-                }else {
+                } else {
                     eat.setTextColor(getResources().getColor(R.color.gray));
                     eat.setText("住宿不方便： ×");
                 }
@@ -385,20 +406,17 @@ public class PersonMainPage extends AppCompatActivity {
                 content_textview.setLayoutParams(lp);
                 content_textview.setPadding(30, 30, 15, 30);
                 view.addView(content_textview);
-                content_textview.setText("详细地址："+dao.getDetailAddress());
+                content_textview.setText("详细地址：" + dao.getDetailAddress());
 
                 content_textview = new TextView(PersonMainPage.this);
                 content_textview.setLayoutParams(lp);
                 content_textview.setPadding(30, 30, 15, 30);
                 view.addView(content_textview);
-                content_textview.setText("推荐路线："+dao.getRoute());
+                content_textview.setText("推荐路线：" + dao.getRoute());
 //                增加线路和详细地址
 
-
-
-
                 ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,100);
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100);
                 //for结束，内容展示完成，增加一个评论按钮
                 ImageView commont = new ImageView(PersonMainPage.this);
                 commont.setImageResource(R.drawable.pinglun);
@@ -407,14 +425,14 @@ public class PersonMainPage extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         ///
-                        dialog = new CommentDialog(PersonMainPage.this,new CommentDialog.OnClickCallBack(){
+                        dialog = new CommentDialog(PersonMainPage.this, new CommentDialog.OnClickCallBack() {
 
                             @Override
                             public String send(String comment) {
                                 //需要发送评论
                                 HttpMethods.getInstance()
-                                        .comment(follower,view_show_id.toString(),comment,commentObserver);
-                                Toast.makeText(PersonMainPage.this,"PersonMainPage 评论" + comment, +Toast.LENGTH_LONG).show();
+                                        .comment(follower, view_show_id.toString(), comment, commentObserver);
+                                Toast.makeText(PersonMainPage.this, "PersonMainPage 评论" + comment, +Toast.LENGTH_LONG).show();
 
                                 return null;
                             }
@@ -446,29 +464,19 @@ public class PersonMainPage extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
                 view.addView(recyclerView);
             }
+
             @Override
             public void onError(Throwable e) {
                 //错误结果
                 Log.e("error", "" + e.getMessage());
                 loadingDialogUtil.cancel();
-                Toast.makeText(PersonMainPage.this,"错误请重试或反馈",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "错误请重试或反馈", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onComplete() {
                 //这时才能得到View_show_id
                 loadingDialogUtil.cancel();
-
-                /**
-                 * 获取有多少个点赞和收藏
-                 */
-                HttpMethods.getInstance()
-                        .getStarColllection(view_show_id.toString(),star_collection_observer);
-
-                HttpMethods.getInstance()
-                        .getHeadImage(followed,headImageObserver);
-                HttpMethods.getInstance()
-                        .getCommentByViewShow(view_show_id.toString(),getCommentObserver);
             }
         };
 
@@ -491,7 +499,7 @@ public class PersonMainPage extends AppCompatActivity {
             @Override
             public void onComplete() {
                 loadingDialogUtil.cancel();
-                Toast.makeText(PersonMainPage.this,"点赞成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "点赞成功", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -514,7 +522,7 @@ public class PersonMainPage extends AppCompatActivity {
             @Override
             public void onComplete() {
                 loadingDialogUtil.cancel();
-                Toast.makeText(PersonMainPage.this,"收藏成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "收藏成功", Toast.LENGTH_SHORT).show();
             }
         };
         follow_observer = new Observer<ResponseResult<String>>() {
@@ -536,7 +544,7 @@ public class PersonMainPage extends AppCompatActivity {
             @Override
             public void onComplete() {
                 loadingDialogUtil.cancel();
-                Toast.makeText(PersonMainPage.this,"操作成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "操作成功", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -548,10 +556,12 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<Star_collection> star_collectionResponseResult) {
-                Star_collection dao = star_collectionResponseResult.getData();
-                if(dao != null) {
-                    yesNum.setText(dao.getStar() + "");
-                    collection_num.setText(dao.getCollection() + "");
+                if (star_collectionResponseResult != null) {
+                    Star_collection dao = star_collectionResponseResult.getData();
+                    if (dao != null) {
+                        yesNum.setText(dao.getStar() + "");
+                        collection_num.setText(dao.getCollection() + "");
+                    }
                 }
             }
 
@@ -563,17 +573,6 @@ public class PersonMainPage extends AppCompatActivity {
             @Override
             public void onComplete() {
 
-                /**
-                 * 获取点赞
-                 */
-                HttpMethods.getInstance()
-                        .star_collection_follow(view_show_id.toString(),follower,0,star_collection_follow);
-
-                /**
-                 * 获取是否点赞
-                 */
-                HttpMethods.getInstance()
-                        .star_collection_follow(view_show_id.toString(),follower,1,star_collection_follow);
             }
         };
 
@@ -585,29 +584,31 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<Integer> integerResponseResult) {
-                String message = integerResponseResult.getMessage();
-                int code = integerResponseResult.getData();
-                if("star".equals(message)){
-                    if(code == 1){//已经执行
-                        star_button.setChecked(true);
-                        isYes = true;
-                    }else{
-                        star_button.setChecked(false);
-                        isYes = false;
-                    }
-                }else if("collection".equals(message)){
-                    if(code == 1){//已经执行
-                        collection_button.setChecked(true);
-                        isCollection = true;
-                    }else{
-                        collection_button.setChecked(false);
-                        isCollection = false;
-                    }
-                }else if("follow".equals(message)){
-                    if(code == 1){//已经执行
+                if (integerResponseResult != null) {
+                    String message = integerResponseResult.getMessage();
+                    int code = integerResponseResult.getData();
+                    if ("star".equals(message)) {
+                        if (code == 1) {//已经执行
+                            star_button.setChecked(true);
+                            isYes = true;
+                        } else {
+                            star_button.setChecked(false);
+                            isYes = false;
+                        }
+                    } else if ("collection".equals(message)) {
+                        if (code == 1) {//已经执行
+                            collection_button.setChecked(true);
+                            isCollection = true;
+                        } else {
+                            collection_button.setChecked(false);
+                            isCollection = false;
+                        }
+                    } else if ("follow".equals(message)) {
+                        if (code == 1) {//已经执行
 
-                    }else{
+                        } else {
 
+                        }
                     }
                 }
             }
@@ -631,30 +632,33 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<HeadImage> headImageResponseResult) {
+                if (headImageResponseResult != null) {
+                    Log.e("data", headImageResponseResult.getData().getHead_image());
+                    HeadImage headImageData = headImageResponseResult.getData();
+                    String headImageUrl = "";
+                    if (headImageData != null) {
+                        headImageUrl = headImageData.getHead_image();
+                    }
+                    if (headImageUrl != "" || headImageUrl != null) {
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.gray_bg)
+                                .error(R.drawable.chat_girl)
+                                .priority(Priority.HIGH)
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
-                Log.e("data",headImageResponseResult.getData().getHead_image());
-                HeadImage headImageData = headImageResponseResult.getData();
-                String headImageUrl = "";
-                if(headImageData != null){
-                    headImageUrl = headImageData.getHead_image();
-                }
-                if(headImageUrl != "" || headImageUrl != null){
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.drawable.gray_bg)
-                            .error(R.drawable.chat_girl)
-                            .priority(Priority.HIGH)
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+                        Glide.with(PersonMainPage.this)
+                                .load(MyUrl.add_Path(headImageUrl))
+                                .apply(options)
+                                .into(headImage);
 
-                    Glide.with(PersonMainPage.this)
-                            .load(MyUrl.add_Path(headImageUrl))
-                            .apply(options)
-                            .into(headImage);
-
-                    Glide.with(PersonMainPage.this)
-                            .load(MyUrl.add_Path(headImageUrl))
-                            .apply(options)
-                            .into(leftImageView);
+                        Glide.with(PersonMainPage.this)
+                                .load(MyUrl.add_Path(headImageUrl))
+                                .apply(options)
+                                .into(leftImageView);
+                    }
+                } else {
+                    Toast.makeText(PersonMainPage.this, "获取头像失败", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -677,13 +681,14 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<List<CommentDao>> listResponseResult) {
-
-                List<CommentDao> list = listResponseResult.getData();
-                if( list != null&& listResponseResult.getCode() != 0){
-                    commentDaoList.clear();
-                    commentDaoList.addAll(list);
-                    //得到数据
-                    Log.e("size",commentDaoList.size() + " " +commentDaoList.get(0));
+                if (listResponseResult != null) {
+                    List<CommentDao> list = listResponseResult.getData();
+                    if (list != null && listResponseResult.getCode() != 0) {
+                        commentDaoList.clear();
+                        commentDaoList.addAll(list);
+                        //得到数据
+                        Log.e("size", commentDaoList.size() + " " + commentDaoList.get(0));
+                    }
                 }
             }
 
@@ -707,17 +712,19 @@ public class PersonMainPage extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<String> stringResponseResult) {
-                int code = stringResponseResult.getCode();
-                if(code == 0){
-                    Toast.makeText(PersonMainPage.this,"评论出错啦",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(PersonMainPage.this,"评论成功",Toast.LENGTH_SHORT).show();
+                if (stringResponseResult != null) {
+                    int code = stringResponseResult.getCode();
+                    if (code == 0) {
+                        Toast.makeText(PersonMainPage.this, "评论出错啦", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(PersonMainPage.this, "评论成功", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(PersonMainPage.this,"评论出错啦",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonMainPage.this, "评论出错啦", Toast.LENGTH_SHORT).show();
                 loadingDialogUtil.cancel();
             }
 
@@ -736,18 +743,18 @@ public class PersonMainPage extends AppCompatActivity {
                 return true;
             case R.id.follow:
                 HttpMethods.getInstance()
-                        .add_Follow(follower,followed,1,follow_observer);
+                        .add_Follow(follower, followed, 1, follow_observer);
                 break;
             case R.id.unfollow:
                 HttpMethods.getInstance()
-                        .add_Follow(follower,followed,0,follow_observer);
+                        .add_Follow(follower, followed, 0, follow_observer);
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar,menu);
+        getMenuInflater().inflate(R.menu.toolbar, menu);
         return true;
     }
 }

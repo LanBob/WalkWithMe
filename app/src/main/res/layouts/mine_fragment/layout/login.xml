@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_nine_healthcare"
+    android:background="@drawable/minebackgroud"
     android:orientation="vertical">
 
     <TextView
@@ -11,7 +11,7 @@
         android:layout_height="@dimen/y40"
         android:gravity="center"
         android:text="登录界面"
-        android:textColor="#4DF7E0"
+        android:textColor="@color/black"
         android:textSize="19sp" />
 
     <!--最正常的登录-->
@@ -56,7 +56,6 @@
                 android:layout_gravity="center"
                 android:checked="false"
                 android:text="记住密码"
-                android:textColor="#00eeaa"
                 android:textSize="12sp" />
 
             <CheckBox
@@ -68,7 +67,6 @@
                 android:layout_toRightOf="@id/layout_remember_password"
                 android:checked="false"
                 android:text="自动登录"
-                android:textColor="#aa00ff"
                 android:textSize="12sp" />
 
             <TextView

@@ -162,7 +162,7 @@ public class MessageInterScore extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
             }
 
             @Override

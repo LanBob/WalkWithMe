@@ -34,18 +34,12 @@
                 android:text="请选择您所需的图片"
                 android:textSize="18sp" />
 
-            <View
-                android:id="@+id/nothing_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x10"
-                android:layout_below="@id/edit_camera"
-                android:background="#CEDADD" />
 
             <LinearLayout
                 android:id="@+id/llinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view"
+                android:layout_below="@id/edit_camera"
                 android:background="@color/white"
                 android:orientation="vertical">
 
@@ -53,22 +47,20 @@
                 <EditText
                     android:id="@+id/et_new_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/y130"
                     android:layout_marginLeft="@dimen/x20"
                     android:layout_marginRight="@dimen/x20"
-                    android:background="@null"
+                    android:background="@drawable/textview_border"
+                    android:maxLines="2"
                     android:hint="添加标题，建议字数35字以内"
                     android:padding="@dimen/x16"
                     android:textColor="#00eedd"
                     android:textSize="18sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x20"
-                    android:background="#DEE9EB" />
 
 
                 <com.sendtion.xrichtext.RichTextEditor
+                    android:background="@drawable/textview_border"
                     android:id="@+id/et_new_content"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/y780"
@@ -83,19 +75,15 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/nothing_view0"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x10"
-                android:layout_below="@id/llinear"
-                android:background="#CEDADD" />
 
 
             <LinearLayout
+                android:layout_marginRight="@dimen/x10"
                 android:id="@+id/LL_position"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view0"
+                android:layout_marginTop="@dimen/y15"
+                android:layout_below="@id/llinear"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -107,33 +95,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/x40"
                     android:layout_margin="@dimen/x10"
-                    android:text="目的地 :    "
+                    android:text="目的地 :  "
                     android:textSize="17sp" />
 
                 <TextView
+                    android:background="@drawable/textview_border"
                     android:id="@+id/positiong_choose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x40"
-                    android:layout_margin="@dimen/x10"
-                    android:text="  --  -- 请选择目的地  --  --"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x70"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:paddingLeft="@dimen/x30"
+                    android:paddingTop="@dimen/y17"
+                    android:text="  --  -- 点击选择目的地  --  --"
                     android:textSize="15sp" />
 
             </LinearLayout>
 
-
-            <View
-                android:id="@+id/nothing_view1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x10"
-                android:layout_below="@id/LL_position"
-                android:background="#CEDADD" />
 
             <!--增加输入功能-->
             <LinearLayout
                 android:id="@+id/detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view1"
+                android:layout_below="@id/LL_position"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -149,13 +133,14 @@
                     android:textSize="17sp" />
 
                 <EditText
+                    android:textAlignment="center"
                     android:id="@+id/inputDetailAddress"
                     android:hint="输入地址"
                     android:background="@drawable/textview_border"
                     android:textSize="15sp"
                     android:layout_margin="@dimen/x10"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x40" />
+                    android:layout_height="@dimen/x80" />
 
             </LinearLayout>
 
@@ -180,18 +165,22 @@
                     android:textSize="17sp" />
 
                 <EditText
+                    android:textAlignment="center"
                     android:id="@+id/inputRouteAddress"
                     android:hint="输入路线信息"
                     android:background="@drawable/textview_border"
                     android:textSize="15sp"
                     android:layout_margin="@dimen/x10"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x40" />
+                    android:layout_height="@dimen/x80" />
 
             </LinearLayout>
 
+            <!--增加输入功能-->
+
+
             <LinearLayout
-                android:id="@+id/eatLive"
+                android:id="@+id/LL_choose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/route"
@@ -204,9 +193,75 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x60"
+                    android:layout_margin="@dimen/x10"
+                    android:text="标签、分类 :   "
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:background="@drawable/textview_border"
+                    android:id="@+id/type_choose"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x70"
+                    android:paddingLeft="@dimen/x30"
+                    android:paddingTop="@dimen/y17"
+                    android:text="  --  -- 请选择分类  --  --"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
+
+            <!--价格-->
+            <LinearLayout
+                android:id="@+id/llll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LL_choose"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x40"
+                    android:layout_height="@dimen/x40"
+                    android:src="@drawable/sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x40"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:text="向导价格 :     "
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:textAlignment="center"
+                    android:id="@+id/editMoney"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x70"
+                    android:layout_margin="@dimen/x10"
+                    android:background="@drawable/textview_border"
+                    android:hint=" 请输入价格 "
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/eatLive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llll"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x40"
+                    android:layout_height="@dimen/x40"
+                    android:src="@drawable/sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/x40"
                     android:layout_margin="@dimen/x10"
-                    android:text="是否方便吃？:"
+                    android:text="是否方便吃:"
                     android:textSize="17sp" />
 
                 <com.app.view.SwitchView
@@ -220,7 +275,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/x40"
                     android:layout_margin="@dimen/x10"
-                    android:text="是否方便住？:  "
+                    android:text="是否方便住:"
                     android:textSize="17sp" />
 
                 <com.app.view.SwitchView
@@ -233,97 +288,20 @@
 
 
             <View
-                android:id="@+id/nothing_view11"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x10"
-                android:layout_below="@id/eatLive"
-                android:background="#CEDADD" />
-            <!--增加输入功能-->
-
-
-            <LinearLayout
-                android:id="@+id/LL_choose"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view11"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/x40"
-                    android:layout_height="@dimen/x40"
-                    android:src="@drawable/sign" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x40"
-                    android:layout_margin="@dimen/x10"
-                    android:text="标签、分类 :   "
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/type_choose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x30"
-                    android:layout_margin="@dimen/x10"
-                    android:text="  --  -- 请选择分类  --  --"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/nothing_view4"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x10"
-                android:layout_below="@id/LL_choose"
-                android:background="#CEDADD" />
-
-
-            <!--价格-->
-            <LinearLayout
-                android:id="@+id/llll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nothing_view4"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/x40"
-                    android:layout_height="@dimen/x40"
-                    android:src="@drawable/sign" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x40"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:text="向导价格 :   "
-                    android:textSize="17sp" />
-
-                <EditText
-                    android:id="@+id/editMoney"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x50"
-                    android:layout_margin="@dimen/x10"
-                    android:background="@drawable/textview_border"
-                    android:text=" 请输入价格 "
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <View
                 android:id="@+id/nothing_view3"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x10"
-                android:layout_below="@id/llll"
+                android:layout_below="@id/eatLive"
                 android:background="#CEDADD" />
 
             <TextView
                 android:id="@+id/save_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x50"
+                android:layout_height="@dimen/x80"
                 android:layout_below="@id/nothing_view3"
-                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginLeft="@dimen/x50"
                 android:layout_marginTop="@dimen/y20"
-                android:layout_marginRight="@dimen/x10"
+                android:layout_marginRight="@dimen/x50"
                 android:background="#00eedd"
                 android:gravity="center"
                 android:text="发布" />

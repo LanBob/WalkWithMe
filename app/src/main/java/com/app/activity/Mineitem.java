@@ -218,7 +218,7 @@ public class Mineitem extends AppCompatActivity {
                 actionBar.setHomeButtonEnabled(true);
                 break;
             default:
-                Log.e("ee", "e11");
+//                Log.e("ee", "e11");
                 setContentView(R.layout.main_item_8);
                 actionBar = getSupportActionBar();
                 actionBar.setTitle("关于");
@@ -231,6 +231,7 @@ public class Mineitem extends AppCompatActivity {
 
     private void initData() {
         loadingDialogUtil = new LoadingDialogUtil(Mineitem.this);
+
         observer = new Observer<ResponseResult<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -251,32 +252,6 @@ public class Mineitem extends AppCompatActivity {
             @Override
             public void onError(Throwable e) {
 
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-
-        responseResultObserver = new Observer<ResponseResult<List<View_show_dao>>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(ResponseResult<List<View_show_dao>> listResponseResult) {
-                List<View_show_dao> list = listResponseResult.getData();
-                if (list != null) {
-                    view_show_daoList.clear();
-                    view_show_daoList.addAll(list);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
             }
 
             @Override
@@ -338,6 +313,32 @@ public class Mineitem extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        };
+
+        responseResultObserver = new Observer<ResponseResult<List<View_show_dao>>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<List<View_show_dao>> listResponseResult) {
+                List<View_show_dao> list = listResponseResult.getData();
+                if (list != null) {
+                    view_show_daoList.clear();
+                    view_show_daoList.addAll(list);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                myViewShowAdapter.notifyDataSetChanged();
             }
         };
 

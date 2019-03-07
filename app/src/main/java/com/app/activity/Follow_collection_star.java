@@ -3,7 +3,6 @@ package com.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,7 +79,7 @@ public class Follow_collection_star extends AppCompatActivity {
                     holder.setText(R.id.main_item_3_star_title, find_item_dao.getTitle());
                     holder.setText(R.id.main_item_3_star_money, "¥  " + find_item_dao.getMoney());
                     holder.setImageResource(R.id.main_item_3_star_imageView, MyUrl.add_Path(find_item_dao.getDefaultpath()));
-                    Log.e("star",find_item_dao.getDefaultpath());
+                    Log.e("star", find_item_dao.getDefaultpath());
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -131,10 +130,10 @@ public class Follow_collection_star extends AppCompatActivity {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(Follow_collection_star.this,OwnMainPage.class);
+                            Intent intent = new Intent(Follow_collection_star.this, OwnMainPage.class);
                             String id = person_dao.getId().toString();
-                            Log.e("userId in Follow",id);
-                            intent.putExtra("userId",id);
+                            Log.e("userId in Follow", id);
+                            intent.putExtra("userId", id);
                             startActivity(intent);
                         }
                     });
@@ -169,11 +168,13 @@ public class Follow_collection_star extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<List<Find_item_dao>> listResponseResult) {
-                List<Find_item_dao> list = listResponseResult.getData();
-                Log.e("star", "star" + list.size());
-                if (list != null && list.size() != 0) {
-                    starList.clear();
-                    starList.addAll(list);
+                if (listResponseResult != null) {
+                    List<Find_item_dao> list = listResponseResult.getData();
+                    Log.e("star", "star" + list.size());
+                    if (list != null && list.size() != 0) {
+                        starList.clear();
+                        starList.addAll(list);
+                    }
                 }
 
             }
@@ -196,13 +197,14 @@ public class Follow_collection_star extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<List<Person_dao>> listResponseResult) {
-                List<Person_dao> list = listResponseResult.getData();
-                Log.e("follow", "follow" + list.size());
-                if (list != null && list.size() != 0) {
-                    followList.clear();
-                    followList.addAll(list);
+                if (listResponseResult != null) {
+                    List<Person_dao> list = listResponseResult.getData();
+                    Log.e("follow", "follow" + list.size());
+                    if (list != null && list.size() != 0) {
+                        followList.clear();
+                        followList.addAll(list);
+                    }
                 }
-
             }
 
             @Override
@@ -223,11 +225,13 @@ public class Follow_collection_star extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseResult<List<Find_item_dao>> listResponseResult) {
-                List<Find_item_dao> list = listResponseResult.getData();
-                Log.e("collection", "collection" + list.size());
-                if (list != null && list.size() != 0) {
-                    collectionList.clear();
-                    collectionList.addAll(list);
+                if (listResponseResult != null) {
+                    List<Find_item_dao> list = listResponseResult.getData();
+                    Log.e("collection", "collection" + list.size());
+                    if (list != null && list.size() != 0) {
+                        collectionList.clear();
+                        collectionList.addAll(list);
+                    }
                 }
             }
 

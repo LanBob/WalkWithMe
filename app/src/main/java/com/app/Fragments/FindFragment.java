@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.R;
+import com.app.Util.LogOutUtil;
 import com.app.Util.MyUrl;
 import com.app.Util.StringUtil;
 import com.app.activity.EditActivity;
@@ -75,6 +76,7 @@ public class FindFragment extends Fragment {
             //=======================初始化
             initView();
             initData();
+            Log.e("time","1" + "1");
             //=======================
         }
         ViewGroup parent = (ViewGroup) mRootView.getParent();
@@ -140,7 +142,7 @@ public class FindFragment extends Fragment {
                 find_item_array[i] = mlist;
             }
         }
-        Log.e("sieze", find_item_array.length + " ");
+//        Log.e("sieze", find_item_array.length + " ");
         //===============================================
     }
 
@@ -172,6 +174,7 @@ public class FindFragment extends Fragment {
             final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
                     StaggeredGridLayoutManager.VERTICAL);//定义瀑布流管理器，第一个参数是列数，第二个是方向。
             layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
             //不设置的话，图片闪烁错位，有可能有整列错位的情况。
             recyclerView.setLayoutManager(layoutManager);
 
@@ -193,37 +196,38 @@ public class FindFragment extends Fragment {
 
                 @Override
                 public void convert(Com_ViewHolder holder, final Find_item_dao find_item_dao) {
-                    holder.setText(R.id.find_item_title, find_item_dao.getTitle());
-                    String url = produce(find_item_dao.getDefaultpath());
-                    Log.e("path", "" + url);
-                    holder.setImageResource(R.id.find_item_default_image, url);
-                    holder.setText(R.id.find_item_money, "¥ " + find_item_dao.getMoney());
-                    holder.setText(R.id.find_item_colloection, find_item_dao.getStar() + "");
-                    Log.e("city", find_item_dao.getCity() + "");
-                    holder.setText(R.id.find_item_city, find_item_dao.getCity());
-                    ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-                    layoutParams.height = 750 + (holder.getLayoutPosition() % 3) * 30 + new Random().nextInt(200);
-                    holder.itemView.setLayoutParams(layoutParams);
-                    holder.setImageSize(R.id.find_item_default_image, layoutParams.width, layoutParams.height - 300);
+                    if(find_item_dao != null){
+                        holder.setText(R.id.find_item_title, find_item_dao.getTitle());
+                        String url = produce(find_item_dao.getDefaultpath());
+                        LogOutUtil.d("path" +url);
+                        holder.setImageResource(R.id.find_item_default_image, url);
+                        holder.setText(R.id.find_item_money, "¥ " + find_item_dao.getMoney());
+                        holder.setText(R.id.find_item_colloection, find_item_dao.getStar() + "");
+                        LogOutUtil.d("ciity" + find_item_dao.getCity());
+                        holder.setText(R.id.find_item_city, find_item_dao.getCity());
+                        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+                        layoutParams.height = 750 + (holder.getLayoutPosition() % 3) * 30 + new Random().nextInt(200);
+                        holder.itemView.setLayoutParams(layoutParams);
+                        holder.setImageSize(R.id.find_item_default_image, layoutParams.width, layoutParams.height - 300);
 
-                    /**
-                     * 通过viewID跳转到响应的页面
-                     */
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), PersonMainPage.class);
-                            intent.putExtra("viewID", find_item_dao.getId());
-                            startActivity(intent);
-                        }
-                    });
-
+                        /**
+                         * 通过viewID跳转到响应的页面
+                         */
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), PersonMainPage.class);
+                                intent.putExtra("viewID", find_item_dao.getId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
                 }
             };
-            getData(position);
-            if (position == 0)
-                getData(0);
             recyclerView.setAdapter(adapter);
+            Log.e("time","3" + position);
+//            每次都会执行两次
+            getData(position);
             //==============================================================================================
             (container).addView(recyclerView);
             //==========================================
@@ -263,7 +267,7 @@ public class FindFragment extends Fragment {
 
     //===================================获取数据,并刷新数据
     private void getData(final int position) {
-
+        Log.e("GOLIVE",position + "");
         if (find_item_array[position].size() == 0 || find_item_array[position] == null) {
             Observer<ResponseResult<List<Find_item_dao>>> observer = new Observer<ResponseResult<List<Find_item_dao>>>() {
                 @Override
@@ -278,21 +282,28 @@ public class FindFragment extends Fragment {
 
                 @Override
                 public void onNext(ResponseResult<List<Find_item_dao>> listResponseResult) {
-                    find_item_list = listResponseResult.getData();
+                    if(listResponseResult.getData() != null&&listResponseResult.getData().size() > 0)
+                    {
+                        find_item_list = listResponseResult.getData();
 
-                    find_item_array[position].clear();
+                        find_item_array[position].clear();
 
-                    find_item_array[position].addAll(find_item_list);
+                        find_item_array[position].addAll(find_item_list);
+                    }
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.e("error", e.getMessage());
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
 
                 @Override
                 public void onComplete() {
-                    // Toast.makeText(getContext(),"加载" + position +"完成",Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -300,8 +311,6 @@ public class FindFragment extends Fragment {
                         }
                     });
                     adapter.notifyDataSetChanged();
-                    if (position == 0)
-                        refreshLayout();
                 }
             };
 
@@ -318,17 +327,24 @@ public class FindFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyDataSetChanged();
-                        vp_pager.getAdapter().notifyDataSetChanged();
                         //每次都要设置这个，消耗时间
+                        vp_pager.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         reflex(tabLayout);
                         swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).start();
-        swipeRefreshLayout.setRefreshing(false);//设置成true的话，下拉过后就会一直在那里转
+
+
+
+
+//        adapter.notifyDataSetChanged();
+//        vp_pager.getAdapter().notifyDataSetChanged();
+        //每次都要设置这个，消耗时间
+//        reflex(tabLayout);
+//        swipeRefreshLayout.setRefreshing(false);//设置成true的话，下拉过后就会一直在那里转
     }
 
     //设置tab的宽度
@@ -338,6 +354,7 @@ public class FindFragment extends Fragment {
             @Override
             public void run() {
                 try {
+                    Log.e("run","tabLayout");
                     //拿到tabLayout的mTabStrip属性
                     LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
 

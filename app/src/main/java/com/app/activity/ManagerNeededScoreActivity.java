@@ -84,7 +84,6 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
                                 if (StringUtil.isInteger(scor)) {
                                     score = Integer.parseInt(scor);
                                     if (score >= 60 && score <= 100) {
-                                        Toast.makeText(ManagerNeededScoreActivity.this, "评分" + score, Toast.LENGTH_SHORT).show();
 
                                         HttpMethods.getInstance()
                                                 .managerUpScore(finalViewId, score, managerUpScoreObserVer);
@@ -133,7 +132,7 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
 
             @Override
             public void onComplete() {
-
+                neededScoreAdapter.notifyDataSetChanged();
             }
         };
 
@@ -146,14 +145,13 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
             @Override
             public void onNext(ResponseResult<String> stringResponseResult) {
                 if (stringResponseResult != null) {
-
                     String viewShowId = stringResponseResult.getMessage();
                     Long viewId = null;
                     if (viewShowId != null)
                         viewId = Long.valueOf(viewShowId);
-                    if (viewShowId != null)
+                    if (viewShowId != null) {
                         if (stringResponseResult.getCode() == 0) {
-                            Toast.makeText(ManagerNeededScoreActivity.this, "该当地向导申请失败，低于140分", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ManagerNeededScoreActivity.this, "评分成功,该当地向导申请失败，低于140分", Toast.LENGTH_SHORT).show();
                             for (int i = 0; i < neededScoreList.size(); ++i) {
                                 if (neededScoreList.get(i).getId().equals(viewId)) {
                                     neededScoreList.remove(viewId);
@@ -161,18 +159,15 @@ public class ManagerNeededScoreActivity extends AppCompatActivity implements Vie
                                 }
                             }
                         } else {
-                            if ("wrong".equals(stringResponseResult.getMessage())) {
-                                Toast.makeText(ManagerNeededScoreActivity.this, "请稍后", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(ManagerNeededScoreActivity.this, "该当地向导申请通过", Toast.LENGTH_SHORT).show();
-                                for (int i = 0; i < neededScoreList.size(); ++i) {
-                                    if (neededScoreList.get(i).getId().equals(viewId)) {
-                                        neededScoreList.remove(viewId);
-                                        break;
-                                    }
+                            Toast.makeText(ManagerNeededScoreActivity.this, "该当地向导申请通过", Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < neededScoreList.size(); ++i) {
+                                if (neededScoreList.get(i).getId().equals(viewId)) {
+                                    neededScoreList.remove(viewId);
+                                    break;
                                 }
                             }
                         }
+                    }
                 }
 
             }

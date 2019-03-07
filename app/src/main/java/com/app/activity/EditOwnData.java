@@ -66,11 +66,11 @@ public class EditOwnData extends AppCompatActivity {
     private int mycode = 0;
 
     private String[] name = {"手机号", "昵称", "性别", "年龄", "个性说明", "爱好"};
-    private String[] setHint = {"手机号","使用昵称","男或女","年华","想说的话……","喜欢什么"};
+    private String[] setHint = {"手机号", "使用昵称", "男或女", "年华", "想说的话……", "喜欢什么"};
 
     private String city;
 
-//    private EditText phone_num;
+    //    private EditText phone_num;
     private EditText alias;
     private EditText sex;
     private EditText age;
@@ -90,15 +90,15 @@ public class EditOwnData extends AppCompatActivity {
         initview();
 
 //        String in = new SharedPreferencesHelper(MainApplication.getContext(),"loginState")
-        String in =  StringUtil.getValue("isAlreadyLogin");
-        if("Y".equals(in)){
+        String in = StringUtil.getValue("isAlreadyLogin");
+        if ("Y".equals(in)) {
             actionBar = getSupportActionBar();
             actionBar.setTitle("设置个人信息");
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             button = findViewById(R.id.save);
 
-            final Observer<ResponseResult<String >> observer = new Observer<ResponseResult<String>>() {
+            final Observer<ResponseResult<String>> observer = new Observer<ResponseResult<String>>() {
                 @Override
                 public void onSubscribe(Disposable d) {
 
@@ -107,15 +107,15 @@ public class EditOwnData extends AppCompatActivity {
                 @Override
                 public void onNext(ResponseResult<String> stringResponseResult) {
                     int code = stringResponseResult.getCode();
-                    Log.e("result",code + "code ");
-                    if(code == 1){//success
+                    Log.e("result", code + "code ");
+                    if (code == 1) {//success
 //                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadyLogin", "Y"));
 //                        helper.putValues(new SharedPreferencesHelper.ContentValue("isAlreadySetOwnData",true));
                         StringUtil.putValue("isAlreadyLogin", "Y");
-                        StringUtil.putValue("isAlreadySetOwnData","Y");
+                        StringUtil.putValue("isAlreadySetOwnData", "Y");
                         mycode = 1;
-                    }else{
-                        Toast.makeText(EditOwnData.this,"遇到不可知错误……",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(EditOwnData.this, "遇到不可知错误……", Toast.LENGTH_SHORT).show();
                         mycode = 0;
                     }
                 }
@@ -127,7 +127,7 @@ public class EditOwnData extends AppCompatActivity {
 
                 @Override
                 public void onComplete() {
-                    if(mycode == 1){
+                    if (mycode == 1) {
                         Intent myintent = new Intent(EditOwnData.this, MainActivity.class);
                         myintent.putExtra("position", 3);
                         finish();
@@ -145,10 +145,10 @@ public class EditOwnData extends AppCompatActivity {
 
                 @Override
                 public void onNext(ResponseResult<String> headImageResponseResult) {
-                    if(headImageResponseResult.getCode() == 1){//成功
-                        Toast.makeText(EditOwnData.this,"头像上传成功",Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(EditOwnData.this,"头像上传失败",Toast.LENGTH_SHORT).show();
+                    if (headImageResponseResult.getCode() == 1) {//成功
+                        Toast.makeText(EditOwnData.this, "头像上传成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(EditOwnData.this, "头像上传失败", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -168,26 +168,28 @@ public class EditOwnData extends AppCompatActivity {
                 public void onClick(View v) {
                     //先设置默认信息，防止空值，再进行上传数据
                     Person_setting person_setting = new Person_setting();
-//                    String num = String.valueOf(phone_num.getText());
-//                    String phone = helper.getString("username");
                     String phone = StringUtil.getValue("username");
-                    String else_name = String.valueOf(alias.getText());
-                    String s = String.valueOf(sex.getText());
-                    int ag = 0;
-                    String agag = age.getText().toString();
-                    if(agag != null)
-                    {
-                        ag = Integer.parseInt(agag);
-                    }
+
+                    String else_name = alias.getText().toString();
+                    String s = sex.getText().toString();
                     String said = String.valueOf(introduce.getText());
                     String loves = String.valueOf(love.getText());
-                    if(agag ==null||phone == null || alias == null || s ==null||said ==null||loves==null || city == null || headImagePath== null){
-                        Toast.makeText(EditOwnData.this,"请检查输入是否有空值",Toast.LENGTH_LONG).show();
-                    }else{
+                    String myAge = age.getText().toString();
+                    Log.e("user", phone);
+                    if (myAge == null || !StringUtil.isInteger(myAge)
+                            || s == null || (!"男".equals(s) && !"女".equals(s))
+                            || phone == null || "".equals(phone.trim())
+                            || else_name == null || "".equals(else_name.trim())
+                            || said == null || "".equals(said.trim())
+                            || loves == null || "".equals(loves.trim())
+                            || city == null || "".equals(city.trim())
+                            || headImagePath == null) {
+                        Toast.makeText(EditOwnData.this, "请检查输入是否误", Toast.LENGTH_LONG).show();
+                    } else {
                         person_setting.setCity(city);
                         person_setting.setPhone_num(phone);
                         person_setting.setAlias(else_name);
-                        person_setting.setAge(ag);
+                        person_setting.setAge(Integer.valueOf(myAge));
                         person_setting.setLove(loves);
                         person_setting.setSex(s);
                         person_setting.setIntroduce(said);
@@ -199,8 +201,8 @@ public class EditOwnData extends AppCompatActivity {
 //                        String username =helper.getString("username");
                         String username = StringUtil.getValue("username");
                         Long id = Long.valueOf(username);
-                        if(id == null){
-                            Toast.makeText(EditOwnData.this,"请重新登录",Toast.LENGTH_LONG).show();
+                        if (id == null) {
+                            Toast.makeText(EditOwnData.this, "请重新登录", Toast.LENGTH_LONG).show();
                         }
 
                         /**
@@ -215,12 +217,11 @@ public class EditOwnData extends AppCompatActivity {
                         fileList.add(f);
 
                         HttpMethods.getInstance()
-                                .Person_settting(person_setting,observer);
+                                .Person_settting(person_setting, observer);
 
                         HttpMethods.getInstance()
-                                .HeadImageUpload(username,fileList,responseResultObserver);
+                                .HeadImageUpload(username, fileList, responseResultObserver);
 
-                        LogUtil.d("personSetting OK");
                     }
                 }
             });
@@ -229,14 +230,13 @@ public class EditOwnData extends AppCompatActivity {
             ///============================================================选择器
 //            item_left =  findViewById(R.id.editOwnDataitemText);
 //            item_left.setText("所在地");
-            position_city =  findViewById(R.id.select_province);
+            position_city = findViewById(R.id.select_province);
             position_city.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     pvOptions.show();
                 }
             });
-
 
 
             //  创建选项选择器
@@ -281,8 +281,8 @@ public class EditOwnData extends AppCompatActivity {
             ///============================================================
 
 
-        }else{
-            Intent intent  = new Intent(EditOwnData.this,Login.class);
+        } else {
+            Intent intent = new Intent(EditOwnData.this, Login.class);
             startActivity(intent);
         }
     }
@@ -319,11 +319,11 @@ public class EditOwnData extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("e","resultCode " + requestCode);
+        Log.e("e", "resultCode " + requestCode);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_IMAGE:
-                    Log.e("e","获取图片路径成功");
+                    Log.e("e", "获取图片路径成功");
                     List<LocalMedia> selectListPic = PictureSelector.obtainMultipleResult(data);
                     String headImage = selectListPic.get(0).getPath();
 //                    GlideUtils.loadChatImage(EditOwnData.this,headImagePath,edit_head_image);

@@ -17,6 +17,9 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.JMS.activity.ChatActivity;
+import com.app.JMS.util.LogUtil;
+import com.app.JMS.util.PictureFileUtil;
 import com.app.R;
 import com.app.Util.CityUtil;
 import com.app.Util.LoadingDialogUtil;
@@ -31,6 +34,8 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.sendtion.xrichtext.RichTextEditor;
 
 import java.io.File;
@@ -90,6 +95,11 @@ public class EditActivity extends AppCompatActivity {
 //    =============================新增四个模块
 
 
+    public static final int REQUEST_CODE_IMAGE = 0000;
+    public static final int REQUEST_CODE_VEDIO = 1111;
+    public static final int REQUEST_CODE_FILE = 2222;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,14 +141,15 @@ public class EditActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MultiImageSelector multiImageSelector = MultiImageSelector.create();
+//                MultiImageSelector multiImageSelector = MultiImageSelector.create();
+//
+//                multiImageSelector.showCamera(true) // 是否显示相机. 默认为显示
+//                        .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
+//                        .multi() // 多选模式, 默认模式;
+//                        .origin(mSelectPath) // 默认已选择图片. 只有在选择模式为多选时有效
+//                        .start(EditActivity.this, REQUEST_IMAGE);
 
-                multiImageSelector.showCamera(true) // 是否显示相机. 默认为显示
-                        .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
-                        .multi() // 多选模式, 默认模式;
-                        .origin(mSelectPath) // 默认已选择图片. 只有在选择模式为多选时有效
-                        .start(EditActivity.this, REQUEST_IMAGE);
-
+                PictureFileUtil.openGalleryPic(EditActivity.this, REQUEST_CODE_IMAGE);
             }
 
         });
@@ -243,9 +254,9 @@ public class EditActivity extends AppCompatActivity {
 
                             @Override
                             public void onNext(ResponseResult<String> stringResponseResult) {
-                                if(stringResponseResult.getCode() == 0){
+                                if (stringResponseResult.getCode() == 0) {
                                     Toast.makeText(EditActivity.this, "发布失败", Toast.LENGTH_LONG).show();
-                                }else {
+                                } else {
                                     Toast.makeText(EditActivity.this, "发布成功", Toast.LENGTH_LONG).show();
                                 }
                                 loadingDialogUtil.cancel();
@@ -354,15 +365,29 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null) {
-            mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-            for (String s : mSelectPath) {
-                if (s != null)
-                    richTextEditor.addImageViewAtIndex(richTextEditor.getLastIndex(), s);
-                richTextEditor.addEditTextAtIndex(richTextEditor.getLastIndex(), "");
+        if (resultCode == RESULT_OK) {
+            switch (resultCode) {
+                case REQUEST_CODE_IMAGE:
+                    // 图片选择结果回调
+                    List<LocalMedia> selectListPic = PictureSelector.obtainMultipleResult(data);
+                    for (LocalMedia media : selectListPic) {
+                        if (media != null)
+                            richTextEditor.addImageViewAtIndex(richTextEditor.getLastIndex(), media.getPath());
+                        richTextEditor.addEditTextAtIndex(richTextEditor.getLastIndex(), "");
+                    }
+                    break;
             }
         }
+
+
+//        if (data != null) {
+//            mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+//            for (String s : mSelectPath) {
+//                if (s != null)
+//                    richTextEditor.addImageViewAtIndex(richTextEditor.getLastIndex(), s);
+//                richTextEditor.addEditTextAtIndex(richTextEditor.getLastIndex(), "");
+//            }
+//        }
     }
 }
 

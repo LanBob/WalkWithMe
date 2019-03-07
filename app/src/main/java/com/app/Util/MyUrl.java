@@ -2,12 +2,11 @@ package com.app.Util;
 
 
 public class MyUrl {
-//    private static final String ip = "172.22.36.31";
-    private static final String ip = "192.168.135.1";
-    private static final String url = "http://"+ip+":8080/";
-    private static final String wsurl = "ws://"+ip+":8080/server/";
-    private static final String image_path = "http://"+ip+":8080/upload/";
-//    private static final String image_path ="http://192.168.135.1:8080/upload/";
+
+
+    public static String getKefu() {
+        return kefu;
+    }
 
     public static String getUrl() {
         return url;

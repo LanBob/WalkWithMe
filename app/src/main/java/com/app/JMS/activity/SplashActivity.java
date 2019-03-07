@@ -10,16 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import com.app.JMS.util.LogUtil;
 import com.app.JMS.widget.SetPermissionDialog;
 import com.app.R;
+import com.app.Util.MyUrl;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private String userId = "";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("userId");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -43,7 +47,12 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
                         if (aBoolean) {
-                            startActivity(new Intent(SplashActivity.this,ChatActivity.class));
+                            if(userId == null){
+                                userId = MyUrl.getKefu();
+                            }
+                            Intent intent1 = new Intent(SplashActivity.this,ChatActivity.class);
+                            intent1.putExtra("userId",userId);
+                            startActivity(intent1);
                             LogUtil.d("permission");
                             finish();
                          } else {

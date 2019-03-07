@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.app.R;
 //import com.app.Util.SharedPreferencesHelper;
+import com.app.Util.LogOutUtil;
 import com.app.Util.StringUtil;
 import com.app.Fragments.MainActivity;
 import com.app.MainApplication;
@@ -109,29 +110,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 //        String name = helper.getString("name");
 //        String pass = helper.getString("password");
-        String name = StringUtil.getValue("name");
+        String newCount = StringUtil.getValue("newCount");
         String pass = StringUtil.getValue("password");
         //判断曾经是否记住密码
         if ("Y".equals(remenberPassword())) {
             checkBox_password.setChecked(true);//勾选记住密码
-            layout_account.setText("" + name);
+            if(newCount == null) newCount = "";
+            layout_account.setText("" + newCount);
             layout_password.setText("" + pass);//把密码和账号输入到输入框中
         } else {
-            //           setTextName();//把用户账号放到输入账号的输入框中
-//            String name = helper.getString("name");
-            if (name == null) {
-                name = "";
+            if (newCount == null) {
+                newCount = "";
             }
-            layout_account.setText("" + name);
+            layout_account.setText("" + newCount);
         }
 
         //判断是否自动登录
-//        if (helper.getBoolean("autoLogin", false)) {
-//            checkBox_login.setChecked(true);
-//            login();//去登录就可以
-//        }
-        //判断是否自动登录
-        if("Y".equals(StringUtil.getValue("autoLogin"))){
+        if("Y".equals(StringUtil.getValue("autoLogin")) && false){
             checkBox_login.setChecked(true);
             login();//去登录就可以
         }
@@ -270,6 +265,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         codeButton.setText("发送验证码");
                     }
                 });
+
                 getMessageCode(messageCodeUserName);
                 break;
             case R.id.layout1_clock://注册时候获取验证码
@@ -542,7 +538,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.e("ee", e.getMessage());
+//                    Log.e("ee", e.getMessage());
+                    Toast.makeText(Login.this, "请稍后", Toast.LENGTH_LONG).show();
                     layout1_regist.setClickable(true);
                 }
 
@@ -559,10 +556,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     code = 0;
                     layout1_regist.setClickable(true);
 
-                    Intent myintent = new Intent(Login.this, MainActivity.class);
-                    myintent.putExtra("position", 3);
-                    finish();
-                    startActivity(myintent);
+                    frameLayout1.setVisibility(View.GONE);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout3.setVisibility(View.GONE);
+                    frameLayout4.setVisibility(View.GONE);
                 }
             };
             Map<String, String> m = new HashMap<>();
@@ -610,9 +607,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onError(Throwable e) {
                 layoutLogin.setClickable(true);
-                Log.e("message", getAccount() + " 和" + getPassword());
+
+                LogOutUtil.d("message" + getAccount() + "和" + getPassword());
+
                 e.printStackTrace();
-                Toast.makeText(Login.this, "啦啦啦，遇到不可知错误啦……", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "请稍后", Toast.LENGTH_SHORT).show();
                 code = 0;
             }
 
@@ -691,6 +690,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             StringUtil.putValue("autoLogin", "Y");
             StringUtil.putValue("password", getPassword());
             StringUtil.putValue("name", getAccount());
+            StringUtil.putValue("newCount",getAccount());
 //            helper.putValues(
 //                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
 //                    new SharedPreferencesHelper.ContentValue("autoLogin", true),
@@ -715,7 +715,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             StringUtil.putValue("autoLogin", "N");
             StringUtil.putValue("password", getPassword());
             StringUtil.putValue("name", getAccount());
-
+            StringUtil.putValue("newCount",getAccount());
 //            helper.putValues(
 //                    new SharedPreferencesHelper.ContentValue("remenberPassword", true),
 //                    new SharedPreferencesHelper.ContentValue("autoLogin", false),

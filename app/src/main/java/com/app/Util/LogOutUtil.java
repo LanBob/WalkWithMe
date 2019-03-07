@@ -2,7 +2,7 @@ package com.app.Util;
 
 import android.util.Log;
 
-public class LogUtil {
+public class LogOutUtil {
 
     public static final int OUT = 1;
 
@@ -47,7 +47,7 @@ public class LogUtil {
         String callingClass = "";
         for (int i = 2; i < trace.length; i++) {
             Class<?> clazz = trace[i].getClass();
-            if (!clazz.equals(LogUtil.class)) {
+            if (!clazz.equals(LogOutUtil.class)) {
                 callingClass = trace[i].getClassName();
                 callingClass = callingClass.substring(callingClass
                         .lastIndexOf('.') + 1);

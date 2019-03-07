@@ -1,6 +1,5 @@
 package com.app.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -34,7 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import com.app.JMS.util.LogUtil;
 import com.app.R;
@@ -165,23 +164,24 @@ public class HomeFragment extends Fragment {
             adapter = new Com_Adapter<Find_item_dao>(getContext(), R.layout.home_mid_item, find_item_daoList) {
                 @Override
                 public void convert(Com_ViewHolder holder, final Find_item_dao find_item_dao) {
+                    if (find_item_dao != null) {
+                        holder.setText(R.id.home_mid_title, find_item_dao.getTitle());
+                        holder.setText(R.id.home_mid_money, "¥ " + find_item_dao.getMoney());
+                        holder.setText(R.id.home_mid_city, find_item_dao.getCity());
+                        holder.setText(R.id.home_mid_star, find_item_dao.getStar() + "");
+                        holder.setImageResource(R.id.home_mid_image, MyUrl.add_Path(find_item_dao.getDefaultpath()));
 
-                    holder.setText(R.id.home_mid_title, find_item_dao.getTitle());
-                    holder.setText(R.id.home_mid_money, "¥ " + find_item_dao.getMoney());
-                    holder.setText(R.id.home_mid_city, find_item_dao.getCity());
-                    holder.setText(R.id.home_mid_star, find_item_dao.getStar() + "");
-                    holder.setImageResource(R.id.home_mid_image, MyUrl.add_Path(find_item_dao.getDefaultpath()));
-
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getContext(), " " + find_item_dao.getTitle(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getActivity(), PersonMainPage.class);
-                            Log.e("viewID", find_item_dao.getId() + " ");
-                            intent.putExtra("viewID", find_item_dao.getId());
-                            startActivity(intent);
-                        }
-                    });
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+//                            Toast.makeText(getContext(), " " + find_item_dao.getTitle(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), PersonMainPage.class);
+                                Log.e("viewID", find_item_dao.getId() + " ");
+                                intent.putExtra("viewID", find_item_dao.getId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
                 }
             };
 
@@ -192,27 +192,30 @@ public class HomeFragment extends Fragment {
             home_everyday_recyclerView.setAdapter(new Com_Adapter<Home_everyDao>(getContext(), R.layout.everyday_item, home_every_list) {
                 @Override
                 public void convert(Com_ViewHolder holder, final Home_everyDao home_everyDao) {
-                    holder.setText(R.id.home_every_text, home_everyDao.getIntroduce());
-                    holder.setText(R.id.home_every_daytime, home_everyDao.getTime());
-                    holder.setCircleImageView(R.id.home_every_image, home_everyDao.getImage());
+                    if (home_everyDao != null) {
+                        holder.setText(R.id.home_every_text, home_everyDao.getIntroduce());
+                        holder.setText(R.id.home_every_daytime, home_everyDao.getTime());
+                        holder.setCircleImageView(R.id.home_every_image, home_everyDao.getImage());
 
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getContext(), " " + home_everyDao.getIntroduce(), Toast.LENGTH_SHORT).show();
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+//                            Toast.makeText(getContext(), " " + home_everyDao.getIntroduce(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        switch (home_everyDao.getId()) {
+                            case 0:
+                                holder.itemView.setBackgroundColor(Color.parseColor("#00C39A"));
+                                break;
+                            case 1:
+                                holder.itemView.setBackgroundColor(Color.parseColor("#76BEE6"));
+                                break;
+                            default:
+                                holder.itemView.setBackgroundColor(Color.parseColor("#657DC1"));
+                                break;
                         }
-                    });
-                    switch (home_everyDao.getId()) {
-                        case 0:
-                            holder.itemView.setBackgroundColor(Color.parseColor("#00C39A"));
-                            break;
-                        case 1:
-                            holder.itemView.setBackgroundColor(Color.parseColor("#76BEE6"));
-                            break;
-                        default:
-                            holder.itemView.setBackgroundColor(Color.parseColor("#657DC1"));
-                            break;
                     }
+
                 }
             });
             //=========home_every_recyclerViee=============================================
@@ -224,22 +227,24 @@ public class HomeFragment extends Fragment {
             home_nine_recyclerview.setAdapter(new Com_Adapter<Home_nine_dao>(getContext(), R.layout.home_nine_item, home_nine_list_dao) {
                 @Override
                 public void convert(Com_ViewHolder holder, final Home_nine_dao home_nine_dao) {
+                    if(home_nine_dao != null){
+                        holder.setText(R.id.home_nine_item_text, home_nine_dao.getIntroduce());
 
-                    holder.setText(R.id.home_nine_item_text, home_nine_dao.getIntroduce());
+                        //设置图片
+                        holder.setImageResource(R.id.home_nine_item_image, home_nine_dao.getHome_nine_image());
 
-                    //设置图片
-                    holder.setImageResource(R.id.home_nine_item_image, home_nine_dao.getHome_nine_image());
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+//                            Toast.makeText(getContext(), " " + home_nine_dao.getIntroduce(), Toast.LENGTH_SHORT).show();
+                                //跳转到相关的页面去
+                                Intent intent = new Intent(getActivity(), Home_show_item.class);
+                                intent.putExtra("type", home_nine_dao.getType());
+                                getActivity().startActivity(intent);
+                            }
+                        });
+                    }
 
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getContext(), " " + home_nine_dao.getIntroduce(), Toast.LENGTH_SHORT).show();
-                            //跳转到相关的页面去
-                            Intent intent = new Intent(getActivity(), Home_show_item.class);
-                            intent.putExtra("type", home_nine_dao.getType());
-                            getActivity().startActivity(intent);
-                        }
-                    });
                 }
             });
             //=========home_nine_recyclerViee=============================================
@@ -261,28 +266,25 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onNext(ResponseResult<List<Find_item_dao>> listResponseResult) {
-                find_item_daoList.clear();
-                find_item_daoList.addAll(listResponseResult.getData());
-                Log.e("list", find_item_daoList.size() + " ");
-                if (find_item_daoList.size() > 0)
-                    Log.e("content", find_item_daoList.get(0).getTitle());
+                if (listResponseResult.getData() != null && listResponseResult.getData().size() > 0) {
+                    find_item_daoList.clear();
+                    find_item_daoList.addAll(listResponseResult.getData());
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
-                Log.e("error", e.getMessage());
+
             }
 
             @Override
             public void onComplete() {
                 Log.e("com", "complete");
                 //可能会犯错，因为list= re，getList（）得到的不是同一个list对象
-                Toast.makeText(getActivity(),"成功进行访问",Toast.LENGTH_LONG).show();
                 adapter.notifyDataSetChanged();
             }
         };
-
+//在这里获取第一个和第三个的
         HttpMethods.getInstance()
                 .getFind_item(1, observer);
         HttpMethods.getInstance()

@@ -6,9 +6,14 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.app.JMS.bean.Message;
 import com.dhh.websocket.Config;
+import com.dhh.websocket.WebSocketSubscriber;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.WebSocket;
 
 
 public class MainApplication extends MultiDexApplication {
@@ -20,8 +25,6 @@ public class MainApplication extends MultiDexApplication {
     public Config config;
     public static Application	mApplication;
 
-
-
     @Override
     public void onCreate() {
 
@@ -29,7 +32,6 @@ public class MainApplication extends MultiDexApplication {
         mApplication = this;
         mContext = getApplicationContext();
         initConfig();
-
     }
 
     /**

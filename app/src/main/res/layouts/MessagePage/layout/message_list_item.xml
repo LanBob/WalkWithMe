@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#A3E4E0"
+    android:layout_marginLeft="@dimen/x6"
+    android:layout_marginRight="@dimen/x6"
+    android:layout_marginTop="@dimen/y15"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y130">
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/y30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.app.view.CircleImageView
+            android:layout_marginLeft="@dimen/x19"
+            android:id="@+id/headImage"
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80"
+            android:src="@drawable/chat_girl" />
+
+        <TextView
+            android:textSize="16sp"
+            android:id="@+id/userId"
+            android:layout_marginLeft="@dimen/x40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/headImage"
+            android:text="11598495868" />
+
+        <TextView
+            android:id="@+id/showMessage"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_toRightOf="@id/headImage"
+            android:layout_below="@id/userId"
+            android:text="[收到新消息]"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/noMessage"
+            android:visibility="visible"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_toRightOf="@id/headImage"
+            android:layout_below="@id/userId"
+            android:text="无新消息"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_marginLeft="@dimen/x300"
+            android:layout_toRightOf="@id/userId"
+            android:text="10:90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/count"
+            android:text=" "
+            android:layout_marginTop="@dimen/y35"
+            android:layout_marginLeft="@dimen/x300"
+            android:layout_toRightOf="@id/userId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
