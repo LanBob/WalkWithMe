@@ -84,7 +84,7 @@ public class MineFragment extends Fragment {
             R.drawable.mine_add_account,
             R.drawable.mine_about, R.drawable.mine_feedback};
     String[] mineItem = {
-            "账号", "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于", "管理员入口"
+            "账号", "申请成为导游", "我的向导", "关注发现", "修改密码", "反馈", "退出登录", "修改个人信息", "关于", "管理员入口"
     };
     //====================图片对应关系==============================================
 
@@ -151,7 +151,7 @@ public class MineFragment extends Fragment {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //控制跳转  , "申请成为导游", "我的旅行", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
+                                //控制跳转  , "申请成为导游", "我的向导", "关注发现", "修改密码", "反馈", "退出登录", "添加账号", "关于"
                                 String b = "";
                                 b = StringUtil.getValue("isAlreadyLogin");
                                 Log.e("myindex", "" + mineRecycleItemDao.getIndex() + " -->" + mineRecycleItemDao.getMessage());
@@ -167,10 +167,11 @@ public class MineFragment extends Fragment {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
                                             Intent intent_login = new Intent(getActivity(), Login.class);
                                             intent_login.putExtra("index", "7");
+                                            getActivity().finish();
                                             getActivity().startActivity(intent_login);
                                         }
                                         break;
-                                    case 2://我的旅行
+                                    case 2://我的向导
                                         if ("Y".equals(b)) {
                                             Intent intent2 = new Intent(getActivity(), Mineitem.class);
                                             intent2.putExtra("index", "2");
@@ -197,6 +198,7 @@ public class MineFragment extends Fragment {
                                         if ("Y".equals(b)) {
                                             Intent intent4 = new Intent(getActivity(), Login.class);
                                             intent4.putExtra("index", "4");
+//                                            getActivity().finish();
                                             getActivity().startActivity(intent4);
                                         } else {
                                             Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
@@ -213,7 +215,7 @@ public class MineFragment extends Fragment {
                                     case 6://申请退出登录
                                         Intent intent6 = new Intent(getActivity(), Mineitem.class);
                                         intent6.putExtra("index", "6");
-                                        //getActivity().startActivity(intent6);
+                                        getActivity().finish();
                                         getActivity().startActivityForResult(intent6, 1);
                                         break;
 

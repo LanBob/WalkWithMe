@@ -367,6 +367,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 String messageCode4 = ((EditText) findViewById(R.id.layout4_code)).getText().toString().trim();
                 if (StringUtil.isMobile(username4) && StringUtil.isInteger(messageCode4)) {
                     changePassword(username4, pwd4, messageCode4);
+//                    finish
+                    Intent myintent = new Intent(Login.this, MainActivity.class);
+                    finish();
+                    startActivity(myintent);
                 } else {
                     Toast.makeText(Login.this, "请输入数字号码", Toast.LENGTH_SHORT).show();
                 }
@@ -420,7 +424,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     finish();
                     startActivity(myintent);
                     //登录成功后将用户名修改为这个Username
-
                 }
             };
             Map<String,String> map = new HashMap<>();

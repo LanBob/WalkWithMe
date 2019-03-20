@@ -24,15 +24,15 @@
                 <com.app.view.Roll.RollPagerView
                     android:id="@+id/rollview_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x322"
-                    app:rollviewpager_play_delay="300" />
+                    android:layout_height="@dimen/y302"
+                    app:rollviewpager_play_delay="1500" />
+                android:layout_marginTop="@dimen/y50"
 
-
-
+                <!--注意：这里的那个高度设置，是需要配合下面的RelativeLayout的-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x180"
+                    android:layout_marginTop="@dimen/y302"
                     android:background="@android:color/white"
                     android:orientation="vertical">
 
@@ -52,47 +52,47 @@
                         android:id="@+id/home_nine_recyclerview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/white"/>
+                        android:background="@android:color/white" />
 
-                    <!--发现精选-->
-                    <TextView
-                        android:id="@+id/no_use_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/home_nine_recyclerview"
-                        android:layout_marginLeft="@dimen/x30"
-                        android:layout_marginTop="@dimen/x50"
-                        android:layout_marginBottom="@dimen/x30"
-                        android:background="@android:color/white"
-                        android:text="发现精选"
-                        android:textSize="20sp" />
+                    <!--&lt;!&ndash;发现精选&ndash;&gt;-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/no_use_text"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@id/home_nine_recyclerview"-->
+                        <!--android:layout_marginLeft="@dimen/x30"-->
+                        <!--android:layout_marginTop="@dimen/x50"-->
+                        <!--android:layout_marginBottom="@dimen/x30"-->
+                        <!--android:background="@android:color/white"-->
+                        <!--android:text="发现精选"-->
+                        <!--android:textSize="20sp" />-->
 
-                    <!--中间大张页面的推荐-->
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/home_everyday_recyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x260"
-                        android:layout_below="@id/no_use_text"
-                        android:layout_marginTop="@dimen/x10"
-                        android:background="@android:color/white"/>
+                    <!--&lt;!&ndash;中间大张页面的推荐&ndash;&gt;-->
+                    <!--<android.support.v7.widget.RecyclerView-->
+                        <!--android:id="@+id/home_everyday_recyclerview"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="@dimen/x260"-->
+                        <!--android:layout_below="@id/no_use_text"-->
+                        <!--android:layout_marginTop="@dimen/x10"-->
+                        <!--android:background="@android:color/white" />-->
 
                     <TextView
                         android:id="@+id/no_use_too"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/home_everyday_recyclerview"
+                        android:layout_below="@id/home_nine_recyclerview"
                         android:layout_marginLeft="@dimen/x30"
-                        android:layout_marginTop="@dimen/x50"
+                        android:layout_marginTop="@dimen/y70"
                         android:layout_marginBottom="@dimen/x30"
                         android:text="精选向导"
-                        android:textSize="20sp" />
+                        android:textSize="23sp" />
 
 
                     <!--中间横向的推荐-->
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/home_mid_recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/y900"
                         android:layout_below="@id/no_use_too"
                         android:background="@android:color/white" />
 
@@ -121,26 +121,26 @@
                 android:layout_marginRight="@dimen/y10"
                 android:layout_marginBottom="@dimen/x10"
                 android:background="@drawable/textview_border"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <EditText
-                    android:layout_weight="1"
                     android:id="@+id/tv_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:inputType="text"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:hint="搜索"
+                    android:imeOptions="actionSend"
+                    android:inputType="text"
+                    android:maxLines="1"
                     android:textColor="@color/black" />
 
                 <ImageView
                     android:id="@+id/editextSearch"
-                    android:src="@drawable/search"
                     android:layout_width="@dimen/y50"
-                    android:layout_height="@dimen/y50" />
+                    android:layout_height="@dimen/y50"
+                    android:src="@drawable/search" />
 
             </LinearLayout>
         </RelativeLayout>

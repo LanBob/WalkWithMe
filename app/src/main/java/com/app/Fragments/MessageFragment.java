@@ -31,7 +31,7 @@ import java.util.List;
 public class MessageFragment extends Fragment {
     private List<Message_dao> list;
     private RecyclerView recyclerView;
-    private String message_name[] = {"联系客服", "消息", "通知"};
+    private String message_name[] = {"消息", "相互验证", "通知"};
     private Integer message_image[] = {R.mipmap.message_confirm,
             R.mipmap.message_message,
             R.mipmap.message_tongzhi};
@@ -75,7 +75,7 @@ public class MessageFragment extends Fragment {
                             public void onClick(View v) {
                                 Toast.makeText(getContext(), " " + message_dao.getMessage_name(), Toast.LENGTH_SHORT).show();
                                 switch (message_dao.getMessage_name()) {
-                                    case "联系客服":
+                                    case "消息":
                                         if("N".equals(isAlreadyLogin) || userId == null || !StringUtil.isMobile(userId)){
                                             Toast.makeText(getContext(), "通知未开放", Toast.LENGTH_SHORT).show();
                                         }else {
@@ -85,7 +85,7 @@ public class MessageFragment extends Fragment {
                                         }
 
                                         break;
-                                    case "消息":
+                                    case "相互验证":
                                         if ("Y".equals(isAlreadyLogin) && userId != null && !"".equals(userId)) {
                                             Intent intent1 = new Intent(getActivity(), MessageInterScore.class);
                                             getActivity().startActivity(intent1);

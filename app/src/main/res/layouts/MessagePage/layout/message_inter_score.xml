@@ -7,11 +7,27 @@
     <TextView
         android:layout_marginTop="@dimen/y30"
         android:gravity="center"
-        android:text="需要为其他导游进行评分"
+        android:textSize="20sp"
+        android:text="为您随机挑选的导游如下"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="@dimen/y16"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="请及时为其进行评分"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:gravity="center"
+        android:textSize="14sp"
+        android:text="（只有完成为其评分，您才能成功完成自己的向导发布）"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/y50"
         android:id="@+id/neededScore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

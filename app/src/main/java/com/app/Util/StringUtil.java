@@ -142,6 +142,7 @@ public class StringUtil {
         db.insert("chatbean", null, values);
     }
 
+//    默认至少返回一个值
     public static List<ChatListBean> query() {
         if (db == null) {
             DBHelper dbHelper = new DBHelper(MainApplication.getContext(), "test_db", null, 1);
@@ -161,6 +162,15 @@ public class StringUtil {
             chatListBean.setTime(cursor.getString(cursor.getColumnIndex("time")));
             listBeans.add(chatListBean);
         }
+        if(listBeans.size() == 0){
+            ChatListBean chatListBean = new ChatListBean();
+            chatListBean.setCount(0);
+            chatListBean.setUserId(MyUrl.getKefu());
+            chatListBean.setTime(StringUtil.getToMinute(System.currentTimeMillis()));
+//            如果是没有，就将其返回
+            StringUtil.insertChatListBean(chatListBean);
+            listBeans.add(chatListBean);
+        }
         return listBeans;
     }
 
@@ -174,6 +184,27 @@ public class StringUtil {
         values.put("count", chatListBean.getCount());
         values.put("time", chatListBean.getTime());
         db.update("chatbean", values, "userId = ?", new String[]{chatListBean.getUserId()});
+    }
+
+    public static ChatListBean getBeanByUserId(String userId){
+        if (db == null) {
+            DBHelper dbHelper = new DBHelper(MainApplication.getContext(), "test_db", null, 1);
+            db = dbHelper.getWritableDatabase();
+        }
+        Cursor cursor = db.query("chatbean", new String[]{"userId", "count", "time"}, "userId = ?", new String[]{userId}, null, null, null);
+        ChatListBean chatListBean = new ChatListBean();
+        while (cursor.moveToNext()) {
+            chatListBean.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
+            chatListBean.setCount(Integer.valueOf(cursor.getString(cursor.getColumnIndex("count"))));
+            chatListBean.setTime(cursor.getString(cursor.getColumnIndex("time")));
+        }
+        return chatListBean;
+    }
+
+    public static void clearCount(String userId){
+        ChatListBean chatListBean = getBeanByUserId(userId);
+        chatListBean.setCount(0);
+        update(chatListBean);
     }
 
     public static int getUserIdCount(String userId) {
@@ -228,7 +259,10 @@ public class StringUtil {
             db = dbHelper.getWritableDatabase();
         }
         ContentValues values = new ContentValues();
+//        修改UserId,改成whoToContract+toCantractWho
         values.put("userId", sqlMessage.getUserId());
+//        values.put("userId", sqlMessage.getUserId());
+
         values.put("path", sqlMessage.getPath());
         values.put("time", sqlMessage.getTime());
         LogOutUtil.d("insert sqlMessage" + sqlMessage.getUserId());
@@ -281,6 +315,7 @@ public class StringUtil {
         }
     }
 
+
     public static byte[] read(File file){
         ByteArrayOutputStream ous = null;
         InputStream ios = null;
@@ -311,6 +346,7 @@ public class StringUtil {
             } catch (IOException e) {
             }
         }
+        Log.e("read File",ous.toString());
         return ous.toByteArray();
     }
 

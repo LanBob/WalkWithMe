@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.dhh:rxlifecycle:1.6@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/rxlifecycle-1.6.aar/876f014dbe64ac4efabc7268815aa494/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/rxlifecycle-1.6.aar/876f014dbe64ac4efabc7268815aa494/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.dhh/rxlifecycle/1.6/1a09155b36b18851e929bf2fea33363295b2d083/rxlifecycle-1.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -103,7 +103,7 @@ public class RollPagerView extends RelativeLayout implements OnPageChangeListene
 
 		TypedArray type = getContext().obtainStyledAttributes(attrs, R.styleable.RollViewPager);
 		gravity = type.getInteger(R.styleable.RollViewPager_rollviewpager_hint_gravity, 1);
-		delay = type.getInt(R.styleable.RollViewPager_rollviewpager_play_delay, 0);
+		delay = type.getInt(R.styleable.RollViewPager_rollviewpager_play_delay, 1500);
 		color = type.getColor(R.styleable.RollViewPager_rollviewpager_hint_color, Color.BLACK);
 		alpha = type.getInt(R.styleable.RollViewPager_rollviewpager_hint_alpha, 0);
 		paddingLeft = (int) type.getDimension(R.styleable.RollViewPager_rollviewpager_hint_paddingLeft, 0);

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,6 +44,7 @@ public class MessageInterScore extends AppCompatActivity implements View.OnClick
     private String completeInterScore = "系统未完成验证";
     private String failedScore = "申请当地旅游点失败";
     private String pass = "验证通过";
+    private ActionBar actionBar;
 
     private String userId;
 
@@ -49,6 +52,10 @@ public class MessageInterScore extends AppCompatActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_inter_score);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("相互评分");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
         userId = StringUtil.getValue("username");
         initView();
         initData();
@@ -178,6 +185,17 @@ public class MessageInterScore extends AppCompatActivity implements View.OnClick
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MessageInterScore.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         neededScore.setLayoutManager(linearLayoutManager);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //对用户按home icon的处理，本例只需关闭activity，就可返回上一activity，即主activity。
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

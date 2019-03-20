@@ -1,7 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/about"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:textSize="30sp"
+        android:text="关于我们"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:textSize="19sp"
+        android:text="1.0.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/y50"
+        android:textSize="19sp"
+        android:text="平台简介："
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/x60"
+        android:textSize="16sp"
+        android:text="      Walk with Me 是一个链接当地导游和旅游者的平台，我们致力于打造“浸入式”定制旅行，满足游客不同的旅行诉求，为热爱旅游的人提供分享的平台。"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/y30"
+        android:textSize="16sp"
+        android:text="      对于游客，我们可以提供安全，完整的导游身份验证，确保每一位导游的高质与可靠。平台对于不同需求的划分，可以为您提供多方面完善的策划，从衣食住行到吃喝玩乐。后期完善的跟进与评价系统，可以维护保障你的个人权益。"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/y30"
+        android:textSize="16sp"
+        android:text="      对于导游，我们可以提供当地人热爱旅游的人一个分享快乐和就业的机会。在此同时也有保障导游权益与安全的系统程序。"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginTop="@dimen/y30"
+        android:textSize="16sp"
+        android:text="      我们的目标是为当地导游和游客创造一个安全可靠的机会，满足彼此的需求。"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

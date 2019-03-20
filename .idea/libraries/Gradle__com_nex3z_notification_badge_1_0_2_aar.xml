@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.nex3z:notification-badge:1.0.2@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/notification-badge-1.0.2.aar/ab5615d5f1fe8b5266e9b33539b27552/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/notification-badge-1.0.2.aar/ab5615d5f1fe8b5266e9b33539b27552/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nex3z/notification-badge/1.0.2/8225e27aead8efde18c7f2949503e4e664bd153b/notification-badge-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -103,7 +103,8 @@
             <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".activity.ManagerEntity">
+        <activity android:name=".activity.ManagerEntity"
+            android:theme="@style/CustomActionBarTheme">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -112,7 +113,8 @@
         </activity>
         <activity android:name=".activity.ManagerGoodManActivity"/>
         <activity android:name=".activity.ManagerNeededScoreActivity"/>
-        <activity android:name=".activity.MessageInterScore"/>
+        <activity android:name=".activity.MessageInterScore"
+            android:theme="@style/CustomActionBarTheme"/>
         <activity android:name=".JMS.activity.ChatListActivity"
             android:theme="@style/CustomActionBarTheme"/>
         <service android:name=".JMS.ChatService"/>

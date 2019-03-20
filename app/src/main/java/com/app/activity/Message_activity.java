@@ -2,10 +2,12 @@ package com.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,69 +64,23 @@ public class Message_activity extends AppCompatActivity {
     private ViewGroup.LayoutParams l;
     private String userID;
 
-    private WebSocket mwebSocket;
-    private WebSocketSubscriber webSocketSubscriber;
+//    private WebSocket mwebSocket;
+//    private WebSocketSubscriber webSocketSubscriber;
 
     private String toUserId = "555";
     private String fromUserId = "444";
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_activity);
-
-//        SharedPreferencesHelper helper = new SharedPreferencesHelper(MainApplication.getContext(), "loginState");
-//        userID= helper.getLong("userId");
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("消息");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
         userID = StringUtil.getValue("userId");
-//        Log.e("id",userID + " ");
 
-        webSocketSubscriber = new WebSocketSubscriber() {
-            @Override
-            protected void onOpen(@NonNull WebSocket webSocket) {
-                Log.d("MainActivity", " on WebSocket open");
-                mwebSocket = webSocket;
-//                mwebSocket.send("haha");
-            }
-
-            /**
-             * 接收到消息
-             * @param text
-             */
-            @Override
-            protected void onMessage(@NonNull String text) {
-                Log.d("MainActivity", text);
-            }
-
-            /**
-             * 二进制消息
-             * @param byteString
-             */
-            @Override
-            protected void onMessage(@NonNull ByteString byteString) {
-                Log.d("MainActivity", byteString.toString());
-            }
-
-            @Override
-            protected void onReconnect() {
-                Log.d("MainActivity", "onReconnect");
-            }
-
-            @Override
-            protected void onClose() {
-                Log.d("MainActivity", "onClose");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
-        };
-
-        String url = MyUrl.add_Wsurl(fromUserId+"/" + toUserId);
-        Log.e("webweb","ww" +  url);
-
-        WebSocketUtil.getInstance()
-                .connect(url,this,webSocketSubscriber);
 
         ////===========================
         //设置用户相关，包括
@@ -330,6 +286,17 @@ public class Message_activity extends AppCompatActivity {
             }
         };
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //对用户按home icon的处理，本例只需关闭activity，就可返回上一activity，即主activity。
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

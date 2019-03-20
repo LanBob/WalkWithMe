@@ -12,16 +12,19 @@
         android:background="#FFFFFF"
         android:clipToPadding="false" />
 
-    <com.spark.submitbutton.SubmitButton
+
+    <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="已经完成阅读"
+        android:layout_height="@dimen/x66"
         android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginRight="@dimen/x50"
+        android:layout_marginBottom="@dimen/x50"
         android:textSize="16sp"
         android:textColor="@color/white"
-        app:sub_btn_background="#4AD6D6"
-        app:sub_btn_duration="3000"
-        app:sub_btn_tick_color="@color/white" />
+        android:background="#6AE6DA"
+        android:text="进入验证" />
+
 
 </FrameLayout>

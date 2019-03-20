@@ -13,12 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.JMS.activity.ChatActivity;
-import com.app.JMS.util.LogUtil;
 import com.app.JMS.util.PictureFileUtil;
 import com.app.R;
 import com.app.Util.CityUtil;
@@ -46,8 +43,6 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import me.nereo.multi_image_selector.MultiImageSelector;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -96,6 +91,7 @@ public class EditActivity extends AppCompatActivity {
 
 
     public static final int REQUEST_CODE_IMAGE = 0000;
+    public static final int RESULT_OK           = -1;
     public static final int REQUEST_CODE_VEDIO = 1111;
     public static final int REQUEST_CODE_FILE = 2222;
 
@@ -366,8 +362,10 @@ public class EditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (resultCode) {
+
+            switch (requestCode) {
                 case REQUEST_CODE_IMAGE:
+                    Log.e("success","Success" + REQUEST_CODE_IMAGE);
                     // 图片选择结果回调
                     List<LocalMedia> selectListPic = PictureSelector.obtainMultipleResult(data);
                     for (LocalMedia media : selectListPic) {

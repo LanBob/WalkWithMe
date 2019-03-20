@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.app.JMS.activity.ChatActivity;
+import com.app.JMS.bean.ChatListBean;
 import com.app.R;
 import com.app.Util.LoadingDialogUtil;
 import com.app.Util.LogOutUtil;
@@ -31,6 +33,7 @@ import com.app.commonAdapter.Com_Adapter;
 import com.app.commonAdapter.Com_ViewHolder;
 import com.app.entity.CommentDao;
 import com.app.entity.HeadImage;
+import com.app.entity.Person_setting;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.view.CircleImageView;
@@ -87,6 +90,8 @@ public class PersonMainPage extends AppCompatActivity {
     private Long view_show_id = 0L;
     private String follower;
     private String followed;
+    private TextView leftName;
+    private TextView leftIntroduce;
 
     //===================
     Observer<ResponseResult<View_show_dao>> view_show_observer;
@@ -99,6 +104,7 @@ public class PersonMainPage extends AppCompatActivity {
     Observer<ResponseResult<View_show_dao>> mainObserver;
     Observer<ResponseResult<List<CommentDao>>> getCommentObserver;
     Observer<ResponseResult<String>> commentObserver;
+
     //===================
 
     //RecyclerView评论
@@ -225,6 +231,8 @@ public class PersonMainPage extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         leftMainPage = findViewById(R.id.leftMainPage);
         leftChat = findViewById(R.id.leftChat);
+        leftName = findViewById(R.id.leftName);
+        leftIntroduce = findViewById(R.id.leftIntroduce);
 
         //通过java添加 图片
         setSupportActionBar(toolbar);
@@ -290,6 +298,14 @@ public class PersonMainPage extends AppCompatActivity {
         leftChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(PersonMainPage.this, ChatActivity.class);
+                intent.putExtra("userId",follower);
+                ChatListBean chatListBean = new ChatListBean();
+                chatListBean.setTime(String.valueOf(System.currentTimeMillis()));
+                chatListBean.setUserId(follower);
+                chatListBean.setCount(0);
+                StringUtil.insertChatListBean(chatListBean);
+                startActivity(intent);
                 Toast.makeText(PersonMainPage.this, "请求联系 Ta", Toast.LENGTH_SHORT).show();
             }
         });
@@ -341,18 +357,19 @@ public class PersonMainPage extends AppCompatActivity {
                 main_page_position_name.setText(dao.getCity());
                 personMainPageMoney.setText("¥ " + dao.getMoney());
                 upMytime.setText(dao.getMyTime());
+
                 if ("是".equals(dao.getFriendlyToEat())) {
                     eat.setTextColor(getResources().getColor(R.color.blue));
                     eat.setText("餐饮方便： √");
                 } else {
-                    eat.setTextColor(getResources().getColor(R.color.gray));
+                    eat.setTextColor(getResources().getColor(R.color.bar_grey));
                     eat.setText("餐饮不方便： ×");
                 }
                 if ("是".equals(dao.getFirendlyToLive())) {
                     eat.setText("住宿方便： √");
                     eat.setTextColor(getResources().getColor(R.color.blue));
                 } else {
-                    eat.setTextColor(getResources().getColor(R.color.gray));
+                    eat.setTextColor(getResources().getColor(R.color.bar_grey));
                     eat.setText("住宿不方便： ×");
                 }
                 scoreTextView.setText("综合评分: " + dao.getScore());
@@ -733,6 +750,46 @@ public class PersonMainPage extends AppCompatActivity {
                 loadingDialogUtil.cancel();
             }
         };
+
+
+        Observer<ResponseResult<Person_setting>> observer = new Observer<ResponseResult<Person_setting>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseResult<Person_setting> personResponseResult) {
+                if(personResponseResult != null){
+                    Person_setting person_setting = personResponseResult.getData();
+                    if (person_setting != null) {
+                        //空指针异常
+                        leftName.setText(person_setting.getAlias());
+                        leftIntroduce.setText(person_setting.getIntroduce());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("e", "eee" + e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("com", "eee");
+            }
+        };
+
+
+        //==================================================获取个人信息
+
+        if(follower != null && StringUtil.isMobile(follower)){
+            HttpMethods.getInstance()
+                    .getPerson(Long.valueOf(follower), observer);
+        }
+
+
     }
 
     @Override

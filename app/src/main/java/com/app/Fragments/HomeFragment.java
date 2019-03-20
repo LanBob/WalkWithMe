@@ -9,32 +9,22 @@ import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.transition.TransitionSet;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
-//import android.widget.Toast;
-
 import com.app.JMS.util.LogUtil;
 import com.app.R;
 import com.app.Util.MyUrl;
@@ -46,21 +36,18 @@ import com.app.commonAdapter.Com_ViewHolder;
 import com.app.modle.HttpMethods;
 import com.app.modle.ResponseResult;
 import com.app.entity.Find_item_dao;
-import com.app.entity.Home_everyDao;
 import com.app.entity.Home_mid_dao;
 import com.app.entity.Home_nine_dao;
 import com.app.view.Roll.ColorPointHintView;
 import com.app.view.Roll.LoopPagerAdapter;
 import com.app.view.Roll.RollPagerView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by donglinghao on 2016-01-28.
+ * Created by Lusr on 2016-01-28.
  * PagerAdapter用法简介
  * 首先，如果继承pageradapter，至少必须重写下面的四个方法：
  * <p>
@@ -87,13 +74,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView home_nine_recyclerview;
     private static final String TAG = "HomeFragment";
 
-    Integer[] home_nine_recyclerview_image = {
-            R.mipmap.first_light, R.mipmap.second_light,
-            R.mipmap.third_light, R.mipmap.fourth_light,
-            R.mipmap.first_light, R.mipmap.second_light,
-            R.mipmap.third_light, R.mipmap.fourth_light,
-    };
-
     Integer home_nine_path[] = {
             R.drawable.home_nine_scenery,
             R.drawable.home_nine_photography,
@@ -118,7 +98,7 @@ public class HomeFragment extends Fragment {
 
     //=========home_mid_recyclerViee=============================================
     private RecyclerView home_mid_recyclerView;
-    String[] home_mid_string = {"现代化风格建筑群，优美景色等你来", "悠悠的小船，汗水夹杂着快乐，那一抹暖阳最美！", "爬山，假期是最好的运动，山上有你想要的一切", "云南最好的景色当给你不一样的感受，大千世界，只为一景", "带你转悠带你飞"};
+//    String[] home_mid_string = {"现代化风格建筑群，优美景色等你来", "悠悠的小船，汗水夹杂着快乐，那一抹暖阳最美！", "爬山，假期是最好的运动，山上有你想要的一切", "云南最好的景色当给你不一样的感受，大千世界，只为一景", "带你转悠带你飞"};
 
     Integer[] hmoe_mid_image = {
             R.drawable.home_1, R.drawable.home_3, R.drawable.home_4,
@@ -136,15 +116,6 @@ public class HomeFragment extends Fragment {
 
     //=========home_mid_recyclerViee=============================================
 
-    //=========home_everyday=============================================
-    private RecyclerView home_everyday_recyclerView;
-    private Home_everyDao home_everyDao;
-    private List<Home_everyDao> home_every_list;
-    private String[] home_every_string = {"To learn how to play", "Learn 50 fresh words", "Learn the poem by heart"};
-    private Integer[] home_every_image = {R.mipmap.first_light, R.mipmap.second_light, R.mipmap.third_light};
-
-    //=========home_everyday=============================================
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -157,7 +128,12 @@ public class HomeFragment extends Fragment {
 
             //=========home_mid_recyclerViee=============================================
             home_mid_recyclerView = mRootView.findViewById(R.id.home_mid_recyclerView);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()){
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
             home_mid_recyclerView.setLayoutManager(linearLayoutManager);
@@ -187,38 +163,6 @@ public class HomeFragment extends Fragment {
 
             home_mid_recyclerView.setAdapter(adapter);
             //=========home_mid_recyclerViee=============================================
-
-            //=========home_every_recyclerViee=============================================
-            home_everyday_recyclerView.setAdapter(new Com_Adapter<Home_everyDao>(getContext(), R.layout.everyday_item, home_every_list) {
-                @Override
-                public void convert(Com_ViewHolder holder, final Home_everyDao home_everyDao) {
-                    if (home_everyDao != null) {
-                        holder.setText(R.id.home_every_text, home_everyDao.getIntroduce());
-                        holder.setText(R.id.home_every_daytime, home_everyDao.getTime());
-                        holder.setCircleImageView(R.id.home_every_image, home_everyDao.getImage());
-
-                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-//                            Toast.makeText(getContext(), " " + home_everyDao.getIntroduce(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        switch (home_everyDao.getId()) {
-                            case 0:
-                                holder.itemView.setBackgroundColor(Color.parseColor("#00C39A"));
-                                break;
-                            case 1:
-                                holder.itemView.setBackgroundColor(Color.parseColor("#76BEE6"));
-                                break;
-                            default:
-                                holder.itemView.setBackgroundColor(Color.parseColor("#657DC1"));
-                                break;
-                        }
-                    }
-
-                }
-            });
-            //=========home_every_recyclerViee=============================================
 
             //=========home_nine_recyclerViee=============================================
             home_nine_recyclerview = mRootView.findViewById(R.id.home_nine_recyclerview);
@@ -400,6 +344,8 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), SearchActivity.class);
                     intent.putExtra("search", keyWord);
                     getActivity().startActivity(intent);
+                }else {
+                    expand();
                 }
             }
         });
@@ -416,19 +362,19 @@ public class HomeFragment extends Fragment {
         //---------------------------------
 
         //=========home_mid_recyclerViee========中间横向的拉动，设置数据，数据来源=====================================
-        home_mid_list = new ArrayList<>();
-        for (int i = 0; i < home_mid_string.length; ++i) {
-            hmoe_mid_dao = new Home_mid_dao();
-            hmoe_mid_dao.setName(home_mid_string[i]);
-            hmoe_mid_dao.setImage(hmoe_mid_image[i]);
-            home_mid_list.add(hmoe_mid_dao);
-        }
+//        home_mid_list = new ArrayList<>();
+//        for (int i = 0; i < home_mid_string.length; ++i) {
+//            hmoe_mid_dao = new Home_mid_dao();
+//            hmoe_mid_dao.setName(home_mid_string[i]);
+//            hmoe_mid_dao.setImage(hmoe_mid_image[i]);
+//            home_mid_list.add(hmoe_mid_dao);
+//        }
         //=========================================以上从网络上获取
 
 
         //========================================================home_nine_list_dao
         home_nine_list_dao = new ArrayList<>();
-        for (int i = 0; i < home_nine_recyclerview_image.length; ++i) {
+        for (int i = 0; i < home_nine_path.length; ++i) {
             home_nine_dao = new Home_nine_dao();
             home_nine_dao.setHome_nine_image(home_nine_path[i]);
             home_nine_dao.setIntroduce(home_nine_name[i]);
@@ -438,20 +384,26 @@ public class HomeFragment extends Fragment {
 
 
         //=========home_every_recyclerViee=============================================
-        home_every_list = new ArrayList<Home_everyDao>();
-        for (int i = 0; i < home_every_image.length; ++i) {
-            home_everyDao = new Home_everyDao();
-            home_everyDao.setTime("today");
-            home_everyDao.setImage(home_every_image[i]);
-            home_everyDao.setIntroduce(home_every_string[i]);
-            home_everyDao.setId(i);
-            home_every_list.add(home_everyDao);
-        }
+//        home_every_list = new ArrayList<Home_everyDao>();
+//        for (int i = 0; i < home_every_image.length; ++i) {
+//            home_everyDao = new Home_everyDao();
+//            home_everyDao.setTime("today");
+//            home_everyDao.setImage(home_every_image[i]);
+//            home_everyDao.setIntroduce(home_every_string[i]);
+//            home_everyDao.setId(i);
+//            home_every_list.add(home_everyDao);
+//        }
+//
+//        home_everyday_recyclerView = mRootView.findViewById(R.id.home_everyday_recyclerview);
+//        home_everyday_recyclerView.setLayoutManager(home_every_lin);
 
-        home_everyday_recyclerView = mRootView.findViewById(R.id.home_everyday_recyclerview);
-        LinearLayoutManager home_every_lin = new LinearLayoutManager(getContext());
+        LinearLayoutManager home_every_lin = new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         home_every_lin.setOrientation(LinearLayoutManager.HORIZONTAL);
-        home_everyday_recyclerView.setLayoutManager(home_every_lin);
 
     }
 
@@ -459,11 +411,9 @@ public class HomeFragment extends Fragment {
     ///=================Search
     private class ImageLoopAdapter extends LoopPagerAdapter {
         int[] imgs = new int[]{
-                R.drawable.img1,
-                R.drawable.img2,
-                R.drawable.img3,
-                R.drawable.img4,
-                R.drawable.img5,
+                R.drawable.top1,
+                R.drawable.top2,
+                R.drawable.top3
         };
 
         public ImageLoopAdapter(RollPagerView viewPager) {
@@ -476,6 +426,7 @@ public class HomeFragment extends Fragment {
             ImageView view = new ImageView(container.getContext());
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
             view.setImageResource(imgs[position]);
             return view;
         }

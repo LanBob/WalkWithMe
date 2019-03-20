@@ -33,6 +33,7 @@ import com.app.JMS.ChatService;
 import com.app.JMS.adapter.ChatAdapter;
 import com.app.JMS.bean.AudioMsgBody;
 import com.app.JMS.bean.ChatListBean;
+import com.app.JMS.bean.FileMsgBody;
 import com.app.JMS.bean.ImageMsgBody;
 import com.app.JMS.bean.Message;
 import com.app.JMS.bean.MsgSendStatus;
@@ -44,6 +45,7 @@ import com.app.JMS.bean.VideoMsgBody;
 import com.app.JMS.util.ChatUiHelper;
 import com.app.JMS.util.FileUtils;
 import com.app.JMS.util.LogUtil;
+import com.app.JMS.util.MessageUtil;
 import com.app.JMS.util.PictureFileUtil;
 import com.app.JMS.widget.MediaManager;
 import com.app.JMS.widget.RecordButton;
@@ -121,11 +123,10 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private List<Message> mReceiveMsgList = null;
 
-    private WebSocket mwebSocket;
-    private WebSocketSubscriber webSocketSubscriber;
     private Disposable disposable;
 
-    private Map<String,String> map;
+    private Map<String, String> map;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,84 +144,11 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
-    public void setWebSocket(String fromUserId) {
-
-        webSocketSubscriber = new WebSocketSubscriber() {
-            @Override
-            protected void onOpen(@NonNull WebSocket webSocket) {
-                Log.d("MainActivity", " on WebSocket open");
-                mwebSocket = webSocket;
-            }
-
-            /**
-             * 接收到消息
-             * @param text
-             */
-            @Override
-            protected void onMessage(@NonNull String text) {
-                Log.d("MainActivity", text);
-            }
-
-            /**
-             * 二进制消息
-             * @param byteString
-             */
-            @Override
-            protected void onMessage(@NonNull ByteString byteString) {
-                byte[] bytes = byteString.toByteArray();
-//                插入操作，进行
-                Message message = (Message) StringUtil.byteToObject(bytes);
-                ChatListBean chatListBean = new ChatListBean();
-                chatListBean.setTime(StringUtil.getToMinute(message.getSentTime()));
-                int count = StringUtil.getUserIdCount(message.getTargetId());
-                chatListBean.setCount(count);
-                chatListBean.setUserId(message.getTargetId());
-//                只要有消息来，就会触发进行存储
-                StringUtil.insertChatListBean(chatListBean);
-
-                String absolutePath = getApplicationContext().getFilesDir().getAbsolutePath();
-                String fileName = String.valueOf(System.currentTimeMillis());
-//                ByteString进行存储
-                StringUtil.createFile(
-                        absolutePath, fileName);
-                String path = absolutePath + File.pathSeparator + fileName;
-                StringUtil.writeFile(bytes, path, false);
-
-//                将这个消息，存储到数据库
-                SqlMessage sqlMessage = new SqlMessage();
-                sqlMessage.setTime(String.valueOf(message.getSentTime()));
-                sqlMessage.setPath(path);
-                sqlMessage.setUserId(message.getTargetId());
-//                只要有消息来，就会存储S在qlMesage之中
-                StringUtil.insertSqlMessage(sqlMessage);
-            }
-
-            @Override
-            protected void onReconnect() {
-            }
-
-            @Override
-            protected void onClose() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
-        };
-
-        String url = MyUrl.add_Wsurl(fromUserId);
-
-        WebSocketUtil.getInstance()
-                .connect(url, ChatActivity.this, webSocketSubscriber);
-    }
-
-
     private ImageView ivAudio;
 
     protected void initContent() {
         ButterKnife.bind(this);
-        map =  new HashMap<>();
+        map = new HashMap<>();
         mReceiveMsgList = new ArrayList<>();
         mAdapter = new ChatAdapter(this, mReceiveMsgList);
         LinearLayoutManager mLinearLayout = new LinearLayoutManager(this);
@@ -252,14 +180,18 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
             }
         });
-//        setWebSocket(fromUserId);
 //        获取和发送
         if (fromUserId != null && StringUtil.isMobile(fromUserId)) {
             Log.e("in", "insert set" + fromUserId);
-            setWebSocket(fromUserId);
+//            startService();
+//            setWebSocket(fromUserId,ChatActivity.this);
+//            MessageUtil.setWebSocket(fromUserId,getApplicationContext().getFilesDir().getAbsolutePath());
+            MessageUtil.clearCount(toUserId);
             reciveMessage();
         }
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -267,6 +199,12 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
             disposable.dispose();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        reciveMessage();
+        super.onRestart();
     }
 
     public void reciveMessage() {
@@ -278,30 +216,11 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
                         return aLong + 1;
                     }
                 })
-                .take(3)
+                .take(30)
                 .observeOn(AndroidSchedulers.mainThread())//ui线程中进行控件更新
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        List<SqlMessage> sqlMessageList = StringUtil.getSqlMessage(toUserId);
-//                        如果这个人有消息,进行转换
-                        if (sqlMessageList != null)
-                            for (SqlMessage sqlMessage : sqlMessageList) {
-                                if (sqlMessage != null) {
-                                    File f = new File(sqlMessage.getPath());
-                                    byte[] bytes = StringUtil.read(f);
-                                    Message message = (Message) StringUtil.byteToObject(bytes);
-//                                    一定是要刷新真正的数据源
-//////                                得到一个Message
-                                    if (!mReceiveMsgList.contains(message)) {
-                                        message.setSentStatus(MsgSendStatus.SENT);
-                                        mReceiveMsgList.add(message);
-                                    }
-                                    LogOutUtil.e("sisze" + mReceiveMsgList.size());
-                                }
-                            }
-
-
                     }
                 }).subscribe(new Observer<Long>() {
             @Override
@@ -311,6 +230,35 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void onNext(Long num) {
+                //消息是从谁发来的
+                List<SqlMessage> sqlMessageList = StringUtil.getSqlMessage(fromUserId + toUserId);
+////                        如果这个人有消息,进行转换
+                for (SqlMessage sqlMessage : sqlMessageList) {
+                    File f = new File(sqlMessage.getPath());
+
+                    byte[] bytes = StringUtil.read(f);
+//                    Message message = (Message) StringUtil.byteToObject(bytes);
+                    Message message = (Message) MessageUtil.toObject(bytes);
+
+
+                    if (mReceiveMsgList.size() == 0) {
+                        message.setSentStatus(MsgSendStatus.SENT);
+                        mReceiveMsgList.add(message);
+                    }
+                    int flag = 0;
+                    for (int i = 0; i < mReceiveMsgList.size(); ++i) {
+                        if (mReceiveMsgList.get(i).getUuid().equals(message.getUuid())) {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        Log.e("UUID", message.getUuid() + "");
+                        message.setSentStatus(MsgSendStatus.SENT);
+                        mReceiveMsgList.add(message);
+                    }
+                }
+                Log.e("UUID", "外面");
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -325,6 +273,9 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onComplete() {
                 //回复原来初始状态
                 mAdapter.notifyDataSetChanged();
+                if (disposable != null) {
+                    disposable.dispose();
+                }
             }
         });
     }
@@ -422,19 +373,23 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_send:
-                sendTextMsg(mEtContent.getText().toString());
-                mEtContent.setText("");
+                    sendTextMsg(mEtContent.getText().toString());
+                    mEtContent.setText("");
                 break;
             case R.id.rlPhoto:
-                PictureFileUtil.openGalleryPic(ChatActivity.this, REQUEST_CODE_IMAGE);
+                Toast.makeText(ChatActivity.this,"您好，由于服务器原因，未开放图片聊天功能",Toast.LENGTH_LONG).show();
+//                PictureFileUtil.openGalleryPic(ChatActivity.this, REQUEST_CODE_IMAGE);
                 break;
             case R.id.rlVideo:
-                PictureFileUtil.openGalleryAudio(ChatActivity.this, REQUEST_CODE_VEDIO);
+                Toast.makeText(ChatActivity.this,"您好，由于服务器原因，未开放视频聊天功能",Toast.LENGTH_LONG).show();
+//                PictureFileUtil.openGalleryAudio(ChatActivity.this, REQUEST_CODE_VEDIO);
                 break;
             case R.id.rlFile:
-                PictureFileUtil.openFile(ChatActivity.this, REQUEST_CODE_FILE);
+                Toast.makeText(ChatActivity.this,"您好，由于服务器原因，未开放文件聊天功能",Toast.LENGTH_LONG).show();
+//                PictureFileUtil.openFile(ChatActivity.this, REQUEST_CODE_FILE);
                 break;
             case R.id.rlLocation:
+                Toast.makeText(ChatActivity.this,"您好，由于服务器原因，未开放位置功能",Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -452,6 +407,7 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
 //                    sendFileMessage(mSenderId, mTargetId, filePath);
                     break;
                 case REQUEST_CODE_IMAGE:
+
                     // 图片选择结果回调
                     List<LocalMedia> selectListPic = PictureSelector.obtainMultipleResult(data);
                     for (LocalMedia media : selectListPic) {
@@ -586,10 +542,15 @@ public class ChatActivity extends AppCompatActivity implements SwipeRefreshLayou
     private void updateMsg(final Message mMessgae) {
         mRvChat.scrollToPosition(mAdapter.getItemCount() - 1);
 
+
         ByteString byteString = StringUtil.getByteString(mMessgae);
-//        mwebSocket.send(byteString);
-//        chatService.sendMessage(byteString);
-        mwebSocket.send(byteString);
+
+        MessageUtil.savaMessage(byteString,
+                getApplicationContext().getFilesDir().getAbsolutePath());
+
+        WebSocketUtil.sendByte(MyUrl.add_Wsurl(fromUserId),byteString);
+//        if(MessageUtil.getMwebSocket()!= null)
+//            MessageUtil.get
 
         //模拟2秒后发送成功
         new Handler().postDelayed(new Runnable() {

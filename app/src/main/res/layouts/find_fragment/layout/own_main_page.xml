@@ -8,6 +8,7 @@
     tool:context=".activity.OwnMainPage">
 
     <ScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,7 +20,7 @@
                 android:id="@+id/ll_head"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y450"
-                android:background="#00eedd"
+                android:background="#8DF0E8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 

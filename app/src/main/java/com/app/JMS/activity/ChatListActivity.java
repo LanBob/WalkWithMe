@@ -1,24 +1,30 @@
 package com.app.JMS.activity;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.app.JMS.ChatService;
 import com.app.JMS.bean.ChatListBean;
 import com.app.JMS.bean.Message;
 import com.app.JMS.bean.SqlMessage;
+import com.app.JMS.util.MessageUtil;
 import com.app.R;
 import com.app.Util.LogOutUtil;
 import com.app.Util.MyUrl;
@@ -28,6 +34,7 @@ import com.app.commonAdapter.Com_ViewHolder;
 import com.app.modle.WebSocketUtil;
 import com.app.view.BadgeView;
 import com.dhh.websocket.WebSocketSubscriber;
+import com.dhh.websocket.WebSocketSubscriber2;
 
 import org.w3c.dom.Text;
 
@@ -39,7 +46,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -56,8 +62,10 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     private List<ChatListBean> listBeans;
     private RecyclerView.Adapter adapter;
 
-    private WebSocket mwebSocket;
-    private WebSocketSubscriber webSocketSubscriber;
+
+    private  WebSocket mwebSocket;
+    private  WebSocketSubscriber webSocketSubscriber;
+
     private Disposable disposable;
     private String userId = null;
 
@@ -66,10 +74,12 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_message_list);
         actionBar = getSupportActionBar();
-        actionBar.setTitle("我的旅行");
+        actionBar.setTitle("聊天列表");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
         userId = StringUtil.getValue("username");
+
         initView();
     }
 
@@ -81,48 +91,32 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.setLayoutManager(linearLayoutManager);
         listBeans = new ArrayList<>();
 
-//        固定至少有一个Bean
-//        listBeans = StringUtil.query();
-        List<ChatListBean> ll  = StringUtil.query();
-        LogOutUtil.d("listBean"+ll.size());
-        if(ll.size() == 0){
-            ChatListBean chatListBean = new ChatListBean();
-            chatListBean.setCount(0);
-            chatListBean.setUserId(MyUrl.getKefu());
-            chatListBean.setTime(StringUtil.getToMinute(System.currentTimeMillis()));
-            StringUtil.insertChatListBean(chatListBean);
-            listBeans.add(chatListBean);
-        }else {
-            listBeans.clear();
-            listBeans.addAll(ll);
-        }
-
         adapter = new Com_Adapter<ChatListBean>(ChatListActivity.this, R.layout.message_list_item, listBeans) {
             @Override
             public void convert(Com_ViewHolder holder, final ChatListBean chatListBean) {
-                if(chatListBean != null){
-                    Log.e("in insert holder" ,"chat" + chatListBean.getCount() );
-                    holder.setText(R.id.userId,chatListBean.getUserId());
-                    TextView count = holder.itemView.findViewById(R.id.count);
+                if (chatListBean != null) {
+                    holder.setText(R.id.userId, chatListBean.getUserId());
 
-                    if(chatListBean.getCount() > 0){
+                    if (chatListBean.getCount() > 0) {
+                        TextView count = holder.itemView.findViewById(R.id.count);
                         BadgeView badge = new BadgeView(ChatListActivity.this, count);
                         badge.setBadgePosition(BadgeView.POSITION_CENTER);
-                        badge.setText(chatListBean.getCount() +"");
+//                        Log.e("more zeor","do it show");
+                        count.setVisibility(View.VISIBLE);
+                        badge.setText(chatListBean.getCount() + "");
                         badge.show();
                         holder.itemView.findViewById(R.id.showMessage).setVisibility(View.VISIBLE);
                         holder.itemView.findViewById(R.id.noMessage).setVisibility(View.GONE);
-                    }else {
-                        count.setText(" ");
+                    } else {
                         holder.itemView.findViewById(R.id.showMessage).setVisibility(View.GONE);
                         holder.itemView.findViewById(R.id.noMessage).setVisibility(View.VISIBLE);
                     }
-                    holder.setText(R.id.time,chatListBean.getTime());
+                    holder.setText(R.id.time, chatListBean.getTime());
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent  =  new Intent(ChatListActivity.this,SplashActivity.class);
-                            intent.putExtra("userId",chatListBean.getUserId());
+                            Intent intent = new Intent(ChatListActivity.this, SplashActivity.class);
+                            intent.putExtra("userId", chatListBean.getUserId());
                             startActivity(intent);
                         }
                     });
@@ -130,95 +124,85 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
             }
         };
         recyclerView.setAdapter(adapter);
-
-        if(userId != null){
-            setWebSocket(userId);
+        if (userId != null && StringUtil.isMobile(userId)) {
+            setWebSocket(userId,ChatListActivity.this);
+            Log.e("use", userId);
             reciveMessage();
         }
 
     }
 
-    public void setWebSocket(String fromUserId) {
-//        LogOutUtil.d("insert fromUserId" + fromUserId);
+    private void setWebSocket(String fromUserId, Activity activity) {
         webSocketSubscriber = new WebSocketSubscriber() {
             @Override
             protected void onOpen(@NonNull WebSocket webSocket) {
-                Log.d("MainActivity", " on WebSocket open");
-                mwebSocket = webSocket;
+                Log.e("open","open");
+                super.onOpen(webSocket);
             }
 
-            /**
-             * 接收到消息
-             * @param text
-             */
             @Override
             protected void onMessage(@NonNull String text) {
-                Log.d("MainActivity", text);
+                Log.e("text","text" + text);
+                super.onMessage(text);
             }
 
-            /**
-             * 二进制消息
-             * @param byteString
-             */
             @Override
             protected void onMessage(@NonNull ByteString byteString) {
-                LogOutUtil.d("insert user");
-                byte[] bytes = byteString.toByteArray();
-
-//                插入操作，进行
-                Message message = (Message) StringUtil.byteToObject(bytes);
-
-                ChatListBean chatListBean = new ChatListBean();
-                chatListBean.setTime(StringUtil.getToMinute(message.getSentTime()));
-                int count = StringUtil.getUserIdCount(message.getTargetId());
-                chatListBean.setCount(count + 1);
-
-                Log.e("insert ",chatListBean.getCount() + "");
-                chatListBean.setUserId(message.getSenderId());
-
-//                只要有消息来，就会触发进行存储
-                StringUtil.insertChatListBean(chatListBean);
-
-                String absolutePath  = getApplicationContext().getFilesDir().getAbsolutePath();
-                String fileName = String.valueOf(System.currentTimeMillis());
-//                ByteString进行存储
-                StringUtil.createFile(
-                        absolutePath,fileName);
-                String path = absolutePath + File.pathSeparator + fileName;
-                StringUtil.writeFile(bytes,path,false);
-
-//                将这个消息，存储到数据库
-                SqlMessage sqlMessage = new SqlMessage();
-                sqlMessage.setTime(String.valueOf(message.getSentTime()));
-                sqlMessage.setPath(path);
-                sqlMessage.setUserId(message.getTargetId());
-//                只要有消息来，就会存储S在qlMesage之中
-                StringUtil.insertSqlMessage(sqlMessage);
+                Log.e("byteString","byteString" + byteString.toString());
+                MessageUtil.savaMessage(byteString,getApplicationContext().getFilesDir().getAbsolutePath());
+                super.onMessage(byteString);
             }
 
             @Override
             protected void onReconnect() {
+                Log.e("onReconnect","onReconnect");
+                super.onReconnect();
             }
 
             @Override
             protected void onClose() {
+                Log.e("onClose","onClose");
+                super.onClose();
             }
 
             @Override
             public void onError(Throwable e) {
+                Log.e("Throwable","e" + e.getMessage());
                 super.onError(e);
             }
         };
-
-        String url = MyUrl.add_Wsurl(fromUserId);
-
-        WebSocketUtil.getInstance()
-                .connect(url, ChatListActivity.this, webSocketSubscriber);
+        WebSocketUtil.getInstance().connect(MyUrl.add_Wsurl(fromUserId),
+                activity,webSocketSubscriber);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        if (disposable != null) {
+            disposable.dispose();
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        reciveMessage();
+        super.onRestart();
+    }
+
+    public void closeTimer(){
+        if (disposable != null) {
+            disposable.dispose();
+        }
+    }
     public void reciveMessage() {
 
-        Observable.interval(0, 5, TimeUnit.SECONDS)
+        Observable.interval(0, 3, TimeUnit.SECONDS)
                 .map(new Function<Long, Long>() {
                     @Override
                     public Long apply(Long aLong) throws Exception {
@@ -230,17 +214,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        List<ChatListBean> chatListBeans = StringUtil.query();
-                        LogOutUtil.d("list" + chatListBeans.size());
-                        if(chatListBeans.size() > 0)
-                        for (ChatListBean c :
-                                chatListBeans) {
-                            if(!listBeans.contains(c) && !"13724158682".equals(c.getUserId())){
-                                LogOutUtil.d("insert  in for" + c.getUserId() );
-                                listBeans.add(c);
-                            }
 
-                        }
                     }
                 }).subscribe(new Observer<Long>() {
             @Override
@@ -250,12 +224,18 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onNext(Long num) {
+
+                listBeans.clear();
+//                        查询所有
+                List<ChatListBean> chatListBeans = StringUtil.query();
+                listBeans.addAll(chatListBeans);
+
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(Throwable e) {
-                if(disposable != null){
+                if (disposable != null) {
                     disposable.dispose();
                 }
             }
@@ -263,9 +243,21 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onComplete() {
                 //回复原来初始状态
-
+                closeTimer();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //对用户按home icon的处理，本例只需关闭activity，就可返回上一activity，即主activity。
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

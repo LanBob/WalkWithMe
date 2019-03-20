@@ -2,6 +2,7 @@ package com.app.JMS.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.app.JMS.activity.ChatActivity;
@@ -16,6 +17,7 @@ import com.app.JMS.bean.TextMsgBody;
 import com.app.JMS.bean.VideoMsgBody;
 import com.app.JMS.util.GlideUtils;
 import com.app.R;
+import com.app.Util.StringUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
@@ -133,16 +135,20 @@ public class ChatAdapter extends BaseQuickAdapter<Message, BaseViewHolder> {
 
             TextMsgBody msgBody = (TextMsgBody) item.getBody();
             helper.setText(R.id.chat_item_content_text, msgBody.getMessage());
-            helper.setText(R.id.item_tv_time,item.getSentTime()+"");
+            helper.setText(R.id.item_tv_time, StringUtil.millToTime(item.getSentTime()));
         } else if (item.getMsgType().equals(MsgType.IMAGE)) {
             ImageMsgBody msgBody = (ImageMsgBody) item.getBody();
             if (TextUtils.isEmpty(msgBody.getThumbPath())) {
+                Log.e("image","enpty");
                 GlideUtils.loadChatImage(mContext, msgBody.getThumbUrl(), (ImageView) helper.getView(R.id.bivPic));
             } else {
+                Log.e("image","new Fileenpty");
                 File file = new File(msgBody.getThumbPath());
                 if (file.exists()) {
+                    Log.e("image","存在 Fileenpty");
                     GlideUtils.loadChatImage(mContext, msgBody.getThumbPath(), (ImageView) helper.getView(R.id.bivPic));
                 } else {
+                    Log.e("image","不存在 Fileenpt");
                     GlideUtils.loadChatImage(mContext, msgBody.getThumbUrl(), (ImageView) helper.getView(R.id.bivPic));
                 }
             }

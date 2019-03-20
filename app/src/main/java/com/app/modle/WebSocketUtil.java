@@ -36,10 +36,9 @@ public class WebSocketUtil {
      * @param url url
      * @param msg 文字消息
      */
-    public void send(String url,String msg){
+    public static void send(String url,String msg){
         //异步发送,若WebSocket已经打开,直接发送,若没有打开,打开一个WebSocket发送完数据,直接关闭.
         RxWebSocket.asyncSend(url, msg);
-
     }
 
     /**
@@ -47,10 +46,9 @@ public class WebSocketUtil {
      * @param url 路径
      * @param byteString 文字消息
      */
-    public void sendByte(String url,ByteString byteString){
+    public static void sendByte(String url,ByteString byteString){
         RxWebSocket.asyncSend(url, byteString);
     }
-
 
 
 //==================================================对内操作

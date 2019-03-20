@@ -16,9 +16,6 @@ public class ImageMsgBody extends FileMsgBody{
 
 
 
-
-
-
     public String getThumbPath() {
         return thumbPath;
     }

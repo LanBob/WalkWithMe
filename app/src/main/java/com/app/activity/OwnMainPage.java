@@ -190,7 +190,12 @@ public class OwnMainPage extends AppCompatActivity implements View.OnClickListen
             }
         };
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OwnMainPage.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OwnMainPage.this){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         gaideRecyclerView.setLayoutManager(linearLayoutManager);
 

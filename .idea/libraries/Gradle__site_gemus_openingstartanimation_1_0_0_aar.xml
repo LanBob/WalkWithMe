@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: site.gemus:openingstartanimation:1.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/openingstartanimation-1.0.0.aar/18bffba2131269f7ee6551164b0a8921/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/openingstartanimation-1.0.0.aar/18bffba2131269f7ee6551164b0a8921/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/site.gemus/openingstartanimation/1.0.0/944a7737dedfbc08ca3b406535ee3b741ae3c912/openingstartanimation-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

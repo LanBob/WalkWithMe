@@ -6,6 +6,32 @@ android {
     buildToolsVersion "28.0.3"
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
+//    第一步，放这个
+
+//    进行配置
+//    signingConfigs {
+//        debug {
+//
+//        }
+//        release {// 自己的签名文件
+//            storeFile file("doc/****.jks")
+//            storePassword "******"
+//            keyAlias "******"
+//            keyPassword "******"
+//        }
+//    }
+//    第二步
+//    //渠道Flavors，配置不同风格的app,友盟渠道统计时用到
+//    productFlavors {
+//        "offical" {}
+//        "360" {}
+//        yingyongbao {}
+//        wandoujia {}
+//        baidu {}
+//        "91" {}
+//    }
+
+//    进行配置
 
     defaultConfig {
         applicationId "com.app.gaolonglong.fragmenttabhost"
@@ -13,6 +39,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+//        flavorDimensions "versionCode"//第三步
         multiDexEnabled true
     }
     configurations {
@@ -21,6 +48,27 @@ android {
     }
     buildTypes {
         release {
+//第四步
+//            添加
+            // 不显示Log
+//            buildConfigField "boolean", "LOG_DEBUG", "false"
+//            //混淆
+//            minifyEnabled true
+//            //Zipalign优化
+//            zipAlignEnabled true
+//
+//            // 移除无用的resource文件
+//            shrinkResources true
+//
+//            //签名
+//            signingConfig signingConfigs.release
+//            applicationVariants.all { variant ->
+//                variant.outputs.all {
+//                    // 输出apk名称为app_v1.0_2015-xx-xx_xxxx.apk
+//                    outputFileName = "xinlebao_${defaultConfig.versionName}_${defaultConfig.name}.apk"
+//                }
+//            }
+//            添加
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -94,7 +142,7 @@ dependencies {
 
     implementation 'org.jetbrains:annotations-java5:15.0'//?
 
-    implementation 'me.spark:submitbutton:1.0.1'//一个按钮效果，可以不要
+//    implementation 'me.spark:submitbutton:1.0.1'//一个按钮效果，可以不要
 
     implementation 'com.sackcentury:shinebutton:0.2.0'//一个点赞效果
 
